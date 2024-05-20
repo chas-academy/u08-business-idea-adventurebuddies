@@ -1,57 +1,68 @@
 import { IUser } from "../interfaces/IUser";
 import User from "../models/userModel";
 
-
-const create = async (data: IUser) => {
-    await User.create(data);
+export const registerUser = async (user: Partial<IUser>) => {
+  const { name, userName, email, password } = user;
+  if (!name || !userName || !email || !password) {
+    return {
+      error: "Please provide all the required fields",
+    };
+  }
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return {
+      error: "User with that email already exists.",
+    };
+  }
+  const newUser = new User({ name, userName, email, password });
+  await newUser.save();
+  const token = await newUser.generateAuthToken();
+  return {
+    user: newUser,
+    token,
+  };
 };
-const readAll = async () => {
-    const users = await User.find({});
-    return users;
-};
-const read = async (id:any) => {
-   return await User.findById(id);
-};
-const update = async (id:any, data: IUser) => {
-    return await User.findByIdAndUpdate(id, data, { new: true });
-};
-const deleteOne = async (id:any) => {
-    return await User.findByIdAndDelete(id); 
+
+export const loginUser = async (user: Partial<IUser>) => {
+  const { email, password } = user;
+  if (!email || !password) {
+    return {
+      error: "Please provide all the required fields",
+    };
+  }
+  const existingUser = await User.findByCredentials(email, password);
+  if (!existingUser) {
+    return null;
+  }
+  const token = await existingUser.generateAuthToken();
+  return {
+    user: existingUser,
+    token,
+  };
 };
 
-export const getAllUsers = async (req: any, res: any) => {
-    const users = await readAll();
-    res.status(200).json(users);
+// Add these functions to your controller
+export const getAllUsers = async () => {
+  const users = await User.find({});
+  return users;
 };
-export const addUser = async (req: any, res:any) => {
-    const {name, userName, password, confirmPassword, email, dateOfBirth, description} = req.body;
 
-    const result = await create({name, userName, password, confirmPassword, email, dateOfBirth, description});
-
-    res.status(201).json({message: "User created successfully", user: result})
+export const getUser = async (id: string) => {
+  return await User.findById(id);
 };
-export const getUser = async (req: any, res:any) => {
-    const id = req.params.id;
-    const user = await read(id);
 
-    res.status(200).json(user);
+export const updateUser = async (id: string, data: Partial<IUser>) => {
+  return await User.findByIdAndUpdate(id, data, { new: true });
 };
-export const updateUser = async (req: any, res:any) => {
-    const {name, userName, password, confirmPassword, email, dateOfBirth, description} = req.body;
-    const id = req.params.id;
 
-    const updatedUser = await update(id, {name, userName, password, confirmPassword, email, dateOfBirth, description});
-
-    res
-        .status(200)
-        .json({message: "Update succeded", updatedUser: updatedUser});
+export const deleteUser = async (id: string) => {
+  return await User.findByIdAndDelete(id);
 };
-export const deleteUser = async (req: any, res:any) => {
-    const id = req.params.id;
 
-    const deletedUser = await deleteOne(id);
-
-    res
-        .status(200)
-        .json({message: "User deleted", deletedUser: deletedUser});
+export const logoutUser = async (req: any) => {
+  req.user.tokens = req.user.tokens.filter((token: any) => {
+    return token.token !== req.token;
+  });
+  await req.user.save();
+  return { message: "User logged out successfully." };
 };
