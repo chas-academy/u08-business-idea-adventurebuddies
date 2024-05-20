@@ -4,17 +4,22 @@ import jwt from "jsonwebtoken";
 import User from "./userModel";
 import { IUser, IUserMethods, UserModel } from "../interfaces/IUser";
 
-const userSchema = new Schema<IUser, UserModel, IUserMethods>({
-  name: { type: String, required: true },
-  userName: { type: String, required: true, unique: false },
-  email: { type: String, required: true, unique: false },
-  dateOfBirth: { type: Date, required: false },
-  description: { type: String, required: false },
-  password: { type: String, required: true },
-  // confirmPassword: { type: String, required: true },
-  tokens: [{ token: { type: String, required: false } }],
-  role: { type: Number, default: 1 },
-});
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
+  {
+    name: { type: String, required: true },
+    userName: { type: String, required: true, unique: false },
+    email: { type: String, required: true, unique: false },
+    dateOfBirth: { type: Date, required: false },
+    description: { type: String, required: false },
+    password: { type: String, required: true },
+    // confirmPassword: { type: String, required: true },
+    tokens: [{ token: { type: String, required: false } }],
+    role: { type: Number, default: 1 },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
