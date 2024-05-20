@@ -1,20 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+import { Style, Icon } from "ol/style";
 
 function Maps1() {
   const [position, setPosition] = useState(null);
 
   useEffect(() => {
+    // Get user's geolocation when the component mounts
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        // If successful, save the position in state
         setPosition(position.coords);
+        console.log(position);
       },
       (error) => {
-        console.log("Could not get your Location: ", error);
+        // If geolocation fetch fails, handle the error
+        console.error("Error getting geolocation:", error);
       }
     );
   }, []);
@@ -28,21 +37,45 @@ function Maps1() {
         source: new OSM(),
       });
 
+      // Create a vector source and layer for the marker
+      const vectorSource = new VectorSource();
+      const vectorLayer = new VectorLayer({
+        source: vectorSource,
+      });
       const map = new Map({
         target: "map",
-        layers: [osmLayer],
+        layers: [osmLayer, vectorLayer],
         view: new View({
           center: fromLonLat([longitude, latitude]),
-          zoom: 7,
+          zoom: 10,
         }),
       });
-      return () => map.setTarget();
+
+      // Create a marker at the user's location
+      const marker = new Feature({
+        geometry: new Point(fromLonLat([longitude, latitude])),
+      });
+
+      // Add the marker to the vector source
+      vectorSource.addFeature(marker);
+
+      // Style the marker
+      marker.setStyle(
+        new Style({
+          image: new Icon({
+            anchor: [0.5, 1],
+            src: "https://openlayers.org/en/latest/examples/data/icon.png", // URL to your marker icon
+          }),
+        })
+      );
+
+      return () => map.setTarget(undefined);
     }
   }, [position]);
 
   return (
     <div
-      style={{ height: "300px", width: "100%" }}
+      style={{ height: "500px", width: "100%" }}
       id="map"
       className="map-container"
     />
@@ -50,60 +83,3 @@ function Maps1() {
 }
 
 export default Maps1;
-
-// import React, { useState, useEffect, useRef } from "react";
-// import { Map, View } from "ol";
-// import TileLayer from "ol/layer/Tile";
-// import OSM from "ol/source/OSM";
-// import "ol/ol.css";
-// import { fromLonLat } from "ol/proj";
-
-// function Maps1() {
-//   const [position, setPosition] = useState(null);
-
-//   useEffect(() => {
-//     // Hämta användarens geolocation när komponenten renderas
-//     navigator.geolocation.getCurrentPosition(
-//       (position) => {
-//         // Om hämtningen lyckas, spara positionen i state
-//         setPosition(position.coords);
-//       },
-//       (error) => {
-//         // Om hämtningen misslyckas, hantera felet här
-//         console.error("Error getting geolocation:", error);
-//       }
-//     );
-//   }, []);
-
-//   useEffect(() => {
-//     if (position) {
-//       const { latitude, longitude } = position;
-
-//       const osmLayer = new TileLayer({
-//         preload: Infinity,
-//         source: new OSM(),
-//       });
-
-//       const map = new Map({
-//         target: "map",
-//         layers: [osmLayer],
-//         view: new View({
-//           center: fromLonLat([longitude, latitude]),
-//           zoom: 3,
-//         }),
-//       });
-
-//       return () => map.setTarget();
-//     }
-//   }, [position]);
-
-//   return (
-//     <div
-//       style={{ height: "300px", width: "100%" }}
-//       id="map"
-//       className="map-container"
-//     />
-//   );
-// }
-
-// export default Maps1;
