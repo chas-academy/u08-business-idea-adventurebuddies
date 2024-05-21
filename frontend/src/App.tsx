@@ -3,15 +3,24 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Maps1 from "./Maps1";
+import Maps2 from "./Maps2";
+
+// export interface LocationData {
+//   latitude: number;
+//   longitude: number;
+// }
 
 function App() {
-  const [count, setCount] = useState(0);
+  // Denna useState tar emot ordet som skrivs in i search
   const [place, setPlace] = useState<string>("");
-  const [locationData, setlocationData] = useState(null);
+  // Denna useState behövs för att man ska kunna se uppdateringar i inputrutan för text
+  const [searchWord, setSearchWord] = useState<string>("");
+  // Denna useState lagrar den sökta location datan med long lat etc
+  const [locationData, setLocationData] = useState({});
+  // Detta är Usestate för Input Button som är inställda på default på option1
+  const [selectedValue, setSelectedValue] = useState<string>("option1");
 
-  // Problemet verkar vara att du måste installera leafletjs för att göra en proxyserver som kan skicka request till OSM
-  // Genom att göra detta kan du skicka request till sidan om du gör en sådan fil måste du no använda zustand för att kunna skicka runt propps.
-
+  // Denna gör ett api anrop och hämtar information om serwordet som du har matat in
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,8 +29,8 @@ function App() {
             `https://nominatim.openstreetmap.org/search?q=${place}&format=json&addressdetails=1&limit=1&polygon_svg=1`
           );
           const jsonData = await response.json();
-          console.log("location", jsonData);
-          setlocationData(jsonData);
+          setLocationData(jsonData[0]);
+          console.log("Detta är ", jsonData[0]);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -30,24 +39,20 @@ function App() {
     fetchData();
   }, [place]);
 
-  // Denna useState behövs för att man ska kunna se uppdateringar i inputrutan för text
-  const [searchWord, setSearchWord] = useState<string>("");
   // Handlechange är i onChange i textinput så när användaren trycker på tangenterna så
   // triggas handlechange och lägger in bokstaven i searchWork som uppdateras input i value med vad som finns.
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchWord(event.target.value);
   };
-
+  // Denna finns i inputs och triggas när man väljer input
+  const handleChangeRadio = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedValue(event.target.value);
+    // console.log("Optiooon", selectedValue);
+  };
+  // Denna triggas när man skickar formen
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const inputInDom = document.getElementById(
-      "searchInput"
-    ) as HTMLInputElement;
-    if (inputInDom) {
-      const placeFromDom = inputInDom.value;
-
-      setPlace(placeFromDom);
-    }
+    setPlace(searchWord);
   };
 
   return (
@@ -63,33 +68,33 @@ function App() {
           className="border border-gray-400 px-2"
         />{" "}
         <br />
+        <label>
+          Angel Map
+          <input
+            type="radio"
+            value="option1"
+            checked={selectedValue === "option1"}
+            onChange={handleChangeRadio}
+          />
+        </label>
+        <label>
+          Battle Map
+          <input
+            type="radio"
+            value="option2"
+            checked={selectedValue === "option2"}
+            onChange={handleChangeRadio}
+          />
+        </label>
         <button onClick={handleSubmit}>Klicka</button>
       </form>
 
       <div>
         <Maps1 />
       </div>
-
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Maps2 locationData={locationData} option={selectedValue} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
