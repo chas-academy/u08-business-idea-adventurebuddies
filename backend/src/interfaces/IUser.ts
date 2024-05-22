@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { HydratedDocument, Model } from "mongoose";
 import { Document } from "mongoose";
 
@@ -6,9 +7,10 @@ export interface IUser extends Document {
   userName: string;
   email: string;
   dateOfBirth: Date;
-  description: object;
+  gender: string;
+  description?: object;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
   tokens: { token: string }[];
   generateAuthToken: () => Promise<string>;
   role: number;
