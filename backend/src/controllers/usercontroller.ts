@@ -2,8 +2,17 @@ import { IUser } from "../interfaces/IUser";
 import User from "../models/userModel";
 
 export const registerUser = async (user: Partial<IUser>) => {
-  const { name, userName, email, password } = user;
-  if (!name || !userName || !email || !password) {
+  const { name, userName, email, password, dateOfBirth, gender, description } =
+    user;
+  if (
+    !name ||
+    !userName ||
+    !email ||
+    !password ||
+    !dateOfBirth ||
+    !gender ||
+    !description
+  ) {
     return {
       error: "Please provide all the required fields",
     };
@@ -14,7 +23,17 @@ export const registerUser = async (user: Partial<IUser>) => {
       error: "User with that email already exists.",
     };
   }
-  const newUser = new User({ name, userName, email, password });
+  const newUser = new User({
+    name,
+    userName,
+    email,
+    password,
+    dateOfBirth,
+    gender,
+    description,
+    role: user.role,
+  });
+
   await newUser.save();
   const token = await newUser.generateAuthToken();
   return {
