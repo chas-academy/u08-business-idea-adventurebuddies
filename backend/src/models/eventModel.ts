@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IEvent } from "../interfaces/IEvent";
 import { ObjectId } from "mongodb";
-// import { IUser } from "../interfaces/IUser";
+// import { User } from "../models/User";
 
 const locationSchema = new Schema({
     type: {
@@ -17,7 +17,7 @@ const locationSchema = new Schema({
 
 const eventSchema = new Schema<IEvent>({
   activity: { type: String, required: true },
-  user_id: { type: Schema.Types.ObjectId, ref: "IUser", required: true },
+  user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   start_time: { type: Date, default: () => new Date(), required: true },
   end_time: { type: Date, default: () => new Date(), required: true },
   location: locationSchema,
@@ -25,7 +25,7 @@ const eventSchema = new Schema<IEvent>({
   age: { type: Number, required: false },
   totalParticipant: { type: Number, required: true },
   participants: [
-    { type: Schema.Types.ObjectId, ref: "IUser", required: false },
+    { type: Schema.Types.ObjectId, ref: 'User', required: false },
   ],
   message: { type: String, required: false },
   created_at: {
