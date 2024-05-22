@@ -7,12 +7,16 @@ import { IUser, IUserMethods, UserModel } from "../interfaces/IUser";
 const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     name: { type: String, required: true },
-    userName: { type: String, required: true, unique: false },
-    email: { type: String, required: true, unique: false },
-    dateOfBirth: { type: Date, required: false },
+    userName: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    dateOfBirth: { type: Date, required: true },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      required: true,
+    },
     description: { type: String, required: false },
     password: { type: String, required: true },
-    // confirmPassword: { type: String, required: true },
     tokens: [{ token: { type: String, required: false } }],
     role: { type: Number, default: 1 },
   },
@@ -24,7 +28,6 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 8);
-    // this.confirmPassword = this.password;
   }
   next();
 });

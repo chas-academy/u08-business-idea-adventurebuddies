@@ -9,7 +9,6 @@ import {
   deleteUser,
 } from "../controllers/usercontroller";
 import { IUser } from "../interfaces/IUser";
-// import auth, { CustomRequest } from "../middleware/auth";
 import { auth, admin, CustomRequest } from "../middleware/auth";
 
 const userRouter = Router();
@@ -22,6 +21,8 @@ userRouter.post("/register", async (req, res) => {
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
     dateOfBirth: req.body.dateOfBirth,
+    gender: req.body.gender,
+    description: req.body.description,
     role: req.body.role,
   };
   console.log(req.body);
