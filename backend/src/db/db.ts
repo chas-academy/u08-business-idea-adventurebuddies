@@ -1,11 +1,15 @@
 import { connect } from "mongoose";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const connectSportDB = async () => {
   try {
-    const mongoURI: string = "mongodb+srv://activitybuddiess:hO2sOrrjaBIRtLDq@sports.mpzqmrl.mongodb.net/SportDB";
+    const mongoURI: string = process.env.MONGODB_URL || "";
     await connect(mongoURI);
     console.log("MongoDB Connected...");
-  } catch (err:any) {
+  } catch (err: any) {
     console.error(err.message);
     // Exit process with failure
     process.exit(1);
@@ -16,3 +20,4 @@ const connectSportDB = async () => {
 // export { connectSportDB, connectUserDB };
 
 export default connectSportDB();
+
