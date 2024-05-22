@@ -1,4 +1,5 @@
 import { connect } from "mongoose";
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,4 +19,5 @@ const connectSportDB = async () => {
 // Om vi vill connecta till mer än en databas behöver vi egna funktioner för dem.
 // export { connectSportDB, connectUserDB };
 
-export default connectSportDB;
+export default connectSportDB();
+
