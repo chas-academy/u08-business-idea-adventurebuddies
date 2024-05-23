@@ -17,7 +17,7 @@ interface MapsFormDataState {
   updateOption: (updateOption: string) => void;
 }
 
-// Skapa din zustand-store med rätt typ
+// Detta är Zustand storen
 export const useMapsFormData = create<MapsFormDataState>((set) => ({
   userLocation: {
     locationData: {
@@ -27,6 +27,7 @@ export const useMapsFormData = create<MapsFormDataState>((set) => ({
   },
   option: "option1",
 
+  // Detta är funktionen för att uppdatera lat,lon i storen
   updateUserLocation: (lat: string, lon: string) =>
     set((state) => ({
       userLocation: {
@@ -38,5 +39,6 @@ export const useMapsFormData = create<MapsFormDataState>((set) => ({
       },
     })),
 
+  // Detta är funktionen för att uppdatera Option i Storen
   updateOption: (updateOption: string) => set({ option: updateOption }),
 }));
