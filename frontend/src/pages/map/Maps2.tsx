@@ -1,39 +1,69 @@
 import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useMapsFormData } from "../../store/useMapsFormData";
 
-// Det du ska göra nu är att försöka få in propps in i maps2 den ska innehålla
-// lon, lat och option long lat ska uppdatera usestase med de du söker på och option
-// ska kunna byta karta till eldkartan eller tillbaka
+// type state2 = {
+//   lat: string;
+//   lon: string;
+// };
 
-function Maps2({ locationData, option }) {
-  const [latitude, setLatitude] = useState<number>(0);
-  const [longitude, setLongitude] = useState<number>(0);
+// Detta var propsen som skickaed förut nu ska du ju få dom genom store istället
+// function Maps2({ locationData, option }) {
+// Lon Lat från store
+const Maps2 = () => {
+  const { userLocation } = useMapsFormData((state) => ({
+    userLocation: state.userLocation.locationData,
+  }));
+  const [latitude, setLatitude] = useState<string>("");
+  const [longitude, setLongitude] = useState<string>("");
   const [optionValue, setOptionValue] = useState<string>("option1");
   // console.log("Option", option);
   console.log("Option2:", optionValue);
 
   useEffect(() => {
+    if (userLocation && userLocation.lat && userLocation.lon) {
+      const { lat, lon } = userLocation;
+      console.log("Latitude Lennart:", lat);
+      console.log("Longitude:", lon);
+      setLatitude(lat);
+      setLongitude(lon);
+    }
+  }, [userLocation, latitude, longitude]);
+
+  // Option från store
+
+  const option = useMapsFormData((state) => state.option);
+
+  useEffect(() => {
+    if (option) {
+      console.log("LEEEEEEEEEEEEEEEEENART", option);
+    }
+  });
+
+  useEffect(() => {
     setOptionValue(option);
   }, [option]);
 
-  useEffect(() => {
-    console.log("Heeeelo");
-    if (locationData && locationData.lat && locationData.lon) {
-      console.log("Detta är long", locationData.lon);
-      setLatitude(locationData.lat);
-      setLongitude(locationData.lon);
-      // console.log("lll", locationData.locationData.lat);
-    }
-  }, [locationData]);
+  // useEffect(() => {
+  //   console.log("Heeeelo");
+  //   if (locationData && locationData.lat && locationData.lon) {
+  //     console.log("Detta är long", locationData.lon);
+  //     setLatitude(locationData.lat);
+  //     setLongitude(locationData.lon);
+  //     // console.log("lll", locationData.locationData.lat);
+  //   }
+  // }, [locationData]);
 
   //   Denna Hämtar geolacation och sätter in Lat och Long i usestate
   const getUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
+      setLatitude(position.coords.latitude.toString());
+      setLongitude(position.coords.longitude.toString());
     });
   };
+  console.log("rrrrrrrrrr", latitude);
+  console.log("eeeeeeeeee", longitude);
 
   useEffect(() => {
     getUserLocation();
@@ -77,6 +107,6 @@ function Maps2({ locationData, option }) {
       <div id="map" style={{ width: "100%", height: "400px" }}></div>
     </>
   );
-}
+};
 
 export default Maps2;
