@@ -3,74 +3,39 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useMapsFormData } from "../../store/useMapsFormData";
 
-// type state2 = {
-//   lat: string;
-//   lon: string;
-// };
-
-// Detta var propsen som skickaed förut nu ska du ju få dom genom store istället
-// function Maps2({ locationData, option }) {
-// Lon Lat från store
 const Maps2 = () => {
+  const [latitude, setLatitude] = useState<string>("");
+  const [longitude, setLongitude] = useState<string>("");
+
+  // Denna hämtar värdena från store till lat, lon
   const { userLocation } = useMapsFormData((state) => ({
     userLocation: state.userLocation.locationData,
   }));
-  const [latitude, setLatitude] = useState<string>("");
-  const [longitude, setLongitude] = useState<string>("");
-  const [optionValue, setOptionValue] = useState<string>("option1");
-  // console.log("Option", option);
-  console.log("Option2:", optionValue);
 
+  // Uppdaterar Lat,Lon med nya värden från store
   useEffect(() => {
     if (userLocation && userLocation.lat && userLocation.lon) {
       const { lat, lon } = userLocation;
-      console.log("Latitude Lennart:", lat);
-      console.log("Longitude:", lon);
       setLatitude(lat);
       setLongitude(lon);
     }
-  }, [userLocation, latitude, longitude]);
+  }, [userLocation]);
 
-  // Option från store
-
+  //Hämtar Option från store
   const option = useMapsFormData((state) => state.option);
 
+  //Denna Hämtar geolacation och sätter in Lat och Long i usestate när komonenten skapas
   useEffect(() => {
-    if (option) {
-      console.log("LEEEEEEEEEEEEEEEEENART", option);
-    }
-  });
-
-  useEffect(() => {
-    setOptionValue(option);
-  }, [option]);
-
-  // useEffect(() => {
-  //   console.log("Heeeelo");
-  //   if (locationData && locationData.lat && locationData.lon) {
-  //     console.log("Detta är long", locationData.lon);
-  //     setLatitude(locationData.lat);
-  //     setLongitude(locationData.lon);
-  //     // console.log("lll", locationData.locationData.lat);
-  //   }
-  // }, [locationData]);
-
-  //   Denna Hämtar geolacation och sätter in Lat och Long i usestate
-  const getUserLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLatitude(position.coords.latitude.toString());
-      setLongitude(position.coords.longitude.toString());
-    });
-  };
-  console.log("rrrrrrrrrr", latitude);
-  console.log("eeeeeeeeee", longitude);
-
-  useEffect(() => {
+    const getUserLocation = () => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLatitude(position.coords.latitude.toString());
+        setLongitude(position.coords.longitude.toString());
+      });
+    };
     getUserLocation();
   }, []);
+
   useEffect(() => {
-    // getUserLocation();
-    // console.log("Uppdateras", latitude);
     // Skapa en karta med Leaflet när komponenten har monterats
     const map = L.map("map").setView([latitude, longitude], 13);
 

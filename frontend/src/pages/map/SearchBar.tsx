@@ -2,13 +2,12 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useMapsFormData } from "../../store/useMapsFormData";
 
 // Uppdatera store med värden
-
 function SearchBar() {
-  // Denna useState tar emot ordet som skrivs in i search
+  // Tar emot ordet som skrivs in i search
   const [place, setPlace] = useState<string>("");
-  // Denna useState behövs för att man ska kunna se uppdateringar i inputrutan för text
+  // Denna behövs för att man ska kunna se uppdateringar i inputrutan för text
   const [searchWord, setSearchWord] = useState<string>("");
-  // Denna useState lagrar den sökta location datan med long lat etc
+  // Lagrar den sökta location datan med long lat etc
   const [locationData, setLocationData] = useState<LocationData>({
     lat: "",
     lon: "",
@@ -17,40 +16,28 @@ function SearchBar() {
   const [selectedValue, setSelectedValue] = useState<string>("option1");
 
   // Interface förlocationData
-
   interface LocationData {
     lat: string;
     lon: string;
   }
 
-  // OLLIIIIEEEE
-  // Denna funktion anropar storen för att kunna använda dess två olika funktioner
-
-  // const { userLocation, updateUserLocation } = useMapsFormData();
-  const userLocation = useMapsFormData((state) => state.userLocation);
-  console.log("Here is userlocation", userLocation);
+  // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
   const updateUserLocation = useMapsFormData(
     (state) => state.updateUserLocation
   );
-
-  const option = useMapsFormData((state) => state.option);
-  const updateOption = useMapsFormData((state) => state.updateOption);
-  console.log("OPPPPPTIN", option);
   // Funktion för att uppdatera storen med värden
-  const updateStoreWithLongLat = () => {
-    updateUserLocation(locationData.lat, locationData.lon);
-  };
-
   useEffect(() => {
-    updateStoreWithLongLat();
-    // console.log("Sitter dom?", locationData.lat);
+    updateUserLocation(locationData.lat, locationData.lon);
   }, [locationData]);
 
+  // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
+  const updateOption = useMapsFormData((state) => state.updateOption);
+  // Funktion för att uppdatera storen med värden
   useEffect(() => {
     updateOption(selectedValue);
   }, [selectedValue]);
 
-  // Denna gör ett api anrop och hämtar information om serwordet som du har matat in
+  // Denna gör ett api anrop och hämtar information om setwordet som du har matat in
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,7 +47,6 @@ function SearchBar() {
           );
           const jsonData = await response.json();
           setLocationData(jsonData[0]);
-          console.log("Detta är ", jsonData[0]);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -77,7 +63,6 @@ function SearchBar() {
   // Denna finns i inputs och triggas när man väljer input
   const handleChangeRadio = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
-    // console.log("Optiooon", selectedValue);
   };
   // Denna triggas när man skickar formen
   const handleSubmit = (event: React.FormEvent) => {
@@ -118,13 +103,6 @@ function SearchBar() {
         </label>
         <button onClick={handleSubmit}>Klicka</button>
       </form>
-
-      {/* <div>
-        <Maps1 />
-      </div>
-      <div>
-        <Maps2 locationData={locationData} option={selectedValue} />
-      </div> */}
     </>
   );
 }
