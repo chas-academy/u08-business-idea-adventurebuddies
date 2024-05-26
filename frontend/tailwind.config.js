@@ -4,12 +4,13 @@ export default {
   theme: {
     extend: {},
     fontFamily: {
-      'display': ['Poppins'],
+      display: ["Poppins"],
     },
     colors: {
-      "darkPurple": "#06020D",
-      "halfDarkpurple": "#252C54",
-      "textColor": "#ffffff",
+      darkPurple: "#06020D",
+      halfDarkpurple: "#252C54",
+      textColor: "#ffffff",
+      buttonPurple: "#6278EF",
     },
   },
   plugins: [],
