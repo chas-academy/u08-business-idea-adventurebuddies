@@ -31,39 +31,39 @@ const LoginPage: React.FC = () => {
       <h1 className="text-center mb-4 font-bold text-2xl leading-12">
         Logga in
       </h1>
-      <div className="absolute w-[630px] h-[450px] left-1/2 transform -translate-x-1/2 top-[237.39px] bg-gray shadow-md rounded-md p-8">
+      <div className="box-border md:box-content bg-gray shadow-md rounded-md p-8">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex flex-col items-center space-y-3">
+          <div className="flex flex-col space-y-3">
             <label htmlFor="username" className="text-sm font-medium">
               Användarnamn:
             </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={handleUsernameChange}
-              className="w-2/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
           </div>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={handleUsernameChange}
+            className="w-3/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
           <div className="flex flex-col items-center space-y-2">
             <label htmlFor="password" className="text-sm font-medium">
               Lösenord:
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={handlePasswordChange}
-              className="w-2/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
           </div>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            className="w-3/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
           <div className="flex justify-around">
             <label className="">
               <input
                 type="checkbox"
                 checked={checked}
                 onChange={handleChange}
-              />
+              />{" "}
               Kom ihåg mig
             </label>
             <Link
@@ -75,7 +75,7 @@ const LoginPage: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-2/5 py-2 bg-buttonPurple text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-2/5 py-2 text-textColor bg-buttonPurple text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Logga in
           </button>
