@@ -10,6 +10,9 @@ export default {
       "darkPurple": "#06020D",
       "halfDarkpurple": "#252C54",
       "textColor": "#ffffff",
+      "primaryColor": "#6278EF",
+      "secondaryColor": "#41B082",
+      "thirdColor": "#FC5D41"
     },
   },
   plugins: [],
