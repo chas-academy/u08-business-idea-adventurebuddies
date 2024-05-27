@@ -15,7 +15,9 @@ export default {
       //secondary = green
       "secondaryColor": "#41B082",
       //third = red
-      "thirdColor": "#FC5D41"
+      "thirdColor": "#FC5D41",
+      //darker shade of primary
+      "hoverOnButton": "#4e60bf"
     },
   },
   plugins: [],
