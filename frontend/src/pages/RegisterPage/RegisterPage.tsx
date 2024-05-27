@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const RegisterPage: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -35,6 +37,30 @@ const RegisterPage: React.FC = () => {
             id="password"
             // value={password}
             // onChange={handlePasswordChange}
+            className="w-3/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="flex flex-col space-y-3">
+            <label htmlFor="username" className="text-sm font-medium">
+              Email:
+            </label>
+          </div>
+          <input
+            type="text"
+            id="email"
+            // value={username}
+            // onChange={handleUsernameChange}
+            className="w-3/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="flex flex-col space-y-3">
+            <label htmlFor="username" className="text-sm font-medium">
+              Upprepa lösenord:
+            </label>
+          </div>
+          <input
+            type="text"
+            id="confirmPassword?"
+            // value={username}
+            // onChange={handleUsernameChange}
             className="w-3/5 p-2 border border-buttonPurple rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div className="flex justify-around"></div>
