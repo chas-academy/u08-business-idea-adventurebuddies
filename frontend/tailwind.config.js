@@ -2,7 +2,12 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      // Lägg till shadow-custom
+      boxShadow: {
+        'custom': '0 4px 6px -1px #c5c5c5, 0 2px 4px -2px #c5c5c5',
+      }
+  },
     fontFamily: {
       'poppins': ["Poppins", "sans-serif"],
     },
