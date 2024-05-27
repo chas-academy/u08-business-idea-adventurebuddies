@@ -17,8 +17,6 @@ interface ButtonProps {
 // Ovan väljer du vilken type, variant, size och icon samt vad som ska stå i knappen. All styling är klar.
 
 
-//Shadow (egen issue)
-
 //primarybutton type="button/submit " variant="primary" size="/small"
 //secondarybutton type="button/submit" variant="secondary" size="/small"
 //dangerbutton type="button/submit" variant=" " size="/small"
@@ -47,21 +45,21 @@ const Button: React.FC<ButtonProps> = ({ children, icon, type, variant, size, on
     return (
         <>
         {variant === "primary" ? (
-            <button style={{fontFamily: 'Poppins'}} className={`${size === 'small' ? 'min-h-12 min-w-44': 'min-h-12 min-w-80' } 'cursor-pointer rounded border bg-primaryColor hover:bg-hoverOnButton text-textColor font-semibold text-base hover:text-lg m-4 '`} type={type} onClick={onClick}>
+            <button className={`${size === 'small' ? 'min-h-12 min-w-44': 'min-h-12 min-w-80' } 'cursor-pointer rounded border bg-primaryColor hover:bg-hoverOnButton text-textColor font-semibold text-base hover:text-lg m-4 font-poppins shadow-custom '`} type={type} onClick={onClick}>
                 <div className='flex flex-row justify-center items-center '>
                 {children}
                 {icon && getIcon()}
                 </div>
             </button>
         ) : variant === "secondary" ? (
-            <button style={{fontFamily: 'Poppins'}} className={`${size === 'small' ? 'min-h-12 min-w-44' : 'min-h-12 min-w-80'}  'cursor-pointer rounded border border-primaryColor hover:outline-none hover:ring hover:ring-primaryColor font-medium text-base hover:text-lg m-4 '`} type={type} onClick={onClick}>
+            <button  className={`${size === 'small' ? 'min-h-12 min-w-44' : 'min-h-12 min-w-80'}  'cursor-pointer rounded border border-primaryColor hover:outline-none hover:ring hover:ring-primaryColor font-medium text-base hover:text-lg m-4 font-poppins shadow-custom '`} type={type} onClick={onClick}>
                  <div className='flex flex-row justify-center items-center '>
                 {children}
                 {icon && getIcon()}
                 </div>
             </button>
         ) : (
-            <button style={{fontFamily: 'Poppins'}} className={`${size === 'small' ? 'min-h-12 min-w-44' : 'min-h-12 min-w-80'} 'cursor-pointer rounded border border-thirdColor hover:bg-thirdColor text-black font-medium hover:text-textColor text-base hover:text-lg m-4 '`} type={type} onClick={onClick}>
+            <button className={`${size === 'small' ? 'min-h-12 min-w-44' : 'min-h-12 min-w-80'} 'cursor-pointer rounded border border-thirdColor hover:bg-thirdColor text-black font-medium hover:text-textColor text-base hover:text-lg m-4 font-poppins shadow-custom '`} type={type} onClick={onClick}>
                  <div className='flex flex-row justify-center items-center '>
                 {children}
                 {icon && getIcon()}
