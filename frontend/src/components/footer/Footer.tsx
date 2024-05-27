@@ -1,16 +1,19 @@
-import "./Footer.css";
+import './Footer.css'
 
-export const Footer = () => {
+const Footer = () => {
   return (
     <>
-      <div className="bottom-0 left-0 absolute w-full mt-32 flex flex-col">
-        <div className="flex-grow flex items-stretch relative">
-          <div className="relative w-full h-full">
+      <footer className="relative flex flex-col mt-auto right-0 left-0 bottom-0">
+        <div className="relative w-full h-auto">
+
+          {/* Back SVG */}
+          <div className="absolute inset-0 mt-4">
             <svg
               viewBox="0 0 1440 377"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute inset-0 w-full h-full"
+              className="w-full h-auto"
+            
             >
               <path
                 fill-rule="evenodd"
@@ -21,12 +24,14 @@ export const Footer = () => {
             </svg>
           </div>
 
-          <div className="relative w-full h-full">
+            {/* Middle SVG */}
+          <div className="absolute inset-0 mt-8 sm:mt-10 md:mt-14 lg:mt-20 xl:mt-24  2xl:mt-28">
             <svg
-              viewBox="0 0 1440 210"
+              viewBox="0 0 1440 320"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute inset-0 w-full h-full "
+              className="w-full h-auto"
+          
             >
               <path
                 fill-rule="evenodd"
@@ -37,12 +42,13 @@ export const Footer = () => {
             </svg>
           </div>
 
-          <div className="relative w-full h-full">
+          {/* Front SVG */}
+          <div className="relative inset-0 top-[2px] ">
             <svg
               viewBox="0 0 1440 432"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute inset-0 w-full h-full"
+              className="w-full h-auto"
             >
               <path
                 fill-rule="evenodd"
@@ -67,19 +73,19 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-halfDarkpurple to-darkPurple fflex-grow flex flex-col justify-between">
-          <ul className="text-left pl-6 pt-2 text-textColor text-xs font-display font-medium">
-            <li>
+        <div className="relative inset-0 bg-gradient-to-b from-halfDarkpurple to-darkPurple flex-grow">
+          <ul className="text-left pl-8 md:pl-32 pt-2 text-textColor text-xs md:text-base xl:text-2xl font-display sm:font-medium">
+            <li className="pb-2">
               <a href="#">
-                Help <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                Hjälp <i className="fa-solid fa-arrow-up-right-from-square"></i>
               </a>
             </li>
-            <li>
-              <a href="#">Condition of use</a>
+            <li className="pb-2">
+              <a href="#">Användningsvillkor</a>
             </li>
-            <li>
+            <li className="pb-2">
               <a href="#">
-                Contact
+                Kontakt
                 <i className="fa-solid fa-arrow-up-right-from-square"></i>
               </a>
             </li>
@@ -95,7 +101,7 @@ export const Footer = () => {
               <li className="px-4">
                 <a href="#">
                   <i
-                    className="fa-brands fa-square-facebook"
+                    className="fa-brands fa-square-facebook fa-xl"
                     style={{ color: "#FFFFFF" }}
                   ></i>
                 </a>
@@ -103,7 +109,7 @@ export const Footer = () => {
               <li className="px-4">
                 <a href="#">
                   <i
-                    className="fa-brands fa-square-instagram"
+                    className="fa-brands fa-square-instagram fa-xl"
                     style={{ color: "#FFFFFF" }}
                   ></i>
                 </a>
@@ -111,7 +117,7 @@ export const Footer = () => {
               <li className="px-4">
                 <a href="#">
                   <i
-                    className="fa-brands fa-linkedin"
+                    className="fa-brands fa-linkedin fa-xl"
                     style={{ color: "#FFFFFF" }}
                   ></i>
                 </a>
@@ -119,13 +125,45 @@ export const Footer = () => {
             </ul>
           </div>
 
-          <div className="border-t solid border-textColor mx-10">
-            <p className="text-center py-2 text-textColor text-xs font-display">
-              2024 by Cmpny, inc
+          <div className="border-t  border-textColor mx-12 md:mx-[300px]">
+            <p className="text-center py-2 text-textColor text-xs md:text-base font-display">
+            <i className="fa-regular fa-copyright" style={{color: "#FFFFFF" }}></i> 2024 Av Adventure Buddies AB
             </p>
           </div>
         </div>
-      </div>
+
+        <div className="flex justify-evenly py-6 sm:hidden">
+          <ul className="flex">
+            <li className='px-6'>
+              <a href="#">
+              <i className="fa-solid fa-house-chimney" style={{color: "#1E0707"}}></i>
+              </a>
+            </li>
+            <li className="px-6">
+              <a href="#">
+              <i className="fa-solid fa-map" style={{color: "#1E0707"}}></i>
+              </a>
+            </li>
+            <li className="px-6">
+              <a href="#">
+              <i className="fa-solid fa-plus" style={{color: "#1E0707"}}></i>
+              </a>
+            </li>
+            <li className="px-6">
+              <a href="#">
+              <i className="fa-solid fa-magnifying-glass" style={{color: "#1E0707"}}></i>
+              </a>
+            </li>
+            <li className="px-6">
+              <a href="#">
+              <i className="fa-solid fa-user-large" style={{color: "#1E0707"}}></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </footer>
     </>
   );
 };
+
+export default Footer;
