@@ -1,88 +1,185 @@
+import { useEffect, useState } from "react";
+import { IEvent2 } from "../../../../shared/interfaces/IEvents2";
+import { useEventLatitude } from "../../store/useIEventLatitude";
+
 const EventForm = () => {
+  // Denna lagras platsen du säker på och uppdateras när användaren trycker på submit
+  const [place, setPlace] = useState<string>("");
+  // Denna lagrar formDatan, den blir även uppdaterad med lon, lat från api anropet
+  const [formData, setFormData] = useState<IEvent2>({
+    activity: "",
+    location: "",
+    start_time: new Date(),
+    participantsMin: 0,
+    participantsMax: 0,
+    equipment: "",
+    age: "15 - 20",
+    lat: "",
+    lon: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPlace(formData.location);
+  };
+
+  useEffect(() => {
+    console.log("HAHAHA", formData.location);
+    const fetchData = async () => {
+      if (place) {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${place}&format=json&addressdetails=1&limit=1&polygon_svg=1`
+          );
+          const jsonData = await response.json();
+          const lon = jsonData[0]["lon"];
+          const lat = jsonData[0]["lat"];
+          setFormData({
+            ...formData,
+            lon: lon,
+            lat: lat,
+          });
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        }
+      }
+    };
+    fetchData();
+    console.log("uppdaterad", formData);
+  }, [place]);
+
+  // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
+  // const updateOption = useMapsFormData((state) => state.updateOption);
+
+  const updateLatitude = useEventLatitude(
+    (state) => state.updateLatitudeIEvent
+  );
+
+  useEffect(() => {
+    updateLatitude(formData.lat, formData.lon);
+  }, [formData.lat, formData.lon]);
+
+  // const { latitudeEvent } = useEventLatitude();
+  // useEffect(() => {
+  //   console.log("Detta är storen ", latitudeEvent.lat);
+  //   console.log("Detta är storen ", latitudeEvent.lon);
+  // }, [latitudeEvent]);
+
   return (
     <>
       <h1>Skapa event</h1>
-      <form className="mx-auto">
+      <form className="mx-auto" onSubmit={onSubmit}>
         <div className="mb-4">
-          <label htmlFor="Aktivitet" className="block text-left">
+          <label htmlFor="activity" className="block text-left">
             Aktivitet:
           </label>
           <input
             type="text"
-            id="Aktivitet"
-            name="Aktivitet"
+            id="activity"
+            name="activity"
             className="border-solid border-2 w-full"
+            onChange={handleChange}
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="Plats" className="block text-left">
+          <label htmlFor="location" className="block text-left">
             Plats:
           </label>
           <input
             type="text"
-            id="Plats"
-            name="Plats"
+            id="location"
+            name="location"
             className="border-solid border-2 w-full"
+            onChange={handleChange}
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="TidOchDatum" className="block text-left">
+          <label htmlFor="start_time" className="block text-left">
             Tid och datum:
           </label>
           <input
             type="time"
-            id="Tid"
-            name="Tid"
+            id="start_time"
+            name="start_time"
             className="border-solid border-2 w-1/2 mb-2"
+            onChange={handleChange}
           />
           <input
             type="date"
             id="Datum"
             name="Datum"
             className="border-solid border-2 w-1/2"
+            onChange={handleChange}
           />
         </div>
         <div className="flex">
           <div className="mb-4 w-1/2">
-            <label htmlFor="MinDeltagare" className="block">
+            <label htmlFor="participantsMin" className="block">
               Min/max deltagare:
             </label>
             <input
               type="number"
-              id="MinDeltagare"
-              name="min"
+              id="participantsMin"
+              name="participantsMin"
               min="1"
               max="30"
               inputMode="numeric"
               className="border-solid border-2 w-10 mr-2"
+              onChange={handleChange}
             />
             <input
               type="number"
               id="MaxDeltagare"
-              name="max"
+              name="participantsMax"
               min="1"
               max="30"
               className="border-solid border-2 w-10"
+              onChange={handleChange}
             />
           </div>
 
           <div className="mb-4 w-1/2">
             <div className="flex">
-              <label htmlFor="Utrustning" className="block">
+              <label htmlFor="equipment" className="block">
                 Utrustning:
               </label>
               <label htmlFor="Ja">Ja</label>
-              <input type="radio" name="Utrustning" className="mr-2" id="Ja" />
+              <input
+                type="radio"
+                name="equipment"
+                className="mr-2"
+                id="Ja"
+                onChange={handleChange}
+              />
               <label htmlFor="Ja">Nej</label>
-              <input type="radio" name="Utrustning" className="mr-2" id="Nej" />
+              <input
+                type="radio"
+                name="equipment"
+                className="mr-2"
+                id="Nej"
+                onChange={handleChange}
+              />
             </div>
             <input
               type="text"
               id="Utrustning"
               name="Utrustning"
               className="border-solid border-2 w-20"
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -92,14 +189,15 @@ const EventForm = () => {
           </label>
           <select
             id="Ålder"
-            name="Ålder"
+            name="age"
             className="border-solid border-2 w-1/2 items-left"
+            onChange={handleChange}
           >
-            <option value="under18">15 - 20</option>
-            <option value="18to30">20 - 25</option>
-            <option value="31to50">25 - 30</option>
-            <option value="over50">40 - 50</option>
-            <option value="over50">50 - 100</option>
+            <option value="15 - 20">15 - 20</option>
+            <option value="20 - 25">20 - 25</option>
+            <option value="25 - 30">25 - 30</option>
+            <option value="40 - 50">40 - 50</option>
+            <option value="50 - 100">50 - 100</option>
           </select>
         </div>
         <div className="flex flex-col items-start">
@@ -110,6 +208,7 @@ const EventForm = () => {
             name="Övrigt"
             placeholder="Skriv här..."
             className="border-solid border-2 w-full items-left"
+            onChange={handleChange}
           />
         </div>
         <div className="pt-4">
