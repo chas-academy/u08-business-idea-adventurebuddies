@@ -12,6 +12,7 @@ export default {
       poppins: ["Poppins", "sans-serif"],
     },
     colors: {
+      hoverOnLink: "#B5C0F8",
       darkPurple: "#06020D",
       halfDarkpurple: "#252C54",
       textColor: "#ffffff",

@@ -1,5 +1,8 @@
 import "./App.css";
+import Footer  from "./components/footer/Footer";
+import HomePage from "./pages/homePage/HomePage";
 import { Link, Outlet } from 'react-router-dom'
+
 
 function App() {
   return (
@@ -35,6 +38,7 @@ function App() {
     <main>
       <Outlet />
     </main>
+    <Footer />
     </>
   );
 }
