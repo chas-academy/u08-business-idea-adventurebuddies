@@ -2,16 +2,25 @@ import { IUser } from "../interfaces/IUser";
 import User from "../models/userModel";
 
 export const registerUser = async (user: Partial<IUser>) => {
-  const { name, userName, email, password, dateOfBirth, gender, description } =
-    user;
+  const {
+    name,
+    userName,
+    email,
+    password,
+    dateOfBirth,
+    gender,
+    description,
+    phoneNumber,
+    profileImageUrl,
+  } = user;
   if (
     !name ||
     !userName ||
     !email ||
     !password ||
     !dateOfBirth ||
-    !gender ||
-    !description
+    !gender
+    // !description
   ) {
     return {
       error: "Please provide all the required fields",
@@ -31,6 +40,8 @@ export const registerUser = async (user: Partial<IUser>) => {
     dateOfBirth,
     gender,
     description,
+    phoneNumber,
+    profileImageUrl,
     role: user.role,
   });
 

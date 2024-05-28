@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.tabs{
+flex-basis: 10em;
+padding:1em;
+} 
+.active-tabs{
+    background-color: white;
+    border-bottom:#6278EF solid ;
+}
+
+.content{
+    display:none;
+}
+
+.active-content{
+    display:block;
+    background-color: white;
+}

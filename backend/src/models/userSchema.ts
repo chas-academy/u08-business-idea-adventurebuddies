@@ -19,6 +19,8 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     password: { type: String, required: true },
     tokens: [{ token: { type: String, required: false } }],
     role: { type: Number, default: 1 },
+    phoneNumber: { type: String, required: false },
+    profileImageUrl: { type: String, required: false },
   },
   {
     timestamps: true,
