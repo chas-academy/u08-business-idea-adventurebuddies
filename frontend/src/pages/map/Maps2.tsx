@@ -2,10 +2,22 @@ import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useMapsFormData } from "../../store/useMapsFormData";
+import { useEventLatitude } from "../../store/useIEventLatitude";
 
 const Maps2 = () => {
   const [latitude, setLatitude] = useState<string>("");
   const [longitude, setLongitude] = useState<string>("");
+
+  // ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ
+
+  // Denna får ut värdet från storen till denna fil nu kan du jobba vidare på för att försöka trigga en pil för dessa kordinater
+  const { latitudeEvent } = useEventLatitude();
+  useEffect(() => {
+    console.log("Detta är storen I Maps ", latitudeEvent.lat);
+    console.log("Detta är storen i maps ", latitudeEvent.lon);
+  }, [latitudeEvent]);
+
+  // ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ
 
   // Denna hämtar värdena från store till lat, lon
   const { userLocation } = useMapsFormData((state) => ({
