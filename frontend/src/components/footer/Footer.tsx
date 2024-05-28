@@ -74,31 +74,30 @@ const Footer = () => {
         </div>
 
         <div className="relative inset-0 bg-gradient-to-b from-halfDarkpurple to-darkPurple flex-grow">
-          <ul className="text-left pl-8 md:pl-32 pt-2 text-textColor text-xs md:text-base xl:text-2xl font-display sm:font-medium">
-            <li className="pb-2">
+          <ul className="text-left pl-8 sm:pl-18 md:pl-32 pt-2 w-1/4  text-textColor text-xs md:text-base xl:text-2xl font-display sm:font-medium">
+            <li className="pb-2 hover:text-hoverOnLink">
               <a href="#">
                 Hjälp <i className="fa-solid fa-arrow-up-right-from-square"></i>
               </a>
             </li>
-            <li className="pb-2">
+            <li className="pb-2 hover:text-hoverOnLink">
               <a href="#">Användningsvillkor</a>
             </li>
-            <li className="pb-2">
+            <li className="pb-2 hover:text-hoverOnLink">
               <a href="#">
                 Kontakt
                 <i className="fa-solid fa-arrow-up-right-from-square"></i>
               </a>
             </li>
-            <li>
+            <li className="hover:text-hoverOnLink">
               <a href="#">
                 FAQ <i className="fa-solid fa-arrow-up-right-from-square"></i>
               </a>
             </li>
           </ul>
-
           <div className="flex justify-center pb-2">
             <ul className="flex">
-              <li className="px-4">
+              <li className="px-4 hover:scale-125">
                 <a href="#">
                   <i
                     className="fa-brands fa-square-facebook fa-xl"
@@ -106,7 +105,7 @@ const Footer = () => {
                   ></i>
                 </a>
               </li>
-              <li className="px-4">
+              <li className="px-4 hover:scale-125">
                 <a href="#">
                   <i
                     className="fa-brands fa-square-instagram fa-xl"
@@ -114,7 +113,7 @@ const Footer = () => {
                   ></i>
                 </a>
               </li>
-              <li className="px-4">
+              <li className="px-4 hover:scale-125">
                 <a href="#">
                   <i
                     className="fa-brands fa-linkedin fa-xl"
