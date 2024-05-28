@@ -10,6 +10,7 @@ export default {
       "darkPurple": "#06020D",
       "halfDarkpurple": "#252C54",
       "textColor": "#ffffff",
+      "hoverOnLink": "#B5C0F8",
     },
   },
   plugins: [],
