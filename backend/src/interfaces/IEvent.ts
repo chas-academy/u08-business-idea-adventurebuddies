@@ -3,15 +3,13 @@ import { ObjectId } from "mongodb";
 
 interface Location {
     type: 'Point';
-    coordinates: [number, number];
+    coordinates: [string, string];
   }
 
 export interface IEvent {
-    _id: ObjectId;
     activity: string;
     user_id: ObjectId;
     start_time: Date;
-    end_time: Date;
     location: Location;
     equipment: string;
     age: number;
