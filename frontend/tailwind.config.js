@@ -9,7 +9,7 @@ export default {
       },
     },
     fontFamily: {
-      poppins: ["Poppins", "sans-serif"],
+      'sans': ["Poppins", "sans-serif"],
     },
     colors: {
       hoverOnLink: "#B5C0F8",
