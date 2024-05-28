@@ -1,10 +1,12 @@
-const CreateEventPage = () => {
+import EventForm from "../../components/EventForm/EventForm";
 
-    return (
-        <>
-        Create event
-        </>
-    )
-}
+const CreateEventPage = () => {
+  return (
+    <>
+      Create event
+      <EventForm />
+    </>
+  );
+};
 
 export default CreateEventPage;
