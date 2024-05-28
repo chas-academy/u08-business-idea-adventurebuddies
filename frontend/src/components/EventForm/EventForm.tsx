@@ -18,6 +18,7 @@ const EventForm = () => {
     lon: "",
   });
 
+  // Denna uppdaterar formData konturnuelligt när användare använder formen
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -30,13 +31,14 @@ const EventForm = () => {
     });
   };
 
+  // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPlace(formData.location);
   };
 
+  // Denna gör ett API kall när Place ändras och sätter sedan lon, lat kordinaterna in i formdata
   useEffect(() => {
-    console.log("HAHAHA", formData.location);
     const fetchData = async () => {
       if (place) {
         try {
@@ -61,21 +63,13 @@ const EventForm = () => {
   }, [place]);
 
   // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
-  // const updateOption = useMapsFormData((state) => state.updateOption);
-
   const updateLatitude = useEventLatitude(
     (state) => state.updateLatitudeIEvent
   );
-
+  // Denna useEffekt har triggers för att uppdatera storen när forDatas lon, lat uppdateras
   useEffect(() => {
     updateLatitude(formData.lat, formData.lon);
   }, [formData.lat, formData.lon]);
-
-  // const { latitudeEvent } = useEventLatitude();
-  // useEffect(() => {
-  //   console.log("Detta är storen ", latitudeEvent.lat);
-  //   console.log("Detta är storen ", latitudeEvent.lon);
-  // }, [latitudeEvent]);
 
   return (
     <>

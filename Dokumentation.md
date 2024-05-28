@@ -72,3 +72,27 @@ Option hämtas också från store och läggs in i variabeln option.
 
 Variablerna från usestate för lon. lat kommer sedan uppdatera esuEffekten för kartan. Kartan har Latitude, Longitude och option som dependesie och detta betyder att när något av dessa värden ändras så kommer denna att uppdateras. Lat och lon skulle då sättas in för arr uppdatera kartan och denna vy och option finns i if för att se om värdet är option 1 eller 2 som då bestämmer vilken kart vy som kommer visas
 ![alt text](frontend/DokumentationBilder/SearchBar/image-17.png)
+
+EventForm:
+
+Detta form tar in data om event och skall skicka över lon, lat till maps för att kunna trigga en funktion som lägger till en marker på användarens event destination.
+
+![alt text](frontend/DokumentationBilder/EventForm/image-1.png)
+
+Jag tog in interfacet IEvent från shared mappen som ligger bredvid backend och frontend mapparna. Denna shared mapp finns för att kunna dela interface mellan backend och frontend. Jag använde detta interface på useStaten och sedan deffinerade jag vad variablerna har för default värden.
+
+![alt text](frontend/DokumentationBilder/EventForm/image-2.png)
+
+Jag upprättade sedan en fetch funktion som skulle kunna skicka ordet som skrivs in på plats till API:t för att kunna få kordinater. För att bara skicka ett API call var jag tvungen att göra yttliggare en useState som inte uppdateras på onchange utan på sumbit. setFormdata uppdateras på onchanger varjegång användaren gör någonting med formet. När användaren känner sig klar och trycker på submit så kommer onsubmit att köras och i den funktionen finns preventDefault() som hindrar så att inte sidan laddas om och setPlace() som kommer att hämta location från formData och sätta den i SetPlace.
+
+![alt text](frontend/DokumentationBilder/EventForm/image-3.png)
+
+Min fetchData har jag satt i en useEffekt som har place som trigger och kommer när användare trycker på sumbit och place uppdateras att triggas och då göra ett api call.
+
+![alt text](frontend/DokumentationBilder/EventForm/image-4.png)
+
+I denna useEffekt har jag seddan tagit jsondatan med lon, lat och satt in dessa i formData för att sammla all info på en och samma plats.
+
+Jag upprättade sedan en Zustandstore som heter useEventLatitude för att kunna skicka dessa kordinater till maps två för att sedan kunna göra en funktion där som triggas när dessa uppdateras och lägger till en marker. I EventForm så så hämtar jag först storen och binder den till updateLatitude variabeln sedan så har jag en useEffect under som har forData.lat och formData.lon som beroende och uppdaterar storen om de blir triggade.
+
+![alt text](frontend/DokumentationBilder/EventForm/image-5.png)
