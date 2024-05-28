@@ -46,15 +46,9 @@ const Navbar = () => {
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </Link>
             </button>
-            {/* <Button type="button" variant="secondary" onClick={handleClick}>
+            <Button type="button" size="small" variant="secondary" onClick={handleClick}>
               Logga in
-            </Button> */}
-            <button
-              type="submit"
-              className="cursor-pointer rounded border border-primaryColor text-black font-medium text-base shadow-xl shadow-black m-5 py-2 w-40"
-            >
-              Logga in
-            </button>
+            </Button>
           </div>
         </div>
 
