@@ -1,0 +1,230 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-05-22T13:08:02.820Z",
+  "__export_source": "insomnia.desktop.app:v9.2.0",
+  "resources": [
+    {
+      "_id": "req_235c5ff0747642e8b3842b7e54ba4d94",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1716368118930,
+      "created": 1715764890394,
+      "url": "http://localhost:3000/api/users",
+      "name": "UserTest",
+      "description": "",
+      "method": "GET",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "preRequestScript": "",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1683350501284.3125,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "wrk_25d15b4752784608a4928094bd6830af",
+      "parentId": null,
+      "modified": 1715166948677,
+      "created": 1715166948677,
+      "name": "Mongoose",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_7b03971d51de4eeeadf6fdbdfcc9a741",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1716383192887,
+      "created": 1716383192887,
+      "url": "http://localhost:3000/api/users",
+      "name": "EventTest",
+      "description": "",
+      "method": "GET",
+      "body": {
+        "mimeType": "application/json",
+        "text": ""
+      },
+      "preRequestScript": "",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1683299590222.5312,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_40610da45f2b497c96782f3bb0bf6d83",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1715699747564,
+      "created": 1715696086254,
+      "url": "http://localhost:3000/api/sports",
+      "name": "SportTest",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"name\": \"Test sport\",\n\t\"rules\": \"Mountainbike är en individuell eller lagbaserad sport där cyklister använder specialiserade mountainbikes för att tävla på terrängbanor med olika svårighetsgrad och terräng. Målet är att slutföra banan så snabbt som möjligt med så få fel som möjligt. Tävlingen kan inkludera discipliner som downhill, cross-country och enduro. Regler inkluderar banmärken, tidtagning och teknisk svårighet. Tävlingen fortsätter tills alla deltagare har slutfört banan och en vinnare har utropats.\",\n\t\"time\": \"Varierar beroende på banan och tävlingens format (kan vara från några minuter till flera timmar)\",\n\t\"player\": \"Individuellt eller i lag\"\n}\n"
+      },
+      "preRequestScript": "",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1682535924295.8125,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_42f7196942204c15952c52689dbdc065",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1716369655162,
+      "created": 1715773497461,
+      "url": "http://localhost:3000/api/events",
+      "name": "EventTest",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t  \"activity\": \"Handboll\",\n\t\t\"user_id\": \"66447dd09a1df89ada40e624\",\n    \"start_time\": \"2024-05-22T15:30:00Z\",\n\t\t\"end_time\": \"2024-05-22T20:00:00Z\",\n\t  \"location\": {\n    \"type\": \"Point\",\n    \"coordinates\": [12.4924, 41.8902]},\n    \"equipment\": \"Allt finns\",\n\t\t\"totalParticipant\": \"16\",\n    \"participants\": [\"6644809709b58a6988194787\", \"664dac13a27676319f53ae13\"],\n    \"age\": \"30\",\n    \"message\": \"Vi är 2 personer som tänkte lira lite handboll, vi har boll med oss\"\n}\n"
+      },
+      "preRequestScript": "",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1682510468764.9219,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_15c7d0f3a5d847ee84fb67ddd6b7c4d5",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1715765396509,
+      "created": 1715764041082,
+      "url": "http://localhost:3000/api/users",
+      "name": "UserTest",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\t\"name\": \"Tintin\",\n\t\"userName\": \"TTintin\",\n\t\"email\": \"tin@tin.tin\",\n\t\"dateOfBirth\" : \"2000-05-20\",\n\t\"description\": \"Språk: Svenska, spanska, norska\",\n\t\"password\": \"tintintintin\",\n\t\"confirmPassword\": \"tintintintin\"\n}\n"
+      },
+      "preRequestScript": "",
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1682485013234.0312,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_d032d3b6d8aa451c808d3ce17b82f77e",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1716369796349,
+      "created": 1716369772142,
+      "url": "http://localhost:3000/api/events/664db2d8c4d327b706565076",
+      "name": "EventTest",
+      "description": "",
+      "method": "DELETE",
+      "body": {},
+      "preRequestScript": "",
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1680610970519.625,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_f007026ad4da12fa41ff51793292732ade5f9748",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1715166948679,
+      "created": 1715166948679,
+      "name": "Base Environment",
+      "data": {},
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1715166948679,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_f007026ad4da12fa41ff51793292732ade5f9748",
+      "parentId": "wrk_25d15b4752784608a4928094bd6830af",
+      "modified": 1715166948681,
+      "created": 1715166948681,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    }
+  ]
+}
