@@ -16,7 +16,7 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="relative flex flex-col mt-auto right-0 left-0 bottom-0">
+      <footer className="relative flex flex-col mt-auto right-0 left-0 bottom-20 sm:bottom-0 ">
         <div className="relative w-full h-auto">
           {/* Back SVG */}
           <div className="absolute inset-0 mt-4">
@@ -160,45 +160,6 @@ const Footer = () => {
               2024 Av Adventure Buddies AB
             </p>
           </div>
-        </div>
-
-        <div className="flex justify-evenly py-6 sm:hidden">
-          <ul className="flex">
-            <li className="px-6">
-              <a href="#">
-                <FontAwesomeIcon
-                  icon={faHouseChimneyWindow}
-                  style={{ color: "#1E0707" }}
-                />
-              </a>
-            </li>
-            <li className="px-6">
-              <a href="#">
-                <FontAwesomeIcon icon={faMap} style={{ color: "#1E0707" }} />
-              </a>
-            </li>
-            <li className="px-6">
-              <a href="#">
-                <FontAwesomeIcon icon={faPlus} style={{ color: "#1E0707" }} />
-              </a>
-            </li>
-            <li className="px-6">
-              <a href="#">
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  style={{ color: "#1E0707" }}
-                />
-              </a>
-            </li>
-            <li className="px-6">
-              <a href="#">
-                <FontAwesomeIcon
-                  icon={faUserLarge}
-                  style={{ color: "#1E0707" }}
-                />
-              </a>
-            </li>
-          </ul>
         </div>
       </footer>
     </>

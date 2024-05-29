@@ -42,7 +42,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden sm:contents basis-1/4">
-            <button className="mx-4 py-2 px-3 rounded-full shadow-xl hover:scale-125 hover:bg-primaryColor">
+            <button className="mx-4 py-2 px-3 rounded-full shadow-xl hover:scale-125 hover:ring hover:ring-primaryColor">
               <Link to="/">
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </Link>
