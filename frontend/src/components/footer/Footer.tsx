@@ -120,53 +120,28 @@ const Footer = () => {
               <li className="px-4" id="facebook">
                 <a
                   href="https://www.facebook.com/groups/918437540292005"
-                  className="hidden sm:contents"
                 >
                   <FontAwesomeIcon
                     icon={faSquareFacebook}
                     size="2xl"
-                    style={{ color: "#FFFFFF" }}
-                  />
-                </a>
-                <a
-                  href="https://www.facebook.com/groups/918437540292005"
-                  className="sm:hidden"
-                >
-                  <FontAwesomeIcon
-                    icon={faSquareFacebook}
-                    size="xl"
                     style={{ color: "#FFFFFF" }}
                   />
                 </a>
               </li>
               <li className="px-4" id="instagram">
-                <a href="#" className="hidden sm:contents">
+                <a href="https://www.instagram.com/activity.buddies/">
                   <FontAwesomeIcon
                     icon={faInstagram}
                     size="2xl"
-                    style={{ color: "#FFFFFF" }}
-                  />
-                </a>
-                <a href="#" className="sm:hidden">
-                  <FontAwesomeIcon
-                    icon={faInstagram}
-                    size="xl"
                     style={{ color: "#FFFFFF" }}
                   />
                 </a>
               </li>
               <li className="px-4" id="linkedin">
-                <a href="#" className="hidden sm:contents">
+                <a href="#">
                   <FontAwesomeIcon
                     icon={faLinkedin}
                     size="2xl"
-                    style={{ color: "#FFFFFF" }}
-                  />
-                </a>
-                <a href="#" className="sm:hidden">
-                  <FontAwesomeIcon
-                    icon={faLinkedin}
-                    size="xl"
                     style={{ color: "#FFFFFF" }}
                   />
                 </a>
