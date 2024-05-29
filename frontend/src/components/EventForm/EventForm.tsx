@@ -17,12 +17,14 @@ const EventForm = () => {
     age: "18+",
     lat: "",
     lon: "",
-    venue: "",
-    gender: "",
-    language: "",
+    venue: "Inomhus",
+    gender: "Female",
+    language: "Svenska",
     price: 0,
-    experience: "",
+    experience: "Nybörjare",
     totalParticipants: 0,
+    user_id: "",
+    end_time: new Date(),
   });
 
   // Denna uppdaterar formData konturnuelligt när användare använder formen
@@ -103,16 +105,13 @@ const EventForm = () => {
       try {
         console.log("Detta är backend data", formData);
 
-        const response = await fetch(
-          "https://u08-business-idea-adventurebuddies.onrender.com/api/events/",
-          {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch("http://localhost:3000/api/events/", {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed");
         }
@@ -137,6 +136,15 @@ const EventForm = () => {
     <>
       <h1>Skapa event</h1>
       <form className="mx-auto" onSubmit={onSubmit}>
+        <div>
+          <label htmlFor="user_id">Användar id</label>
+          <input
+            type="text"
+            name="user_id"
+            id="user_id"
+            onChange={handleChange}
+          />
+        </div>
         <div className="mb-4">
           <label htmlFor="activity" className="block text-left">
             Aktivitet:
@@ -171,6 +179,16 @@ const EventForm = () => {
             type="time"
             id="start_time"
             name="start_time"
+            className="border-solid border-2 w-1/2 mb-2"
+            onChange={handleChange}
+          />
+          <label htmlFor="end_time" className="block text-left">
+            Tid och datum:
+          </label>
+          <input
+            type="time"
+            id="end_time"
+            name="end_time"
             className="border-solid border-2 w-1/2 mb-2"
             onChange={handleChange}
           />
@@ -295,13 +313,11 @@ const EventForm = () => {
             </select>
           </div>
           <div>
-            <label htmlFor="experience">Hur bra är du?</label>
-            <input
-              type="text"
-              name="experience"
-              id="experience"
-              onChange={handleChange}
-            />
+            <select name="experiance" id="experience" onChange={handleChange}>
+              <option value="Nybörjare">Nybörjare</option>
+              <option value="Mellanliggande">Mellanliggande</option>
+              <option value="Avancerad">Avancerad</option>
+            </select>
           </div>
         </div>
         <div>
@@ -326,7 +342,9 @@ const EventForm = () => {
         </div>
 
         <div className="pt-4">
-          <button className="border border-black w-2/3">Skicka</button>
+          <button className="border border-black w-2/3" type="submit">
+            Skicka
+          </button>
         </div>
       </form>
     </>

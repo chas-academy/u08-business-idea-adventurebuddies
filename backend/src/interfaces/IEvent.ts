@@ -24,8 +24,8 @@ export interface IEvent {
   end_time: Date;
   location: string;
   equipment: string;
-  age: number;
-  totalParticipant: number;
+  age: string;
+  totalParticipants: number;
   participantsMin: number;
   participantsMax: number;
   participants: ObjectId[];
@@ -33,8 +33,8 @@ export interface IEvent {
   lat: string;
   lon: string;
   venue: "Inomhus" | "Utomhus" | "Online";
-  gender: "female" | "male" | "other";
-  language: "svenska" | "engelska";
+  gender: "Female" | "Male" | "Other";
+  language: "Svenska" | "Engelska";
   price: number;
-  experience: "nybörjare" | "mellanliggande" | "avancerad";
+  experience: "Nybörjare" | "Mellanliggande" | "Avancerad";
 }
