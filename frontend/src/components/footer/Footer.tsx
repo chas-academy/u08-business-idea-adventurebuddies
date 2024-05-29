@@ -1,11 +1,23 @@
-import './Footer.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./Footer.css";
+import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons/faSquareFacebook";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons/faLinkedin";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons/faArrowUpRightFromSquare";
+import { faCopyright } from "@fortawesome/free-solid-svg-icons/faCopyright";
+import { faHouseChimneyWindow } from "@fortawesome/free-solid-svg-icons/faHouseChimneyWindow";
+import { faMap } from "@fortawesome/free-solid-svg-icons/faMap";
+import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
+import { faUserLarge } from "@fortawesome/free-solid-svg-icons/faUserLarge";
+import { faInstagram } from "@fortawesome/free-brands-svg-icons/faInstagram";
+import React from "react";
+
 
 const Footer = () => {
   return (
     <>
       <footer className="relative flex flex-col mt-auto right-0 left-0 bottom-20 sm:bottom-0 ">
         <div className="relative w-full h-auto">
-
           {/* Back SVG */}
           <div className="absolute inset-0 mt-4">
             <svg
@@ -13,7 +25,6 @@ const Footer = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="w-full h-auto"
-            
             >
               <path
                 fill-rule="evenodd"
@@ -24,14 +35,13 @@ const Footer = () => {
             </svg>
           </div>
 
-            {/* Middle SVG */}
+          {/* Middle SVG */}
           <div className="absolute inset-0 mt-8 sm:mt-10 md:mt-14 lg:mt-20 xl:mt-24  2xl:mt-28">
             <svg
               viewBox="0 0 1440 320"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="w-full h-auto"
-          
             >
               <path
                 fill-rule="evenodd"
@@ -76,8 +86,13 @@ const Footer = () => {
         <div className="relative inset-0 bg-gradient-to-b from-halfDarkpurple to-darkPurple flex-grow">
           <ul className="text-left pl-8 sm:pl-18 md:pl-32 pt-2 w-1/4  text-textColor text-xs md:text-base xl:text-2xl font-display sm:font-medium">
             <li className="pb-2 hover:text-hoverOnLink">
+
               <a href="#">
-                Hjälp <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                Hjälp{" "}
+                <FontAwesomeIcon
+                  icon={faArrowUpRightFromSquare}
+                  style={{ color: "#dbe1eb" }}
+                />
               </a>
             </li>
             <li className="pb-2 hover:text-hoverOnLink">
@@ -86,47 +101,63 @@ const Footer = () => {
             <li className="pb-2 hover:text-hoverOnLink">
               <a href="#">
                 Kontakt
-                <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                <FontAwesomeIcon
+                  icon={faArrowUpRightFromSquare}
+                  style={{ color: "#dbe1eb" }}
+                />
               </a>
             </li>
             <li className="hover:text-hoverOnLink">
               <a href="#">
-                FAQ <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                FAQ{" "}
+                <FontAwesomeIcon
+                  icon={faArrowUpRightFromSquare}
+                  style={{ color: "#dbe1eb" }}
+                />
               </a>
             </li>
           </ul>
           <div className="flex justify-center pb-2">
             <ul className="flex">
-              <li className="px-4 hover:scale-125">
-                <a href="#">
-                  <i
-                    className="fa-brands fa-square-facebook fa-xl"
+              <li className="px-4 hover:scale-125" id="facebook">
+                <a
+                  href="https://www.facebook.com/groups/918437540292005"
+                >
+                  <FontAwesomeIcon
+                    icon={faSquareFacebook}
+                    size="2xl"
                     style={{ color: "#FFFFFF" }}
-                  ></i>
+                  />
                 </a>
               </li>
-              <li className="px-4 hover:scale-125">
-                <a href="#">
-                  <i
-                    className="fa-brands fa-square-instagram fa-xl"
+              <li className="px-4 hover:scale-125" id="instagram">
+                <a href="https://www.instagram.com/activity.buddies/">
+                  <FontAwesomeIcon
+                    icon={faInstagram}
+                    size="2xl"
                     style={{ color: "#FFFFFF" }}
-                  ></i>
+                  />
                 </a>
               </li>
-              <li className="px-4 hover:scale-125">
+              <li className="px-4 hover:scale-125" id="linkedin">
                 <a href="#">
-                  <i
-                    className="fa-brands fa-linkedin fa-xl"
+                  <FontAwesomeIcon
+                    icon={faLinkedin}
+                    size="2xl"
                     style={{ color: "#FFFFFF" }}
-                  ></i>
+                  />
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="border-t  border-textColor mx-12 md:mx-[300px]">
-            <p className="text-center py-2 text-textColor text-xs md:text-base font-display">
-            <i className="fa-regular fa-copyright" style={{color: "#FFFFFF" }}></i> 2024 Av Adventure Buddies AB
+            <p className="text-center py-2 text-textColor text-xs md:text-base font-poppins">
+              <FontAwesomeIcon
+                icon={faCopyright}
+                style={{ color: "#d5dae2" }}
+              />{" "}
+              2024 Av Adventure Buddies AB
             </p>
           </div>
         </div>

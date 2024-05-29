@@ -1,6 +1,6 @@
 import app from "./app";
 import dotenv from "dotenv";
-import connectSportDB from "../src/db/db";
+import connectSportDB from "./db/db";
 
 dotenv.config();
 const port = process.env.PORT || 3000;

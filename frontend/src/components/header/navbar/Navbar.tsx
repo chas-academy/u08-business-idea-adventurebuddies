@@ -6,6 +6,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyin
 import { faHouseChimneyWindow } from "@fortawesome/free-solid-svg-icons";
 import { faMap } from "@fortawesome/free-regular-svg-icons/faMap";
 import { faUserLarge } from "@fortawesome/free-solid-svg-icons/faUserLarge";
+import React from "react";
 
 const Navbar = () => {
   const handleClick = () => {

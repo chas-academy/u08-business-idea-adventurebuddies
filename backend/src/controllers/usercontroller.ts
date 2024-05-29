@@ -2,8 +2,17 @@ import { IUser } from "../interfaces/IUser";
 import User from "../models/userModel";
 
 export const registerUser = async (user: Partial<IUser>) => {
-  const { name, userName, email, password, dateOfBirth, gender, description } =
-    user;
+  const {
+    name,
+    userName,
+    email,
+    password,
+    dateOfBirth,
+    gender,
+    description,
+    phoneNumber,
+    profileImageUrl,
+  } = user;
   if (
     !name ||
     !userName ||
@@ -11,7 +20,8 @@ export const registerUser = async (user: Partial<IUser>) => {
     !password ||
     !dateOfBirth ||
     !gender ||
-    !description
+    !phoneNumber
+    // !description
   ) {
     return {
       error: "Please provide all the required fields",
@@ -23,6 +33,16 @@ export const registerUser = async (user: Partial<IUser>) => {
       error: "User with that email already exists.",
     };
   }
+
+  if (phoneNumber) {
+    const existingPhone = await User.findOne({ phoneNumber });
+    if (existingPhone) {
+      return {
+        error: "User with that phone number already exists.",
+      };
+    }
+  }
+
   const newUser = new User({
     name,
     userName,
@@ -31,6 +51,8 @@ export const registerUser = async (user: Partial<IUser>) => {
     dateOfBirth,
     gender,
     description,
+    phoneNumber,
+    profileImageUrl,
     role: user.role,
   });
 
@@ -71,7 +93,25 @@ export const getUser = async (id: string) => {
 };
 
 export const updateUser = async (id: string, data: Partial<IUser>) => {
-  return await User.findByIdAndUpdate(id, data, { new: true });
+  try {
+    if (data.phoneNumber) {
+      const existingPhone = await User.findOne({
+        phoneNumber: data.phoneNumber,
+      });
+      if (existingPhone && existingPhone._id.toString() !== id) {
+        return {
+          error: "User with that phone number already exists.",
+        };
+      }
+    }
+
+    return await User.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+  } catch (error) {
+    return { error: error };
+  }
 };
 
 export const deleteUser = async (id: string) => {
