@@ -1,3 +1,5 @@
+import React from "react";
+
 interface InputProps {
   type: "text" | "checkbox" | "radio" | "email" | "date" | "time";
   label?: string;

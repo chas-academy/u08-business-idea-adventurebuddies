@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../components/input/Input";
+import React from "react";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
