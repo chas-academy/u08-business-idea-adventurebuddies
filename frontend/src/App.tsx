@@ -1,6 +1,7 @@
 import "./App.css";
+import React from "react";
 import Footer  from "./components/footer/Footer";
-import HomePage from "./pages/homePage/HomePage";
+// import HomePage from "./pages/homePage/HomePage";
 import { Link, Outlet } from 'react-router-dom'
 
 
