@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { IEvent2 } from "../../../../shared/interfaces/IEvents2";
 import { useEventLatitude } from "../../store/useIEventLatitude";
 
