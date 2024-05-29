@@ -10,6 +10,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { faUserLarge } from "@fortawesome/free-solid-svg-icons/faUserLarge";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons/faInstagram";
+import React from "react";
+
 
 const Footer = () => {
   return (
@@ -82,8 +84,9 @@ const Footer = () => {
         </div>
 
         <div className="relative inset-0 bg-gradient-to-b from-halfDarkpurple to-darkPurple flex-grow">
-          <ul className="text-left pl-8 md:pl-32 pt-2 text-textColor text-xs md:text-base xl:text-2xl font-poppins sm:font-medium">
-            <li className="pb-2">
+          <ul className="text-left pl-8 sm:pl-18 md:pl-32 pt-2 w-1/4  text-textColor text-xs md:text-base xl:text-2xl font-display sm:font-medium">
+            <li className="pb-2 hover:text-hoverOnLink">
+
               <a href="#">
                 Hjälp{" "}
                 <FontAwesomeIcon
@@ -92,10 +95,10 @@ const Footer = () => {
                 />
               </a>
             </li>
-            <li className="pb-2">
+            <li className="pb-2 hover:text-hoverOnLink">
               <a href="#">Användningsvillkor</a>
             </li>
-            <li className="pb-2">
+            <li className="pb-2 hover:text-hoverOnLink">
               <a href="#">
                 Kontakt
                 <FontAwesomeIcon
@@ -104,7 +107,7 @@ const Footer = () => {
                 />
               </a>
             </li>
-            <li>
+            <li className="hover:text-hoverOnLink">
               <a href="#">
                 FAQ{" "}
                 <FontAwesomeIcon
@@ -114,10 +117,9 @@ const Footer = () => {
               </a>
             </li>
           </ul>
-
           <div className="flex justify-center pb-2">
             <ul className="flex">
-              <li className="px-4" id="facebook">
+              <li className="px-4 hover:scale-125" id="facebook">
                 <a
                   href="https://www.facebook.com/groups/918437540292005"
                 >
@@ -128,7 +130,7 @@ const Footer = () => {
                   />
                 </a>
               </li>
-              <li className="px-4" id="instagram">
+              <li className="px-4 hover:scale-125" id="instagram">
                 <a href="https://www.instagram.com/activity.buddies/">
                   <FontAwesomeIcon
                     icon={faInstagram}
@@ -137,7 +139,7 @@ const Footer = () => {
                   />
                 </a>
               </li>
-              <li className="px-4" id="linkedin">
+              <li className="px-4 hover:scale-125" id="linkedin">
                 <a href="#">
                   <FontAwesomeIcon
                     icon={faLinkedin}

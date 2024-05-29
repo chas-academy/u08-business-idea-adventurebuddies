@@ -23,6 +23,8 @@ userRouter.post("/register", async (req, res) => {
     dateOfBirth: req.body.dateOfBirth,
     gender: req.body.gender,
     description: req.body.description,
+    phoneNumber: req.body.phoneNumber,
+    profileImageUrl: req.body.profileImageUrl,
     role: req.body.role,
   };
   console.log(req.body);

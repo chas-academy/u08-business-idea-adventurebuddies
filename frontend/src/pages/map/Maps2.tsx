@@ -1,11 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useMapsFormData } from "../../store/useMapsFormData";
+import { useEventLatitude } from "../../store/useIEventLatitude";
+import React from "react";
+// import { CartoDB } from "ol/source";
 
 const Maps2 = () => {
   const [latitude, setLatitude] = useState<string>("");
   const [longitude, setLongitude] = useState<string>("");
+
+
+  // ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ
+
+  // Denna får ut värdet från storen till denna fil nu kan du jobba vidare på för att försöka trigga en pil för dessa kordinater
+  const { latitudeEvent } = useEventLatitude();
+  useEffect(() => {
+    console.log("Detta är storen I Maps ", latitudeEvent.lat);
+    console.log("Detta är storen i maps ", latitudeEvent.lon);
+  }, [latitudeEvent]);
+
+  // ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ
 
   // Denna hämtar värdena från store till lat, lon
   const { userLocation } = useMapsFormData((state) => ({
@@ -35,9 +50,24 @@ const Maps2 = () => {
     getUserLocation();
   }, []);
 
+  // Kollar så att värdet är ett validerade nummer, är det ett nummer så omvandlas det till ett floating-point nummer (NaN(Not-a-Number))
+  const isValidNumber = (value: string) => !isNaN(parseFloat(value));
+
   useEffect(() => {
+    // Default koordinater
+    const defaultLatitude = 51.505;
+    const defaultLongitude = -0.09;
+
+    // Parse latitude och longitude
+    const parsedLatitude = isValidNumber(latitude)
+      ? parseFloat(latitude)
+      : defaultLatitude;
+    const parsedLongitude = isValidNumber(longitude)
+      ? parseFloat(longitude)
+      : defaultLongitude;
+      
     // Skapa en karta med Leaflet när komponenten har monterats
-    const map = L.map("map").setView([latitude, longitude], 13);
+    const map = L.map("map").setView([parsedLatitude, parsedLongitude], 13);
 
     if (option === "option1") {
       const CartoDB_Voyager = L.tileLayer(
@@ -49,16 +79,21 @@ const Maps2 = () => {
           maxZoom: 20,
         }
       ).addTo(map);
+      console.log("CartoDB_Voyager tile layer added:", CartoDB_Voyager);
     } else if (option === "option2") {
       const Thunderforest_SpinalMap = L.tileLayer(
-        "https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey={apikey}",
+        `https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=93300a9709214326825865733ab161ce`,
         {
           attribution:
             '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          apikey: "93300a9709214326825865733ab161ce",
+          // apikey: "93300a9709214326825865733ab161ce",
           maxZoom: 22,
         }
       ).addTo(map);
+      console.log(
+        "Thunderforest_SpinalMap tile layer added:",
+        Thunderforest_SpinalMap
+      );
     }
 
     // Återställ kartan när komponenten rensas från DOM

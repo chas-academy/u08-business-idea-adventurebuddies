@@ -19,6 +19,21 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     password: { type: String, required: true },
     tokens: [{ token: { type: String, required: false } }],
     role: { type: Number, default: 1 },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      sparse: true,
+      validate: {
+        validator: function (v: string) {
+          // Regex to validate phone number format
+          var re = /^(\+\d{1,3}[- ]?)?\d{10}$/; // The output should be something like +46 1234567890
+          return re.test(v);
+        },
+        message: (props: any) => `${props.value} is not a valid phone number!`,
+      },
+    },
+    profileImageUrl: { type: String, required: false },
   },
   {
     timestamps: true,

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const friendcontroller_1 = require("../controllers/friendcontroller");
+const auth_1 = require("../middleware/auth");
+const friendRouter = (0, express_1.Router)();
+friendRouter.post("/request/:friendId", auth_1.auth, friendcontroller_1.sendFriendRequest);
+friendRouter.post("/accept/:friendId", auth_1.auth, friendcontroller_1.acceptFriendRequest);
+friendRouter.post("/reject/:friendId", auth_1.auth, friendcontroller_1.rejectFriendRequest);
+friendRouter.delete("/:friendId", auth_1.auth, friendcontroller_1.removeFriend);
+exports.default = friendRouter;
