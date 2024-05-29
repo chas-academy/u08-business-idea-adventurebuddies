@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
@@ -6,10 +7,10 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
 
-  const handleUsernameChange = (e) => setUsername(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
-  const handleChange = (e) => setChecked(e.target.checked);
-  const handleSubmit = (e) => {
+  const handleUsernameChange = (e: any) => setUsername(e.target.value);
+  const handlePasswordChange = (e: any) => setPassword(e.target.value);
+  const handleChange = (e: any) => setChecked(e.target.checked);
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log({ username, password, checked });
   };
