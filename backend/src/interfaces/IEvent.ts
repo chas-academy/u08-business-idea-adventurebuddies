@@ -17,11 +17,16 @@ import { ObjectId } from "mongodb";
 //   | string;
 
 export interface IEvent {
-  _id: ObjectId;
   activity: string;
   user_id: ObjectId;
+
   // start_time: Date;
   // end_time: Date;
+
+  userName?: string;
+  userEmail?: string;
+  
+
   location: string;
   equipment: string;
   age: string;
@@ -33,8 +38,8 @@ export interface IEvent {
   lat: number;
   lon: number;
   venue: "Inomhus" | "Utomhus" | "Online";
-  gender: "female" | "male" | "other";
-  language: "svenska" | "engelska";
+  gender: "Female" | "Male" | "Other";
+  language: "Svenska" | "Engelska";
   price: number;
-  experience: "nybörjare" | "mellanliggande" | "avancerad";
+  experience: "Nybörjare" | "Mellanliggande" | "Avancerad";
 }

@@ -5,11 +5,14 @@ const create = async (data: IEvent) => {
   await Event.create(data);
 };
 const readAll = async () => {
-  const events = await Event.find({}).populate("user_id");
+  const events = await Event.find({}).populate("user_id").exec();
   return events;
 };
 const read = async (id: any) => {
-  return await Event.findById(id).populate("user_id").populate("participants");
+  return await Event.findById(id)
+    .populate("user_id")
+    .populate("participants")
+    .exec();
 };
 const update = async (id: any, data: IEvent) => {
   return await Event.findByIdAndUpdate(id, data, { new: true });

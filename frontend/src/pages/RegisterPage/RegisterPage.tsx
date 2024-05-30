@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../components/input/Input";
 import React from "react";
+import Button from "../../components/button/Button";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -37,10 +38,10 @@ const RegisterPage: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 font-Poppins">
-        <div className="box-border md:box-content bg-gray-200 rounded-md p-8 glass-container">
-          <h1 className="text-center-primaryColor mb-4 leading-12 font-bold mb-8">
-            Register
+      <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
+        <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
+          <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6">
+            Registrera dig här
           </h1>
           <form
             onSubmit={handleSubmit}
@@ -145,16 +146,13 @@ const RegisterPage: React.FC = () => {
                 av Adventure Buddies.
               </p>
             </div>
-            <button
-              type="submit"
-              className="w-2/5 py-2 text-textColor bg-primaryColor font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Registrera dig
-            </button>
+            <Button type="submit" variant="primary">
+              Skapa konto
+            </Button>
           </form>
           <br></br>
-          <div>
-            Har du redan ett konto?{" "}
+          <div className="flex flex-row justify-center py-3">
+            <p className="pr-2">Har du redan ett konto?</p>
             <Link
               to="/login"
               className="underline hover:underline-offset-4 font-bold"
