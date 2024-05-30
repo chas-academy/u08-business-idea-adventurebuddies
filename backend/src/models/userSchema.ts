@@ -12,7 +12,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     dateOfBirth: { type: Date, required: true },
     gender: {
       type: String,
-      enum: ["male", "female", "other"],
+      enum: ["male", "female", "other", "non-binary"],
       required: true,
     },
     description: { type: String, required: false },
