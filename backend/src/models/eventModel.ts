@@ -17,7 +17,11 @@ const eventSchema = new Schema<IEvent>(
   {
     activity: { type: String, required: true },
     user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    start_time: { type: Date, default: () => new Date(), required: true },
+
+    // start_time: { type: Date, default: () => new Date(), required: true },
+    // end_time: { type: Date, default: () => new Date(), required: true },
+
+
     location: { type: String, required: true },
     equipment: { type: String, required: true },
     age: { type: String, required: false },
@@ -37,12 +41,12 @@ const eventSchema = new Schema<IEvent>(
     },
     gender: {
       type: String,
-      enum: ["female", "male", "other"],
+      enum: ["Female", "Male", "Other"],
       required: true,
     },
     language: {
       type: String,
-      enum: ["svenska", "engelska"],
+      enum: ["Svenska", "Engelska"],
       required: true,
     },
     price: {
@@ -51,7 +55,7 @@ const eventSchema = new Schema<IEvent>(
     },
     experience: {
       type: String,
-      enum: ["nybörjare", "mellanliggande", "avancerad"],
+      enum: ["Nybörjare", "Mellanliggande", "Avancerad"],
       required: true,
     },
   },
