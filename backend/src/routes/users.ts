@@ -7,6 +7,7 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  getUserEvents,
 } from "../controllers/usercontroller";
 import { IUser } from "../interfaces/IUser";
 import { auth, admin, CustomRequest } from "../middleware/auth";
@@ -104,5 +105,7 @@ userRouter.delete("/:id", auth, admin, async (req, res) => {
   const deletedUser = await deleteUser(id);
   res.status(200).json({ message: "User deleted", deletedUser });
 });
+
+userRouter.get("/:id/events", auth, getUserEvents);
 
 export default userRouter;

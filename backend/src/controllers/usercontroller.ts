@@ -1,5 +1,6 @@
 import { IUser } from "../interfaces/IUser";
 import User from "../models/userModel";
+import Event from "../models/eventModel";
 
 export const registerUser = async (user: Partial<IUser>) => {
   const {
@@ -124,4 +125,16 @@ export const logoutUser = async (req: any) => {
   });
   await req.user.save();
   return { message: "User logged out successfully." };
+};
+
+export const getUserEvents = async (userId: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    return { error: "User not found." };
+  }
+  const events = await Event.find({
+    _id: { $in: user.events },
+  });
+
+  return events;
 };
