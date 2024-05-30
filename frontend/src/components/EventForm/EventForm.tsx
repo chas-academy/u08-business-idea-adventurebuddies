@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import React from "react";
 // import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
 import { useEventLatitude } from "../../store/useIEventLatitude";
+import Input from "../input/Input";
+import Button from "../button/Button";
 
 const EventForm = () => {
   // Denna lagras platsen du säker på och uppdateras när användaren trycker på submit
@@ -123,231 +125,181 @@ const EventForm = () => {
   // }, [formData.lat, formData.lon]);
 
   return (
-    <>
-      <div>
-        <label htmlFor="user_id">User ID:</label>
-        <input
-          type="text"
-          id="user_id"
-          name="user_id"
-          // value={formData.user_id}
-          onChange={handleChange}
-        />
-      </div>
-      <h1>Skapa event</h1>
-      <form className="mx-auto" onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="user_id">Användar id</label>
-          <input
-            type="text"
-            name="user_id"
-            id="user_id"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="activity" className="block text-left">
-            Aktivitet:
-          </label>
-          <input
-            type="text"
-            id="activity"
-            name="activity"
-            className="border-solid border-2 w-full"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="location" className="block text-left">
-            Plats:
-          </label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            className="border-solid border-2 w-full"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="start_time" className="block text-left">
+    <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
+      <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
+        <h1>Skapa event</h1>
+        <form className="space-y-4 text-sm font-medium" onSubmit={onSubmit}>
+          <div className="flex flex-col">
+            <Input
+              label="User_ID"
+              type="text"
+              name="user_id"
+              onChange={handleChange}
+            />
+            <Input
+              label="Aktivitet"
+              type="text"
+              name="activity"
+              onChange={handleChange}
+            />
+            <Input
+              label="Plats"
+              type="text"
+              name="location"
+              onChange={handleChange}
+            />
+            <label htmlFor="start_time" className="block text-left"></label>
+            <Input
+              label="Datum & tid"
+              type="datetime-local"
+              name="start_time"
+              timeName="end_time"
+              onChange={handleChange}
+            />
+            {/* <label htmlFor="end_time" className="block text-left">
             Tid och datum:
-          </label>
-          <input
-            type="datetime-local"
-            id="start_time"
-            name="start_time"
-            className="border-solid border-2 w-1/2 mb-2"
-            onChange={handleChange}
-          />
-          <label htmlFor="end_time" className="block text-left">
-            Tid och datum:
-          </label>
-          {/* <input
+          </label> */}
+            {/* <input
             type="time"
             id="end_time"
             name="end_time"
             className="border-solid border-2 w-1/2 mb-2"
             onChange={handleChange}
           /> */}
-          {/* <input
+            {/* <input
             type="date"
             id="Datum"
             name="Datum"
             className="border-solid border-2 w-1/2"
             onChange={handleChange}
           /> */}
-        </div>
-        <div className="flex">
-          <div className="mb-4 w-1/2">
-            <label htmlFor="participantsMin" className="block">
-              Min/max deltagare:
-            </label>
-            <input
-              type="number"
-              id="participantsMin"
-              name="participantsMin"
-              min="1"
-              max="30"
-              inputMode="numeric"
-              className="border-solid border-2 w-10 mr-2"
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              id="MaxDeltagare"
-              name="participantsMax"
-              min="1"
-              max="30"
-              className="border-solid border-2 w-10"
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="mb-4 w-1/2">
-            <div className="flex">
-              <label htmlFor="equipment" className="block">
-                Utrustning:
-              </label>
-              <label htmlFor="Ja">Ja</label>
-              <input
-                type="radio"
-                name="equipment"
-                className="mr-2"
-                id="Ja"
+            <div className="">
+              <Input
+                label="Min/max deltagare:"
+                type="number"
+                name="participantsMin"
+                min="1"
+                max="30"
+                inputMode="numeric"
                 onChange={handleChange}
               />
-              <label htmlFor="Ja">Nej</label>
-              <input
-                type="radio"
-                name="equipment"
-                className="mr-2"
-                id="Nej"
+              <Input
+                type="number"
+                name="participantsMax"
+                min="1"
+                max="30"
+                onChange={handleChange}
+              />
+              <div className="flex flex-row">
+                <Input
+                  label="Ja"
+                  type="radio"
+                  name="equipment"
+                  onChange={handleChange}
+                />
+                <Input
+                  label="Nej"
+                  type="radio"
+                  name="equipment"
+                  onChange={handleChange}
+                />
+              </div>
+              <Input
+                label="Denna utrustning finns!"
+                type="text"
+                name="Utrustning"
                 onChange={handleChange}
               />
             </div>
-            <input
-              type="text"
-              id="Utrustning"
-              name="Utrustning"
-              className="border-solid border-2 w-20"
+            <div className="flex flex-col items-start">
+              <label htmlFor="Ålder" className="">
+                Ålder
+              </label>
+              <select id="Ålder" name="age" onChange={handleChange}>
+                <option value="18 - 25">18 - 25</option>
+                <option value="25 - 35">25 - 35</option>
+                <option value="35 - 45">35 - 45</option>
+                <option value="45 - 55">45 - 55</option>
+                <option value="55 - 65">55 - 65</option>
+                <option value="65+">65+</option>
+                <option value="18+">18+</option>
+              </select>
+            </div>
+            <div className="">
+              <div>
+                <select
+                  id="venue"
+                  name="venue"
+                  className=""
+                  onChange={handleChange}
+                >
+                  <option value="Inomhus">Inomhus</option>
+                  <option value="Utomhus">Utomhus</option>
+                  <option value="Online">Online</option>
+                </select>
+              </div>
+              <div>
+                <select name="gender" id="gender" onChange={handleChange}>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <select name="language" id="language" onChange={handleChange}>
+                  <option value="Svenska">Svenska</option>
+                  <option value="Engelska">Engelska</option>
+                </select>
+              </div>
+            </div>
+            <div className="">
+              <div>
+                <select name="price" id="price" onChange={handleChange}>
+                  <option value="Gratis">Gratis</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="200 eller mer">200 eller mer</option>
+                </select>
+              </div>
+              <div>
+                <select
+                  name="experiance"
+                  id="experience"
+                  onChange={handleChange}
+                >
+                  <option value="Nybörjare">Nybörjare</option>
+                  <option value="Mellanliggande">Mellanliggande</option>
+                  <option value="Avancerad">Avancerad</option>
+                </select>
+              </div>
+            </div>
+            <Input
+              label="Antal deltagare"
+              type="number"
+              name="totalpreticipant"
               onChange={handleChange}
             />
-          </div>
-        </div>
-        <div className="flex flex-col items-start">
-          <label htmlFor="Ålder" className="">
-            Ålder
-          </label>
-          <select
-            id="Ålder"
-            name="age"
-            className="border-solid border-2 w-1/2 items-left"
-            onChange={handleChange}
-          >
-            <option value="18 - 25">18 - 25</option>
-            <option value="25 - 35">25 - 35</option>
-            <option value="35 - 45">35 - 45</option>
-            <option value="45 - 55">45 - 55</option>
-            <option value="55 - 65">55 - 65</option>
-            <option value="65+">65+</option>
-            <option value="18+">18+</option>
-          </select>
-        </div>
-        <div className="flex">
-          <div>
-            <select
-              id="venue"
-              name="venue"
-              className=""
-              onChange={handleChange}
-            >
-              <option value="Inomhus">Inomhus</option>
-              <option value="Utomhus">Utomhus</option>
-              <option value="Online">Online</option>
-            </select>
-          </div>
-          <div>
-            <select name="gender" id="gender" onChange={handleChange}>
-              <option value="Female">Female</option>
-              <option value="Male">Male</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <select name="language" id="language" onChange={handleChange}>
-              <option value="Svenska">Svenska</option>
-              <option value="Engelska">Engelska</option>
-            </select>
-          </div>
-        </div>
-        <div className="flex">
-          <div>
-            <select name="price" id="price" onChange={handleChange}>
-              <option value="Gratis">Gratis</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="200 eller mer">200 eller mer</option>
-            </select>
-          </div>
-          <div>
-            <select name="experiance" id="experience" onChange={handleChange}>
-              <option value="Nybörjare">Nybörjare</option>
-              <option value="Mellanliggande">Mellanliggande</option>
-              <option value="Avancerad">Avancerad</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label htmlFor="totalpreticipant">Antal deltagare</label>
-          <input
-            type="number"
-            name="totalpreticipant"
-            id="totalpreticipant"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex flex-col items-start">
-          <label htmlFor="Övrigt">Övrigt</label>
-          <textarea
-            rows={5}
-            id="Övrigt"
-            name="message"
-            placeholder="Skriv här..."
-            className="border-solid border-2 w-full items-left"
-            onChange={handleChange}
-          />
-        </div>
+            <div className="flex flex-col items-start">
+              <label htmlFor="Övrigt">Övrigt</label>
+              <textarea
+                rows={5}
+                id="Övrigt"
+                name="message"
+                placeholder="Skriv här..."
+                className="border-solid border-2 w-full items-left"
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="pt-4">
-          <button className="border border-black w-2/3" type="submit">
-            Skicka
-          </button>
-        </div>
-      </form>
-    </>
+            <div className="pt-4">
+              <Button type="submit" variant="primary">
+                Skicka
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
