@@ -3,16 +3,47 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
 
-  const handleUsernameChange = (e: any) => setUsername(e.target.value);
-  const handlePasswordChange = (e: any) => setPassword(e.target.value);
-  const handleChange = (e: any) => setChecked(e.target.checked);
-  const handleSubmit = (e: any) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+  // const handleUsernameChange = (e: any) => setFormData(e.target.value);
+  // const handlePasswordChange = (e: any) => setFormData(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setChecked(e.target.checked);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ username, password, checked });
+    console.log({ formData, checked });
+
+    fetch("http://localhost:3000/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("User logged in successfully:", data);
+        // Handle response data
+        // Redirect the user, show a success message, etc.
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+      });
   };
 
   return (
@@ -24,15 +55,15 @@ const LoginForm = () => {
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col items-start w-full">
-            <label htmlFor="username" className="text-sm font-medium">
-              Användarnamn:
+            <label htmlFor="email" className="text-sm font-medium">
+              Email:
             </label>
             <div className="w-full border p-2 rounded border-[#6278EF]">
               <input
                 type="text"
-                id="username"
-                value={username}
-                onChange={handleUsernameChange}
+                id="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 className="w-full h-full"
               />
             </div>
@@ -45,8 +76,8 @@ const LoginForm = () => {
               <input
                 type="password"
                 id="password"
-                value={password}
-                onChange={handlePasswordChange}
+                value={formData.password}
+                onChange={handleInputChange}
                 className="w-full h-full"
               />
             </div>
@@ -88,5 +119,4 @@ const LoginForm = () => {
     </div>
   );
 };
-
 export default LoginForm;

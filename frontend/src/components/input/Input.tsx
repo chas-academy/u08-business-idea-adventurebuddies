@@ -61,6 +61,7 @@ const Input: React.FC<InputProps> = ({
           />
         </div>
       ) : type === "text" || type === "email" ? (
+      ) : type === "text" || type === "email" ? (
         <div className="flex flex-col items-start w-full">
           {label && <label htmlFor={name}>{label}</label>}
           <input
@@ -74,6 +75,7 @@ const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
               focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+          />
           />
         </div>
       ) : type === "datetime-local" ? (
@@ -118,6 +120,7 @@ const Input: React.FC<InputProps> = ({
             className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
             focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
           />
+        </div>
         </div>
       )}
     </div>
