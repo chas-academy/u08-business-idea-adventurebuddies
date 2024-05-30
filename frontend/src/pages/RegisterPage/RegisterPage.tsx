@@ -41,7 +41,7 @@ const RegisterPage: React.FC = () => {
       <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
         <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
           <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6">
-            Registrera dig här!
+            Registrera dig här
           </h1>
           <form
             onSubmit={handleSubmit}
