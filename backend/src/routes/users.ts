@@ -7,6 +7,7 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  getUserEvents,
 } from "../controllers/usercontroller";
 import { IUser } from "../interfaces/IUser";
 import { auth, admin, CustomRequest } from "../middleware/auth";
@@ -81,6 +82,8 @@ userRouter.post("/logoutall", auth, async (req: CustomRequest, res) => {
     message: "User logged out from all devices successfully.",
   });
 });
+
+userRouter.get("/:id/events", auth, getUserEvents);
 
 userRouter.get("/:id", auth, async (req, res) => {
   const id = req.params.id;
