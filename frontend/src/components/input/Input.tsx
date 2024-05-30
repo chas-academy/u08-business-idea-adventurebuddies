@@ -78,11 +78,12 @@ const Input: React.FC<InputProps> = ({
         </div>
       ) : type === "datetime-local" ? (
         <div className="flex flex-col items-start w-11/12 h-18">
-          {label && <label htmlFor={name && timeName}>{label}</label>}
+          {label && <label htmlFor={name}>{label}</label>}
           <div className="flex flex-row w-full justify-between items-start">
             <input
               type="datetime-local"
-              name={name && timeName}
+              id={name}
+              name={name}
               value={value}
               onChange={onChange}
               placeholder={placeholder}
@@ -97,6 +98,7 @@ const Input: React.FC<InputProps> = ({
           {label && <label htmlFor={name}>{label}</label>}
           <input
             type={type}
+            id={name}
             name={name}
             value={value}
             onChange={onChange}
@@ -108,6 +110,7 @@ const Input: React.FC<InputProps> = ({
           {label && <label htmlFor={name}>{label}</label>}
           <input
             type={type}
+            id={name}
             name={name}
             value={value}
             onChange={onChange}

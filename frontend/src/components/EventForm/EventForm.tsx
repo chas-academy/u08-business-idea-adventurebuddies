@@ -148,12 +148,12 @@ const EventForm = () => {
               name="location"
               onChange={handleChange}
             />
-            <label htmlFor="start_time" className="block text-left"></label>
+            {/* <label htmlFor="start_time" className="block text-left"></label> */}
             <Input
               label="Datum & tid"
               type="datetime-local"
               name="start_time"
-              timeName="end_time"
+              value="start_time"
               onChange={handleChange}
             />
             {/* <label htmlFor="end_time" className="block text-left">
