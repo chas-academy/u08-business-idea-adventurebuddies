@@ -53,8 +53,8 @@ const Button: React.FC<ButtonProps> = ({
       {variant === "primary" ? (
         <button
           className={`${
-            size === "small" ? "min-h-12 min-w-44" : "min-h-12 min-w-80"
-          } 'cursor-pointer rounded border bg-primaryColor hover:bg-hoverOnButton text-textColor font-semibold text-base hover:text-lg m-4 font-poppins shadow-custom '`}
+            size === "small" ? "min-h-12 min-w-44" : "min-h-12 w-80"
+          } 'cursor-pointer rounded bg-primaryColor hover:bg-hoverOnButton text-textColor font-semibold text-base hover:text-lg m-4 font-poppins shadow-custom '`}
           type={type}
           onClick={onClick}
         >

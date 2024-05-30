@@ -36,7 +36,7 @@ function App() {
         </li>
       </ul>
     </nav>
-    <main>
+    <main className="flex flex-col justify-center items-center z-10">
       <Outlet />
     </main>
     <Footer />
