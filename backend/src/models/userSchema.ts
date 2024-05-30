@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "./userModel";
@@ -33,6 +33,8 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
         message: (props: any) => `${props.value} is not a valid phone number!`,
       },
     },
+    createdEvents: [{ type: Types.ObjectId, ref: "Event" }],
+    attendingEvents: [{ type: Types.ObjectId, ref: "Event" }],
     profileImageUrl: { type: String, required: false },
   },
   {
