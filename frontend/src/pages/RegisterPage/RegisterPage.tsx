@@ -100,7 +100,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange lösenord"
               />
               <Input
-                type="text"
+                type="password"
                 label="Upprepa lösenord*"
                 name="confirmPassword"
                 value={formData.confirmPassword}
