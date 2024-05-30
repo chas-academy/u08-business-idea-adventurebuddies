@@ -19,6 +19,8 @@ import { ObjectId } from "mongodb";
 export interface IEvent {
   activity: string;
   user_id: ObjectId;
+  userName?: string;
+  userEmail?: string;
   start_time: Date;
   location: string;
   equipment: string;
