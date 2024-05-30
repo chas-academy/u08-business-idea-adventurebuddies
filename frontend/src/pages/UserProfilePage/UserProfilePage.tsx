@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import UserUpdate from "../../components/UserUpdate/UserUpdate";
-import image from "../../components/UserUpdate/rex.jpg";
 
 const UserProfilePage = () => {
 
   const [formData, setFormData] = useState({
-    userName: ""
+    userName: "",
+    description: "",
+    profileImageUrl:""
   });
   
   useEffect(() => {
@@ -14,7 +15,7 @@ const UserProfilePage = () => {
       try {
         const response = await fetch("http://localhost:3000/api/users/:id");
         const data = await response.json();
-        setFormData(data); // Uppdatera state med data från backend
+        setFormData(data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -30,15 +31,14 @@ const UserProfilePage = () => {
          <div>
           <img
             className="border rounded-full h-20 w-20 ml-2"
-            src={image}
+            src={formData.profileImageUrl}
             alt="Profil bild"
           />
         </div>
         <div className="text-left ml-4">
-          <h3 className="font-bold">userName</h3>
+          <h3 className="font-bold">{formData.userName}</h3>
           <p className="text-xs">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci,
-            impedit!
+            {formData.description}
           </p>
 
           <div>

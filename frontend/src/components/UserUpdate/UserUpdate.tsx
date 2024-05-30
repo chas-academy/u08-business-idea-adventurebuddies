@@ -1,60 +1,60 @@
 import React, { useEffect, useState } from "react";
 import Button from "../button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 import Input from "../input/Input";
+import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+import { IUser } from "../../../../backend/src/interfaces/IUser";
 
 const UserUpdate = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    userName: "",
-    email: "",
-    gender: "",
-    description: "",
-    password: "",
-    phoneNumber: "",
-    profileImageUrl: "",
-  });
+  const handleClick = () => {
+    console.log("click");
+  };
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [userData, setUserData] = useState<IUser | null>(null);
+  const [eventData, setEventData] = useState<IEvent | null>(null);
 
   useEffect(() => {
-    // Funktion för att hämta data från backend
-    const fetchData = async () => {
+    // Hämta användaruppgifter
+    // const id = ;
+    const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/users/:id");
+        const response = await fetch(`/api/user/`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         const data = await response.json();
-        setFormData(data); // Uppdatera state med data från backend
+        setUserData(data);
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error("Error fetching user data:", error);
       }
     };
 
-    fetchData();
-  }, []);
+    // Hämta händelsedetaljer
+    const fetchEventData = async () => {
+      try {
+        const response = await fetch("/api/event");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setEventData(data);
+      } catch (error) {
+        console.error("Error fetching event data:", error);
+      }
+    };
 
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+    fetchUserData();
+    fetchEventData();
+  }, []);
 
   const handleDropdownToggle = () => {
     setIsDropdownVisible(!isDropdownVisible);
   };
-
-  const handleClick = () => {
-    console.log("click");
-  };
-  const handleClose = (e: any) => {
-    e.preventDefault();
-    setIsDropdownVisible(false);
-  };
   return (
     <>
-      <div className="col-start-1 col-end-3 ">
+      <div className="col-start-1 col-end-3">
         <div id="updateDropdown" className="flex justify-end mr-2 mt-2">
           <FontAwesomeIcon
             icon={faGear}
@@ -63,19 +63,28 @@ const UserUpdate = () => {
           />
         </div>
 
-        {isDropdownVisible && (
-          <form action="" method="post" className="absolute bg-textColor glass-container">
-            <button onClick={handleClose}>
-              {" "}
-              <FontAwesomeIcon icon={faXmark} style={{ color: "#141414" }} />
-            </button>
+        {isDropdownVisible && userData && eventData &&  (
+          <form
+            action=""
+            method="post"
+            className="absolute right-2 top-60 bg-textColor"
+          >
+            <div>
+              <p>Profilbild URL</p>
+              <Input
+                type="text"
+                name="profileImageUrl"
+                value={userData.profileImageUrl || ""}
+                onChange={handleClick}
+              />
+            </div>
             <div>
               <p>Namn</p>
               <Input
                 type="text"
                 name="name"
-                value={formData.name}
-                onChange={handleInputChange}
+                value={userData.name || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
@@ -83,8 +92,8 @@ const UserUpdate = () => {
               <Input
                 type="text"
                 name="userName"
-                value={formData.userName}
-                onChange={handleInputChange}
+                value={userData.userName || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
@@ -92,8 +101,8 @@ const UserUpdate = () => {
               <Input
                 type="text"
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
+                value={userData.email || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
@@ -101,8 +110,8 @@ const UserUpdate = () => {
               <Input
                 type="text"
                 name="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
+                value={userData.gender || ""}
+                onChange={handleClick}
               />
             </div>{" "}
             <div>
@@ -110,8 +119,8 @@ const UserUpdate = () => {
               <Input
                 type="text"
                 name="description"
-                value={formData.description}
-                onChange={handleInputChange}
+                value={userData.description || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
@@ -119,8 +128,8 @@ const UserUpdate = () => {
               <Input
                 type="text"
                 name="password"
-                value={formData.password}
-                onChange={handleInputChange}
+                value={userData.password || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
@@ -128,26 +137,26 @@ const UserUpdate = () => {
               <Input
                 type="text"
                 name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
+                value={userData.phoneNumber || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
               <p>Activiteter</p>
               <Input
                 type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
+                name="activity"
+                value={eventData.activity || ""}
+                onChange={handleClick}
               />
             </div>
             <div>
               <p>Språk</p>
               <Input
                 type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
+                name="language"
+                value={eventData.language || ""}
+                onChange={handleClick}
               />
             </div>
             <Button
@@ -174,3 +183,4 @@ const UserUpdate = () => {
 };
 
 export default UserUpdate;
+
