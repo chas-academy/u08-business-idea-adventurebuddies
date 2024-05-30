@@ -19,7 +19,8 @@ export const registerUser = async (user: Partial<IUser>) => {
     !email ||
     !password ||
     !dateOfBirth ||
-    !gender
+    !gender ||
+    !phoneNumber
     // !description
   ) {
     return {
@@ -32,6 +33,16 @@ export const registerUser = async (user: Partial<IUser>) => {
       error: "User with that email already exists.",
     };
   }
+
+  if (phoneNumber) {
+    const existingPhone = await User.findOne({ phoneNumber });
+    if (existingPhone) {
+      return {
+        error: "User with that phone number already exists.",
+      };
+    }
+  }
+
   const newUser = new User({
     name,
     userName,
@@ -82,7 +93,25 @@ export const getUser = async (id: string) => {
 };
 
 export const updateUser = async (id: string, data: Partial<IUser>) => {
-  return await User.findByIdAndUpdate(id, data, { new: true });
+  try {
+    if (data.phoneNumber) {
+      const existingPhone = await User.findOne({
+        phoneNumber: data.phoneNumber,
+      });
+      if (existingPhone && existingPhone._id.toString() !== id) {
+        return {
+          error: "User with that phone number already exists.",
+        };
+      }
+    }
+
+    return await User.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+  } catch (error) {
+    return { error: error };
+  }
 };
 
 export const deleteUser = async (id: string) => {

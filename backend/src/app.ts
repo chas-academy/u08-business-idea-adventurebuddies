@@ -1,5 +1,6 @@
 // src/index.js
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 
 import eventRouter from "./routes/events";
 import userRouter from "./routes/users";
@@ -11,6 +12,7 @@ connectSportDB;
 
 const app: Express = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));

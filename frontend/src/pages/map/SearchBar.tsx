@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useMapsFormData } from "../../store/useMapsFormData";
+import React from "react";
 
 // Uppdatera store med värden
 function SearchBar() {
