@@ -1,3 +1,5 @@
+import React from "react";
+
 interface InputProps {
   type: "text" | "checkbox" | "radio" | "email" | "date" | "time";
   label?: string;
@@ -30,7 +32,7 @@ const Input: React.FC<InputProps> = ({
   timeValue,
 }) => {
   return (
-    <div className="flex flex-row max-w-80 m-3">
+    <div className="flex flex-row min-w-80 m-3">
       {type === "checkbox" || type === "radio" ? (
         <div className="flex flex-row justify-between items-center w-full p-2 border rounded border-primaryColor">
           {label && <label htmlFor={label}>{label}</label>}

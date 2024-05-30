@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
@@ -6,18 +7,21 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
 
-  const handleUsernameChange = (e) => setUsername(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
-  const handleChange = (e) => setChecked(e.target.checked);
-  const handleSubmit = (e) => {
+  const handleUsernameChange = (e: any) => setUsername(e.target.value);
+  const handlePasswordChange = (e: any) => setPassword(e.target.value);
+  const handleChange = (e: any) => setChecked(e.target.checked);
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log({ username, password, checked });
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 font-Poppins">
-      <h1 className="text-center-primaryColor mb-4 leading-12">Logga in</h1>
-      <div className="box-border md:box-content bg-gray-200 shadow-md rounded-md p-8">
+      {/* removed shadow-md from the div below */}
+      <div className="box-border md:box-content bg-gray-200 rounded-md p-8 glass-container">
+        <h1 className="text-center-primaryColor mb-4 leading-12 font-bold">
+          Logga in
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col items-start w-full">
             <label htmlFor="username" className="text-sm font-medium">

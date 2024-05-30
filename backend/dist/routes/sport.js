@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const sportcontroller_1 = require("../controllers/sportcontroller");
+const sportRouter = (0, express_1.Router)();
+sportRouter.get("/", sportcontroller_1.getAllSports);
+sportRouter.post("/", sportcontroller_1.addSport);
+sportRouter.get("/:id", sportcontroller_1.getSport);
+sportRouter.put("/:id", sportcontroller_1.updateSport);
+sportRouter.delete("/:id", sportcontroller_1.deleteSport);
+exports.default = sportRouter;
