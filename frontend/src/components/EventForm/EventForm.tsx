@@ -1,28 +1,31 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
+// import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
 import { useEventLatitude } from "../../store/useIEventLatitude";
 
 const EventForm = () => {
   // Denna lagras platsen du säker på och uppdateras när användaren trycker på submit
   const [place, setPlace] = useState<string>("");
   // Denna lagrar formDatan, den blir även uppdaterad med lon, lat från api anropet
-  const [formData, setFormData] = useState<IEvent2>({
+  const [formData, setFormData] = useState({
+    user_id: "",
     activity: "",
     location: "",
-    start_time: new Date(),
     participantsMin: 0,
     participantsMax: 0,
     equipment: "",
     age: "18+",
     lat: "",
     lon: "",
-    venue: "",
-    gender: "",
-    language: "",
+    venue: "Inomhus",
+    gender: "Female",
+    language: "Svenska",
     price: 0,
-    experience: "",
-    totalParticipants: 0,
+    experience: "Nybörjare",
+    totalParticipant: 0,
+    message: "",
+
+    // end_time: new Date(),
   });
 
   // Denna uppdaterar formData konturnuelligt när användare använder formen
@@ -32,10 +35,20 @@ const EventForm = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "start_time") {
+      console.log(name, Math.floor(new Date(value).getTime() / 1000));
+      console.log(
+        "covertiing unix back to date ",
+        new Date(Math.floor(new Date(value).getTime() / 1000) * 1000)
+      );
+      console.log(value);
+      // start with ISO time otherwise this time
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
@@ -66,7 +79,6 @@ const EventForm = () => {
       }
     };
     fetchData();
-    sendDataBackend();
 
     // hamtaBackend();
     // console.log("Detta är backend data", formData);
@@ -74,69 +86,65 @@ const EventForm = () => {
     console.log("uppdaterad", formData);
   }, [place]);
 
-  // Get
-
-  // const hamtaBackend = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       "https://u08-business-idea-adventurebuddies.onrender.com/api/events/"
-  //     ); // Ersätt 'URL_TILL_DIN_BACKEND' med den faktiska URL:en till din backend
-  //     const contentType = response.headers.get("content-type");
-  //     if (contentType && contentType.indexOf("application/json") !== -1) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //       return data;
-  //     } else {
-  //       const text = await response.text();
-  //       console.log("Server returned non-JSON response:", text);
-  //       throw new Error("Server returned non-JSON response");
-  //     }
-  //   } catch (error) {
-  //     console.error("Ett fel inträffade:", error);
-  //     throw error;
-  //   }
-  // };
-
   // Denna skickar formData till backend
-  const sendDataBackend = async () => {
-    if (formData.lat && formData.lon) {
-      try {
-        console.log("Detta är backend data", formData);
+  useEffect(() => {
+    const sendDataBackend = async () => {
+      if (formData.lat && formData.lon) {
+        try {
+          console.log("Detta är backend data", formData);
 
-        const response = await fetch(
-          "https://u08-business-idea-adventurebuddies.onrender.com/api/events/",
-          {
+          const response = await fetch("http://localhost:3000/api/events/", {
             method: "POST",
             body: JSON.stringify(formData),
             headers: {
               "Content-Type": "application/json",
             },
+          });
+          if (!response.ok) {
+            throw new Error("Failed");
           }
-        );
-        if (!response.ok) {
-          throw new Error("Failed");
+          // Om responsen är OK, fortsätt med lämplig hantering
+        } catch (error) {
+          console.error("Error sending data to backend: ", error);
+          // Hantera fel här
         }
-        // Om responsen är OK, fortsätt med lämplig hantering
-      } catch (error) {
-        console.error("Error sending data to backend: ", error);
-        // Hantera fel här
       }
-    }
-  };
+    };
+    sendDataBackend();
+  }, [formData.lat, formData.lon]);
 
   // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
-  const updateLatitude = useEventLatitude(
-    (state) => state.updateLatitudeIEvent
-  );
-  // Denna useEffekt har triggers för att uppdatera storen när forDatas lon, lat uppdateras
-  useEffect(() => {
-    updateLatitude(formData.lat, formData.lon);
-  }, [formData.lat, formData.lon]);
+  // const updateLatitude = useEventLatitude(
+  //   (state) => state.updateLatitudeIEvent
+  // );
+  // Denna useEffekt har triggers för att uppdatera storen när formData lon, lat uppdateras
+  // useEffect(() => {
+  //   updateLatitude(formData.lat, formData.lon);
+  // }, [formData.lat, formData.lon]);
 
   return (
     <>
+      <div>
+        <label htmlFor="user_id">User ID:</label>
+        <input
+          type="text"
+          id="user_id"
+          name="user_id"
+          // value={formData.user_id}
+          onChange={handleChange}
+        />
+      </div>
       <h1>Skapa event</h1>
       <form className="mx-auto" onSubmit={onSubmit}>
+        <div>
+          <label htmlFor="user_id">Användar id</label>
+          <input
+            type="text"
+            name="user_id"
+            id="user_id"
+            onChange={handleChange}
+          />
+        </div>
         <div className="mb-4">
           <label htmlFor="activity" className="block text-left">
             Aktivitet:
@@ -168,19 +176,29 @@ const EventForm = () => {
             Tid och datum:
           </label>
           <input
-            type="time"
+            type="datetime-local"
             id="start_time"
             name="start_time"
             className="border-solid border-2 w-1/2 mb-2"
             onChange={handleChange}
           />
-          <input
+          <label htmlFor="end_time" className="block text-left">
+            Tid och datum:
+          </label>
+          {/* <input
+            type="time"
+            id="end_time"
+            name="end_time"
+            className="border-solid border-2 w-1/2 mb-2"
+            onChange={handleChange}
+          /> */}
+          {/* <input
             type="date"
             id="Datum"
             name="Datum"
             className="border-solid border-2 w-1/2"
             onChange={handleChange}
-          />
+          /> */}
         </div>
         <div className="flex">
           <div className="mb-4 w-1/2">
@@ -295,21 +313,19 @@ const EventForm = () => {
             </select>
           </div>
           <div>
-            <label htmlFor="experience">Hur bra är du?</label>
-            <input
-              type="text"
-              name="experience"
-              id="experience"
-              onChange={handleChange}
-            />
+            <select name="experiance" id="experience" onChange={handleChange}>
+              <option value="Nybörjare">Nybörjare</option>
+              <option value="Mellanliggande">Mellanliggande</option>
+              <option value="Avancerad">Avancerad</option>
+            </select>
           </div>
         </div>
         <div>
-          <label htmlFor="totalpreticipants">Antal deltagare</label>
+          <label htmlFor="totalpreticipant">Antal deltagare</label>
           <input
             type="number"
-            name="totalpreticipants"
-            id="totalpreticipants"
+            name="totalpreticipant"
+            id="totalpreticipant"
             onChange={handleChange}
           />
         </div>
@@ -318,7 +334,7 @@ const EventForm = () => {
           <textarea
             rows={5}
             id="Övrigt"
-            name="Övrigt"
+            name="message"
             placeholder="Skriv här..."
             className="border-solid border-2 w-full items-left"
             onChange={handleChange}
@@ -326,7 +342,9 @@ const EventForm = () => {
         </div>
 
         <div className="pt-4">
-          <button className="border border-black w-2/3">Skicka</button>
+          <button className="border border-black w-2/3" type="submit">
+            Skicka
+          </button>
         </div>
       </form>
     </>

@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../components/input/Input";
 import React from "react";
+import Button from "../../components/button/Button";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
+    userName: "",
     password: "",
     email: "",
     confirmPassword: "",
@@ -15,11 +17,10 @@ const RegisterPage: React.FC = () => {
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -33,14 +34,32 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Hantera formulär här
+
+    fetch("http://localhost:3000/api/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("User registered successfully:", data);
+        // Handle response data
+        // Redirect the user, show a success message, etc.
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+      });
   };
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 font-Poppins">
-        <div className="box-border md:box-content bg-gray-200 rounded-md p-8 glass-container">
-          <h1 className="text-center-primaryColor mb-4 leading-12 font-bold mb-8">
-            Register
+      <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
+        <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
+          <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6">
+            Registrera dig här
           </h1>
           <form
             onSubmit={handleSubmit}
@@ -49,9 +68,17 @@ const RegisterPage: React.FC = () => {
             <div className="flex flex-col">
               <Input
                 type="text"
+                label="Namn*"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Ange användarnamn"
+              />
+              <Input
+                type="text"
                 label="Användarnamn*"
-                name="username"
-                value={formData.username}
+                name="userName"
+                value={formData.userName}
                 onChange={handleInputChange}
                 placeholder="Ange användarnamn"
               />
@@ -65,7 +92,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange email"
               />
               <Input
-                type="text"
+                type="password"
                 label="Lösenord*"
                 name="password"
                 value={formData.password}
@@ -73,7 +100,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange lösenord"
               />
               <Input
-                type="text"
+                type="password"
                 label="Upprepa lösenord*"
                 name="confirmPassword"
                 value={formData.confirmPassword}
@@ -117,7 +144,7 @@ const RegisterPage: React.FC = () => {
                   <option value="">Välj kön</option>
                   <option value="female">Kvinna</option>
                   <option value="male">Man</option>
-                  {/* LÄGG TILL I DB <option value="non-binary">Icke-binär</option> */}
+                  <option value="non-binary">Icke-binär</option>
                   <option value="other">Annat</option>
                 </select>
               </div>
@@ -145,16 +172,13 @@ const RegisterPage: React.FC = () => {
                 av Adventure Buddies.
               </p>
             </div>
-            <button
-              type="submit"
-              className="w-2/5 py-2 text-textColor bg-primaryColor font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Registrera dig
-            </button>
+            <Button type="submit" variant="primary">
+              Skapa konto
+            </Button>
           </form>
           <br></br>
-          <div>
-            Har du redan ett konto?{" "}
+          <div className="flex flex-row justify-center py-3">
+            <p className="pr-2">Har du redan ett konto?</p>
             <Link
               to="/login"
               className="underline hover:underline-offset-4 font-bold"

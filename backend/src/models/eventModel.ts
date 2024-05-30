@@ -1,34 +1,37 @@
 import mongoose, { Schema, model } from "mongoose";
 import { IEvent } from "../interfaces/IEvent";
 
-const locationSchema = new Schema({
-  type: {
-    type: String,
-    enum: ["Point"],
-    required: true,
-  },
-  coordinates: {
-    type: [String],
-    required: true,
-  },
-});
+// const locationSchema = new Schema({
+//   type: {
+//     type: String,
+//     enum: ["Point"],
+//     required: true,
+//   },
+//   coordinates: {
+//     type: [String],
+//     required: true,
+//   },
+// });
 
 const eventSchema = new Schema<IEvent>(
   {
     activity: { type: String, required: true },
     user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
+
     start_time: { type: Date, default: () => new Date(), required: true },
+    // end_time: { type: Date, default: () => new Date(), required: true },
+
     location: { type: String, required: true },
     equipment: { type: String, required: true },
-    age: { type: Number, required: false },
+    age: { type: String, required: false },
     totalParticipant: { type: Number, required: true },
     participantsMin: { type: Number, required: true },
     participantsMax: { type: Number, required: true },
     participants: [
       { type: Schema.Types.ObjectId, ref: "User", required: false },
     ],
-    lat: { type: String, required: true },
-    lon: { type: String, required: true },
+    lat: { type: Number, required: true },
+    lon: { type: Number, required: true },
     message: { type: String, required: false },
     venue: {
       type: String,
@@ -37,21 +40,22 @@ const eventSchema = new Schema<IEvent>(
     },
     gender: {
       type: String,
-      enum: ["female", "male", "other"],
+      enum: ["Female", "Male", "Other"],
       required: true,
     },
     language: {
       type: String,
-      enum: ["svenska", "engelska"],
+      enum: ["Svenska", "Engelska"],
       required: true,
     },
     price: {
-      type: Number,
+      type: String,
+      enum: ["Gratis", "50", "100", "200 eller mer"],
       required: true,
     },
     experience: {
       type: String,
-      enum: ["nybörjare", "mellanliggande", "avancerad"],
+      enum: ["Nybörjare", "Mellanliggande", "Avancerad"],
       required: true,
     },
   },
