@@ -17,11 +17,11 @@ import { ObjectId } from "mongodb";
 //   | string;
 
 export interface IEvent {
-  _id: ObjectId;
   activity: string;
   user_id: ObjectId;
+  userName?: string;
+  userEmail?: string;
   start_time: Date;
-  end_time: Date;
   location: string;
   equipment: string;
   age: number;
