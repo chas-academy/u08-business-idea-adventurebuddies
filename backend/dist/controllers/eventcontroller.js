@@ -9,11 +9,11 @@ const create = async (data) => {
     await eventModel_1.default.create(data);
 };
 const readAll = async () => {
-    const events = await eventModel_1.default.find({}).populate('user_id');
+    const events = await eventModel_1.default.find({}).populate("user_id");
     return events;
 };
 const read = async (id) => {
-    return await eventModel_1.default.findById(id).populate('user_id').populate('participants');
+    return await eventModel_1.default.findById(id).populate("user_id").populate("participants");
 };
 const update = async (id, data) => {
     return await eventModel_1.default.findByIdAndUpdate(id, data, { new: true });
@@ -28,7 +28,7 @@ const createEvent = async (req, res) => {
         res.status(201).json({ message: "Event created successfully", savedEvent });
     }
     catch (error) {
-        res.status(500).json({ message: "Event not created" });
+        res.status(500).json({ message: error });
     }
 };
 exports.createEvent = createEvent;
@@ -59,7 +59,9 @@ exports.getEventById = getEventById;
 const updateEvent = async (req, res) => {
     try {
         const id = req.params.id;
-        const updatedEvent = await update(req.body, id);
+        const updatedEventData = req.body;
+        const updatedEvent = await update(id, updatedEventData);
+        // const updatedEvent = await update(req.body, id);
         if (!updatedEvent) {
             return res.status(404).json({ message: "Event not found" });
         }
@@ -77,9 +79,7 @@ const deleteEvent = async (req, res) => {
         if (!deletedEvent) {
             return res.status(404).json({ message: "Event not found" });
         }
-        res
-            .status(200)
-            .json({ message: "Event deleted", deletedEvent });
+        res.status(200).json({ message: "Event deleted", deletedEvent });
     }
     catch (error) {
         res.status(500).json({ message: "Opps something bad happend" });

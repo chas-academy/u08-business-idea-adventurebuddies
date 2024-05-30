@@ -4,19 +4,23 @@
 
 
 .tabs{
-flex-basis: 10em;
+    border-radius:20px 20px 0 0;
 padding:1em;
 } 
-.active-tabs{
-    background-color: white;
+.tabs.active{
     border-bottom:#6278EF solid ;
 }
 
-.content{
-    display:none;
+
+
+.tabs-content{
+display:none;
+    background-color:aqua;
 }
 
-.active-content{
+.tabs-content.active{
+    padding:2em;
     display:block;
     background-color: white;
 }
+
