@@ -11,8 +11,6 @@ const EventForm = () => {
     user_id: "",
     activity: "",
     location: "",
-    // start_time: new Date(),
-    // spara data i unixtime, iso
     participantsMin: 0,
     participantsMax: 0,
     equipment: "",
@@ -81,7 +79,6 @@ const EventForm = () => {
       }
     };
     fetchData();
-    sendDataBackend();
 
     // hamtaBackend();
     // console.log("Detta är backend data", formData);
@@ -89,61 +86,41 @@ const EventForm = () => {
     console.log("uppdaterad", formData);
   }, [place]);
 
-  // Get
-
-  // const hamtaBackend = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       "https://u08-business-idea-adventurebuddies.onrender.com/api/events/"
-  //     ); // Ersätt 'URL_TILL_DIN_BACKEND' med den faktiska URL:en till din backend
-  //     const contentType = response.headers.get("content-type");
-  //     if (contentType && contentType.indexOf("application/json") !== -1) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //       return data;
-  //     } else {
-  //       const text = await response.text();
-  //       console.log("Server returned non-JSON response:", text);
-  //       throw new Error("Server returned non-JSON response");
-  //     }
-  //   } catch (error) {
-  //     console.error("Ett fel inträffade:", error);
-  //     throw error;
-  //   }
-  // };
-
   // Denna skickar formData till backend
-  const sendDataBackend = async () => {
-    if (formData.lat && formData.lon) {
-      try {
-        console.log("Detta är backend data", formData);
+  useEffect(() => {
+    const sendDataBackend = async () => {
+      if (formData.lat && formData.lon) {
+        try {
+          console.log("Detta är backend data", formData);
 
-        const response = await fetch("http://localhost:3000/api/events/", {
-          method: "POST",
-          body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed");
+          const response = await fetch("http://localhost:3000/api/events/", {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Failed");
+          }
+          // Om responsen är OK, fortsätt med lämplig hantering
+        } catch (error) {
+          console.error("Error sending data to backend: ", error);
+          // Hantera fel här
         }
-        // Om responsen är OK, fortsätt med lämplig hantering
-      } catch (error) {
-        console.error("Error sending data to backend: ", error);
-        // Hantera fel här
       }
-    }
-  };
+    };
+    sendDataBackend();
+  }, [formData.lat, formData.lon]);
 
   // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
-  const updateLatitude = useEventLatitude(
-    (state) => state.updateLatitudeIEvent
-  );
-  // Denna useEffekt har triggers för att uppdatera storen när forDatas lon, lat uppdateras
-  useEffect(() => {
-    updateLatitude(formData.lat, formData.lon);
-  }, [formData.lat, formData.lon]);
+  // const updateLatitude = useEventLatitude(
+  //   (state) => state.updateLatitudeIEvent
+  // );
+  // Denna useEffekt har triggers för att uppdatera storen när formData lon, lat uppdateras
+  // useEffect(() => {
+  //   updateLatitude(formData.lat, formData.lon);
+  // }, [formData.lat, formData.lon]);
 
   return (
     <>
