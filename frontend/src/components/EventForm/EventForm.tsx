@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
+// import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
 import { useEventLatitude } from "../../store/useIEventLatitude";
 
 const EventForm = () => {
   // Denna lagras platsen du säker på och uppdateras när användaren trycker på submit
   const [place, setPlace] = useState<string>("");
   // Denna lagrar formDatan, den blir även uppdaterad med lon, lat från api anropet
-  const [formData, setFormData] = useState<IEvent2>({
+  const [formData, setFormData] = useState({
+    user_id: "",
     activity: "",
     location: "",
-    start_time: new Date(),
+    // start_time: new Date(),
+    // spara data i unixtime, iso
     participantsMin: 0,
     participantsMax: 0,
     equipment: "",
@@ -22,9 +24,10 @@ const EventForm = () => {
     language: "Svenska",
     price: 0,
     experience: "Nybörjare",
-    totalParticipants: 0,
-    user_id: "",
-    end_time: new Date(),
+    totalParticipant: 0,
+    message: "",
+
+    // end_time: new Date(),
   });
 
   // Denna uppdaterar formData konturnuelligt när användare använder formen
@@ -34,10 +37,20 @@ const EventForm = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "start_time") {
+      console.log(name, Math.floor(new Date(value).getTime() / 1000));
+      console.log(
+        "covertiing unix back to date ",
+        new Date(Math.floor(new Date(value).getTime() / 1000) * 1000)
+      );
+      console.log(value);
+      // start with ISO time otherwise this time
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
@@ -134,6 +147,16 @@ const EventForm = () => {
 
   return (
     <>
+      <div>
+        <label htmlFor="user_id">User ID:</label>
+        <input
+          type="text"
+          id="user_id"
+          name="user_id"
+          // value={formData.user_id}
+          onChange={handleChange}
+        />
+      </div>
       <h1>Skapa event</h1>
       <form className="mx-auto" onSubmit={onSubmit}>
         <div>
@@ -176,7 +199,7 @@ const EventForm = () => {
             Tid och datum:
           </label>
           <input
-            type="time"
+            type="datetime-local"
             id="start_time"
             name="start_time"
             className="border-solid border-2 w-1/2 mb-2"
@@ -185,20 +208,20 @@ const EventForm = () => {
           <label htmlFor="end_time" className="block text-left">
             Tid och datum:
           </label>
-          <input
+          {/* <input
             type="time"
             id="end_time"
             name="end_time"
             className="border-solid border-2 w-1/2 mb-2"
             onChange={handleChange}
-          />
-          <input
+          /> */}
+          {/* <input
             type="date"
             id="Datum"
             name="Datum"
             className="border-solid border-2 w-1/2"
             onChange={handleChange}
-          />
+          /> */}
         </div>
         <div className="flex">
           <div className="mb-4 w-1/2">
@@ -321,11 +344,11 @@ const EventForm = () => {
           </div>
         </div>
         <div>
-          <label htmlFor="totalpreticipants">Antal deltagare</label>
+          <label htmlFor="totalpreticipant">Antal deltagare</label>
           <input
             type="number"
-            name="totalpreticipants"
-            id="totalpreticipants"
+            name="totalpreticipant"
+            id="totalpreticipant"
             onChange={handleChange}
           />
         </div>
@@ -334,7 +357,7 @@ const EventForm = () => {
           <textarea
             rows={5}
             id="Övrigt"
-            name="Övrigt"
+            name="message"
             placeholder="Skriv här..."
             className="border-solid border-2 w-full items-left"
             onChange={handleChange}

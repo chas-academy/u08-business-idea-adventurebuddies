@@ -20,11 +20,13 @@ const deleteOne = async (id: any) => {
 
 export const createEvent = async (req: any, res: any) => {
   try {
-    const newEvent = new Event(req.body);
-    const savedEvent = await create(newEvent);
+    // const newEvent = new Event(req.body);
+    // const savedEvent = await create(newEvent);
+    const savedEvent = await Event.create(req.body);
     res.status(201).json({ message: "Event created successfully", savedEvent });
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.log(error);
+    res.status(500).json({ message: "Event not created", error: error });
   }
 };
 

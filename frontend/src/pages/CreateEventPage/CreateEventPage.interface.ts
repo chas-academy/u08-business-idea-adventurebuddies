@@ -13,7 +13,7 @@ export interface IEvent2 {
   language: string;
   price: number;
   experience: string;
-  totalParticipants: number;
+  totalParticipant: number;
   user_id: string;
   end_time: Date;
 }
