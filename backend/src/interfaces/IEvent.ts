@@ -24,17 +24,17 @@ export interface IEvent {
   start_time: Date;
   location: string;
   equipment: string;
-  age: number;
+  age: string;
   totalParticipant: number;
   participantsMin: number;
   participantsMax: number;
   participants: ObjectId[];
   message: string;
-  lat: string;
-  lon: string;
+  lat: number;
+  lon: number;
   venue: "Inomhus" | "Utomhus" | "Online";
-  gender: "female" | "male" | "other";
-  language: "svenska" | "engelska";
+  gender: "Female" | "Male" | "Other";
+  language: "Svenska" | "Engelska";
   price: number;
-  experience: "nybörjare" | "mellanliggande" | "avancerad";
+  experience: "Nybörjare" | "Mellanliggande" | "Avancerad";
 }

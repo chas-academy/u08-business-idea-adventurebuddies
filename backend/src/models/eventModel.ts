@@ -20,15 +20,15 @@ const eventSchema = new Schema<IEvent>(
     start_time: { type: Date, default: () => new Date(), required: true },
     location: { type: String, required: true },
     equipment: { type: String, required: true },
-    age: { type: Number, required: false },
+    age: { type: String, required: false },
     totalParticipant: { type: Number, required: true },
     participantsMin: { type: Number, required: true },
     participantsMax: { type: Number, required: true },
     participants: [
       { type: Schema.Types.ObjectId, ref: "User", required: false },
     ],
-    lat: { type: String, required: true },
-    lon: { type: String, required: true },
+    lat: { type: Number, required: true },
+    lon: { type: Number, required: true },
     message: { type: String, required: false },
     venue: {
       type: String,
