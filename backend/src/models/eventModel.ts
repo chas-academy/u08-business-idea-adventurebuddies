@@ -1,17 +1,17 @@
 import mongoose, { Schema, model } from "mongoose";
 import { IEvent } from "../interfaces/IEvent";
 
-const locationSchema = new Schema({
-  type: {
-    type: String,
-    enum: ["Point"],
-    required: true,
-  },
-  coordinates: {
-    type: [String],
-    required: true,
-  },
-});
+// const locationSchema = new Schema({
+//   type: {
+//     type: String,
+//     enum: ["Point"],
+//     required: true,
+//   },
+//   coordinates: {
+//     type: [String],
+//     required: true,
+//   },
+// });
 
 const eventSchema = new Schema<IEvent>(
   {
@@ -49,7 +49,8 @@ const eventSchema = new Schema<IEvent>(
       required: true,
     },
     price: {
-      type: Number,
+      type: String,
+      enum: ["Gratis", "50", "100", "200 eller mer"],
       required: true,
     },
     experience: {

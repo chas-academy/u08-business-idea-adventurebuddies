@@ -6,6 +6,47 @@ import { Request, Response } from "express";
 const create = async (data: IEvent) => {
   await Event.create(data);
 };
+
+const attendEvent = async (
+  userId: string,
+  eventId: string
+): Promise<IEvent | null> => {
+  const event = await Event.findByIdAndUpdate(
+    eventId,
+    {
+      $addToSet: { participants: userId },
+      $inc: { totalParticipant: 1 },
+    },
+    { new: true }
+  );
+  if (event) {
+    await addToUserList(userId, eventId);
+  }
+  return event;
+};
+
+const unattendEvent = async (
+  userId: string,
+  eventId: string
+): Promise<IEvent | null> => {
+  const event = await Event.findByIdAndUpdate(
+    eventId,
+    {
+      $pull: { participants: userId },
+      $inc: { totalParticipant: -1 },
+    },
+    { new: true }
+  );
+  if (event) {
+    await removeFromUserList(userId, eventId);
+  }
+  return event;
+};
+
+const readByQuery = async (query: any) => {
+  return await Event.find(query);
+};
+
 const readAll = async () => {
   const events = await Event.find({}).populate("user_id").exec();
   return events;
@@ -44,7 +85,7 @@ export const createEvent = async (req: any, res: any) => {
   }
 };
 
-export const getAllEvents = async (req: any, res: any) => {
+export const getAllEvents = async (req: any, res: any): Promise<void> => {
   try {
     const events = await readAll();
     res.status(200).json(events);
@@ -53,40 +94,50 @@ export const getAllEvents = async (req: any, res: any) => {
   }
 };
 
-const attendEvent = async (
-  userId: string,
-  eventId: string
-): Promise<IEvent | null> => {
-  const event = await Event.findByIdAndUpdate(
-    eventId,
-    {
-      $addToSet: { participants: userId },
-      $inc: { totalParticipant: 1 },
-    },
-    { new: true }
-  );
-  if (event) {
-    await addToUserList(userId, eventId);
-  }
-  return event;
-};
+export const getEventsByQuery = async (req: any, res: any): Promise<void> => {
+  try {
+    const { venue, gender, language, experience, age, price } = req.query;
 
-const unattendEvent = async (
-  userId: string,
-  eventId: string
-): Promise<IEvent | null> => {
-  const event = await Event.findByIdAndUpdate(
-    eventId,
-    {
-      $pull: { participants: userId },
-      $inc: { totalParticipant: -1 },
-    },
-    { new: true }
-  );
-  if (event) {
-    await removeFromUserList(userId, eventId);
+    let query: { [key: string]: string | undefined } = {};
+
+    if (venue) {
+      query.venue = venue;
+    }
+
+    if (price) {
+      query.price = price;
+    }
+
+    if (age) {
+      query.age = age;
+    }
+
+    if (gender) {
+      query.gender = gender;
+    }
+
+    if (language) {
+      query.language = language;
+    }
+
+    if (experience) {
+      query.experience = experience;
+    }
+
+    const events = await readByQuery(query);
+
+    console.log(query);
+
+    if (events.length === 0) {
+      res
+        .status(404)
+        .json({ message: "No events found matching your query.", query });
+    } else {
+      res.status(200).json({ events, query });
+    }
+  } catch (error) {
+    res.status(500).json({ message: `Failed to retrieve events: ${error}` });
   }
-  return event;
 };
 
 export const getEventById = async (req: any, res: any) => {
