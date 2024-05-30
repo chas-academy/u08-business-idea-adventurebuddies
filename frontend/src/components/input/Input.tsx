@@ -1,7 +1,7 @@
 import React from "react";
 
 interface InputProps {
-  type: "text" | "checkbox" | "radio" | "email" | "date" | "time";
+  type: "text" | "checkbox" | "radio" | "email" | "date" | "time" | "password";
   label?: string;
   name: string;
   value?: string;
@@ -46,46 +46,46 @@ const Input: React.FC<InputProps> = ({
             className="size-5 border checked:bg-primaryColor mr-1"
           />
         </div>
-      ) : type === 'text' || type === 'email' ? (
+      ) : type === "text" || type === "email" ? (
         <div className="flex flex-col items-start w-full">
           {label && <label htmlFor={label}>{label}</label>}
-            <input
-              type={type}
-              name={name}
-              value={value}
-              onChange={onChange}
-              placeholder={placeholder}
-              className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
-              focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            />
-        </div>
-      ) : type === 'date' && timeName ? (
-        <div className="flex flex-col items-start w-11/12 h-18">
-        {label && <label htmlFor={label}>{label}</label>}
-        <div className="flex flex-row w-full justify-between items-start">
           <input
-            type="date"
+            type={type}
             name={name}
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
-            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+              focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
           />
-          <input
-            type="time"
-            name={timeName}
-            value={timeValue}
-            onChange={onTimeChange}
-            placeholder={placeholder}
-            className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+        </div>
+      ) : type === "date" && timeName ? (
+        <div className="flex flex-col items-start w-11/12 h-18">
+          {label && <label htmlFor={label}>{label}</label>}
+          <div className="flex flex-row w-full justify-between items-start">
+            <input
+              type="date"
+              name={name}
+              value={value}
+              onChange={onChange}
+              placeholder={placeholder}
+              className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
             focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-          />
-      </div>
-      </div>
+            />
+            <input
+              type="time"
+              name={timeName}
+              value={timeValue}
+              onChange={onTimeChange}
+              placeholder={placeholder}
+              className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            />
+          </div>
+        </div>
       ) : (
         <div className="flex flex-col items-start w-full">
-        {label && <label htmlFor={label}>{label}</label>}
+          {label && <label htmlFor={label}>{label}</label>}
           <input
             type={type}
             name={name}
@@ -95,7 +95,7 @@ const Input: React.FC<InputProps> = ({
             className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
             focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
           />
-      </div>
+        </div>
       )}
     </div>
   );

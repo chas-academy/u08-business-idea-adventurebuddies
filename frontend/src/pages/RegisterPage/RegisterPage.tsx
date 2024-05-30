@@ -23,14 +23,6 @@ const RegisterPage: React.FC = () => {
     });
   };
 
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = event.target;
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [name]: value,
-  //   }));
-  // };
-
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -100,7 +92,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange email"
               />
               <Input
-                type="text"
+                type="password"
                 label="Lösenord*"
                 name="password"
                 value={formData.password}
