@@ -1,6 +1,7 @@
 import User from "../models/userModel";
 import { IEvent } from "../interfaces/IEvent";
 import Event from "../models/eventModel";
+import { Request, Response } from "express";
 
 const create = async (data: IEvent) => {
   await Event.create(data);
@@ -45,6 +46,42 @@ export const getAllEvents = async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({ message: "No events found" });
   }
+};
+
+const attendEvent = async (
+  userId: string,
+  eventId: string
+): Promise<IEvent | null> => {
+  const event = await Event.findByIdAndUpdate(
+    eventId,
+    {
+      $addToSet: { participants: userId },
+      $inc: { totalParticipant: 1 },
+    },
+    { new: true }
+  );
+  if (event) {
+    await addToUserList(userId, eventId);
+  }
+  return event;
+};
+
+const unattendEvent = async (
+  userId: string,
+  eventId: string
+): Promise<IEvent | null> => {
+  const event = await Event.findByIdAndUpdate(
+    eventId,
+    {
+      $pull: { participants: userId },
+      $inc: { totalParticipant: -1 },
+    },
+    { new: true }
+  );
+  if (event) {
+    await removeFromUserList(userId, eventId);
+  }
+  return event;
 };
 
 export const getEventById = async (req: any, res: any) => {
@@ -113,5 +150,39 @@ export const removeEventFromUserList = async (req: any, res: any) => {
     res
       .status(500)
       .json({ message: "Failed to remove event from user's list" });
+  }
+};
+
+export const attend = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId, eventId } = req.params as {
+      userId: string;
+      eventId: string;
+    };
+    const event = await attendEvent(userId, eventId);
+    if (!event) {
+      res.status(404).json({ message: "Event not found" });
+      return;
+    }
+    res.status(200).json({ message: "User has attended the event", event });
+  } catch (error) {
+    res.status(500).json({ message: `Failed to attend event: ${error}` });
+  }
+};
+
+export const unattend = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId, eventId } = req.params as {
+      userId: string;
+      eventId: string;
+    };
+    const event = await unattendEvent(userId, eventId);
+    if (!event) {
+      res.status(404).json({ message: "Event not found" });
+      return;
+    }
+    res.status(200).json({ message: "User has unattended the event", event });
+  } catch (error) {
+    res.status(500).json({ message: `Failed to unattend event: ${error}` });
   }
 };

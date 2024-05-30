@@ -83,6 +83,8 @@ userRouter.post("/logoutall", auth, async (req: CustomRequest, res) => {
   });
 });
 
+userRouter.get("/:id/events", auth, getUserEvents);
+
 userRouter.get("/:id", auth, async (req, res) => {
   const id = req.params.id;
   const user = await getUser(id);
@@ -105,7 +107,5 @@ userRouter.delete("/:id", auth, admin, async (req, res) => {
   const deletedUser = await deleteUser(id);
   res.status(200).json({ message: "User deleted", deletedUser });
 });
-
-userRouter.get("/:id/events", auth, getUserEvents);
 
 export default userRouter;
