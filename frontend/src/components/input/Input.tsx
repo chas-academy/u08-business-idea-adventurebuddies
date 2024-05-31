@@ -1,7 +1,16 @@
 import React from "react";
 
 interface InputProps {
-  type: "text" | "checkbox" | "radio" | "email" | "date" | "time";
+  type:
+    | "text"
+    | "checkbox"
+    | "radio"
+    | "email"
+    | "date"
+    | "time"
+    | "number"
+    | "datetime-local"
+    | "password";
   label?: string;
   name: string;
   value?: string;
@@ -11,6 +20,9 @@ interface InputProps {
   checked?: boolean;
   timeName?: string;
   timeValue?: string;
+  min?: string;
+  max?: string;
+  inputMode?: "numeric";
 }
 
 // För att använda denna komponent i din komponent:
@@ -25,77 +37,92 @@ const Input: React.FC<InputProps> = ({
   name,
   value,
   onChange,
-  onTimeChange,
+  // onTimeChange,
   placeholder,
   checked,
   timeName,
-  timeValue,
+  min,
+  max,
+  inputMode,
+  // timeValue,
 }) => {
   return (
-    <div className="flex flex-row min-w-80 m-3">
-      {type === "checkbox" || type === "radio" ? (
+    <div className={`flex flex-row md:min-w-80 m-3`}>
+      {type === "checkbox" ? (
         <div className="flex flex-row justify-between items-center w-full p-2 border rounded border-primaryColor">
-          {label && <label htmlFor={label}>{label}</label>}
+          {label && <label htmlFor={name}>{label}</label>}
           <input
             type={type}
-            id={label}
+            id={name}
             name={name}
             value={value}
             onChange={onChange}
             checked={checked}
             className="size-5 border checked:bg-primaryColor mr-1"
+            required
           />
         </div>
-      ) : type === 'text' || type === 'email' ? (
+      ) : type === "text" || type === "email" || type === "password" ? (
         <div className="flex flex-col items-start w-full">
-          {label && <label htmlFor={label}>{label}</label>}
-            <input
-              type={type}
-              name={name}
-              value={value}
-              onChange={onChange}
-              placeholder={placeholder}
-              className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
-              focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            />
-        </div>
-      ) : type === 'date' && timeName ? (
-        <div className="flex flex-col items-start w-11/12 h-18">
-        {label && <label htmlFor={label}>{label}</label>}
-        <div className="flex flex-row w-full justify-between items-start">
-          <input
-            type="date"
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
-            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-          />
-          <input
-            type="time"
-            name={timeName}
-            value={timeValue}
-            onChange={onTimeChange}
-            placeholder={placeholder}
-            className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
-            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-          />
-      </div>
-      </div>
-      ) : (
-        <div className="flex flex-col items-start w-full">
-        {label && <label htmlFor={label}>{label}</label>}
+          {label && <label htmlFor={name}>{label}</label>}
           <input
             type={type}
             name={name}
             value={value}
             onChange={onChange}
+            min={min}
+            max={max}
+            inputMode={inputMode}
             placeholder={placeholder}
-            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
-            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor 
+              focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            required
           />
-      </div>
+        </div>
+      ) : type === "datetime-local" ? (
+        <div className="flex flex-col items-start w-11/12 h-18">
+          {label && <label htmlFor={name}>{label}</label>}
+          <div className="flex flex-row w-full justify-between items-start">
+            <input
+              type="datetime-local"
+              id={name}
+              name={name}
+              value={value}
+              onChange={onChange}
+              className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor 
+            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+              required
+            />
+            {/* <input name={timeName} /> */}
+          </div>
+        </div>
+      ) : type === "radio" ? (
+        <div className="">
+          {label && <label htmlFor={name}>{label}</label>}
+          <input
+            type={type}
+            id={name}
+            name={name}
+            value={value}
+            onChange={onChange}
+            required
+          />
+        </div>
+      ) : (
+        <div className="flex flex-col items-start w-full">
+          {label && <label htmlFor={name}>{label}</label>}
+          <input
+            type={type}
+            id={name}
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor 
+            focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            required
+          />
+        </div>
       )}
     </div>
   );

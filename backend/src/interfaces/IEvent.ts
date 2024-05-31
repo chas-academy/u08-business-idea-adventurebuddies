@@ -19,22 +19,26 @@ import { ObjectId } from "mongodb";
 export interface IEvent {
   activity: string;
   user_id: ObjectId;
+
+  start_time: Date;
+  // end_time: Date;
+
   userName?: string;
   userEmail?: string;
-  start_time: Date;
+
   location: string;
   equipment: string;
-  age: number;
+  age: string;
   totalParticipant: number;
   participantsMin: number;
   participantsMax: number;
   participants: ObjectId[];
   message: string;
-  lat: string;
-  lon: string;
+  lat: number;
+  lon: number;
   venue: "Inomhus" | "Utomhus" | "Online";
-  gender: "female" | "male" | "other";
-  language: "svenska" | "engelska";
-  price: number;
-  experience: "nybörjare" | "mellanliggande" | "avancerad";
+  gender: "Female" | "Male" | "Other";
+  language: "Svenska" | "Engelska";
+  price: "Gratis" | "50" | "100" | "200 eller mer";
+  experience: "Nybörjare" | "Mellanliggande" | "Avancerad";
 }
