@@ -14,7 +14,7 @@ interface ButtonProps {
   type: "button" | "submit";
   variant?: "primary" | "secondary" | "danger";
   size?: "small";
-  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   filterButton?: "filterButton";
 }
 
