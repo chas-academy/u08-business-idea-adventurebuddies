@@ -1,6 +1,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../button/Button";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { faHouseChimneyWindow } from "@fortawesome/free-solid-svg-icons";
@@ -8,9 +8,21 @@ import { faMap } from "@fortawesome/free-regular-svg-icons/faMap";
 import { faUserLarge } from "@fortawesome/free-solid-svg-icons/faUserLarge";
 import React from "react";
 
-const Navbar = () => {
-  const handleClick = () => {
-    console.log("click");
+interface NavbarProps {
+  isAuthenticated: boolean;
+  email: string;
+  onLogout: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({
+  isAuthenticated,
+  email,
+  onLogout,
+}) => {
+  const navigate = useNavigate();
+
+  const handleChange = () => {
+    navigate("/login");
   };
   return (
     <>
@@ -47,9 +59,27 @@ const Navbar = () => {
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </Link>
             </button>
-            <Button type="button" size="small" variant="secondary" onClick={handleClick}>
-              Logga in
-            </Button>
+            {isAuthenticated ? (
+              <div>
+                <Button
+                  type="button"
+                  size="small"
+                  variant="secondary"
+                  onClick={onLogout}
+                >
+                  {email}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                size="small"
+                variant="secondary"
+                onClick={handleChange}
+              >
+                Login
+              </Button>
+            )}
           </div>
         </div>
 
@@ -82,7 +112,7 @@ const Navbar = () => {
               </a>
             </li>
             <li className="px-6">
-              <a href="#">
+              <a href="/userProfile">
                 <FontAwesomeIcon
                   icon={faUserLarge}
                   style={{ color: "#1E0707" }}
