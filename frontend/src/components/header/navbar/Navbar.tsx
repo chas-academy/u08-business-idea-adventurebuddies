@@ -86,38 +86,38 @@ const Navbar: React.FC<NavbarProps> = ({
         <div className="py-6 sm:hidden fixed bottom-0 left-0 w-full bg-textColor z-10">
           <ul className="grid grid-cols-5">
             <li className="px-6">
-              <a href="#">
+            <Link to="/">
                 <FontAwesomeIcon
                   icon={faHouseChimneyWindow}
                   style={{ color: "#1E0707" }}
                 />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+            <Link to="/map">
                 <FontAwesomeIcon icon={faMap} style={{ color: "#1e0707" }} />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+              <Link to="/createEvent">
                 <FontAwesomeIcon icon={faPlus} style={{ color: "#1E0707" }} />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+              <Link to="/">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
                   style={{ color: "#1E0707" }}
                 />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="/userProfile">
+              <Link to="/userProfile">
                 <FontAwesomeIcon
                   icon={faUserLarge}
                   style={{ color: "#1E0707" }}
                 />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
