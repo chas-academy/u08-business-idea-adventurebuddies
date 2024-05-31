@@ -6,7 +6,8 @@ import Button from "../../components/button/Button";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
+    userName: "",
     password: "",
     email: "",
     confirmPassword: "",
@@ -16,11 +17,10 @@ const RegisterPage: React.FC = () => {
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -34,6 +34,24 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Hantera formulär här
+
+    fetch("http://localhost:3000/api/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("User registered successfully:", data);
+        // Handle response data
+        // Redirect the user, show a success message, etc.
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+      });
   };
 
   return (
@@ -50,9 +68,17 @@ const RegisterPage: React.FC = () => {
             <div className="flex flex-col">
               <Input
                 type="text"
+                label="Namn*"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Ange användarnamn"
+              />
+              <Input
+                type="text"
                 label="Användarnamn*"
-                name="username"
-                value={formData.username}
+                name="userName"
+                value={formData.userName}
                 onChange={handleInputChange}
                 placeholder="Ange användarnamn"
               />
@@ -66,7 +92,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange email"
               />
               <Input
-                type="text"
+                type="password"
                 label="Lösenord*"
                 name="password"
                 value={formData.password}
@@ -74,7 +100,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange lösenord"
               />
               <Input
-                type="text"
+                type="password"
                 label="Upprepa lösenord*"
                 name="confirmPassword"
                 value={formData.confirmPassword}
@@ -118,7 +144,7 @@ const RegisterPage: React.FC = () => {
                   <option value="">Välj kön</option>
                   <option value="female">Kvinna</option>
                   <option value="male">Man</option>
-                  {/* LÄGG TILL I DB <option value="non-binary">Icke-binär</option> */}
+                  <option value="non-binary">Icke-binär</option>
                   <option value="other">Annat</option>
                 </select>
               </div>

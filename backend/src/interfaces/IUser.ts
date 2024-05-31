@@ -15,6 +15,8 @@ export interface IUser extends Document {
   generateAuthToken: () => Promise<string>;
   role: number;
   phoneNumber?: string;
+  createdEvents: ObjectId[];
+  attendingEvents: ObjectId[];
   profileImageUrl?: string;
 }
 

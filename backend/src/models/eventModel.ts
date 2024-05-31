@@ -1,23 +1,26 @@
 import mongoose, { Schema, model } from "mongoose";
 import { IEvent } from "../interfaces/IEvent";
 
-const locationSchema = new Schema({
-  type: {
-    type: String,
-    enum: ["Point"],
-    required: true,
-  },
-  coordinates: {
-    type: [String],
-    required: true,
-  },
-});
+// const locationSchema = new Schema({
+//   type: {
+//     type: String,
+//     enum: ["Point"],
+//     required: true,
+//   },
+//   coordinates: {
+//     type: [String],
+//     required: true,
+//   },
+// });
 
 const eventSchema = new Schema<IEvent>(
   {
     activity: { type: String, required: true },
     user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
+
     start_time: { type: Date, default: () => new Date(), required: true },
+    // end_time: { type: Date, default: () => new Date(), required: true },
+
     location: { type: String, required: true },
     equipment: { type: String, required: true },
     age: { type: String, required: false },
@@ -32,27 +35,28 @@ const eventSchema = new Schema<IEvent>(
     message: { type: String, required: false },
     venue: {
       type: String,
-      enum: ["Inomhus", "Utomhus", "Online"],
-      required: true,
+      enum: ["Inomhus", "Utomhus", "Online", ""],
+      required: false,
     },
     gender: {
       type: String,
-      enum: ["female", "male", "other"],
-      required: true,
+      enum: ["Female", "Male", "Other", ""],
+      required: false,
     },
     language: {
       type: String,
-      enum: ["svenska", "engelska"],
-      required: true,
+      enum: ["Svenska", "Engelska", ""],
+      required: false,
     },
     price: {
-      type: Number,
-      required: true,
+      type: String,
+      enum: ["Gratis", "50", "100", "200 eller mer", ""],
+      required: false,
     },
     experience: {
       type: String,
-      enum: ["nybörjare", "mellanliggande", "avancerad"],
-      required: true,
+      enum: ["Nybörjare", "Mellanliggande", "Avancerad", ""],
+      required: false,
     },
   },
   {
