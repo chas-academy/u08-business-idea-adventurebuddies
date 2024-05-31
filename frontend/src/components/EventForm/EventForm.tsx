@@ -140,7 +140,7 @@ const EventForm = () => {
         Skapa event
       </h1>
       <form className="flex flex-col items-center space-y-4 text-sm font-medium" onSubmit={onSubmit}>
-        <div className="w-2/3">
+        <div className="md:w-2/3">
           <Input
             label="User_ID"
             type="text"
@@ -336,7 +336,7 @@ const EventForm = () => {
             onChange={handleChange}
           />
 
-          <div className="flex flex-col items-center place-self-center rounded border border-primaryColor w-2/3">
+          <div className="flex flex-col items-start justify-center px-3">
             <label htmlFor="Övrigt">Övrigt</label>
             <textarea
               rows={5}
@@ -344,6 +344,7 @@ const EventForm = () => {
               name="message"
               placeholder="Skriv här..."
               onChange={handleChange}
+              className="rounded border border-primaryColor w-full p-1"
             />
           </div>
         </div>
