@@ -1,14 +1,26 @@
 import "./App.css";
-import React from "react";
-import Footer  from "./components/footer/Footer";
+import React, { useState } from "react";
+import Footer from "./components/footer/Footer";
 // import HomePage from "./pages/homePage/HomePage";
-import { Link, Outlet } from 'react-router-dom'
-
+import { Link, Outlet } from "react-router-dom";
+import Header from "./components/header/Header";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleLogin = (email: string) => {
+    setIsAuthenticated(true);
+    setEmail(email);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setEmail("");
+  };
   return (
     <>
-    <nav>
+      <nav>
       <ul>
         <li>
           <Link to="/">Home</Link>
@@ -36,10 +48,19 @@ function App() {
         </li>
       </ul>
     </nav>
-    <main className="flex flex-col justify-center items-center z-10">
-      <Outlet />
-    </main>
-    <Footer />
+      {/* <Header
+        isAuthenticated={isAuthenticated}
+        email={email}
+        onLogout={handleLogout}
+      /> */}
+      <main className="flex flex-col justify-center items-center z-10">
+        <Outlet
+          context={{
+            onLogin: handleLogin,
+          }}
+        />
+      </main>
+      <Footer />
     </>
   );
 }

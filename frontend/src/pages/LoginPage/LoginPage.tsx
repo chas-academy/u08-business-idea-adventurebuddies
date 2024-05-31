@@ -1,9 +1,15 @@
 import { useState } from "react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
-const LoginForm = () => {
+interface ContextType {
+  onLogin: (email: string) => void;
+}
+
+const LoginForm: React.FC = () => {
   const [checked, setChecked] = useState(false);
+  const navigate = useNavigate();
+  const { onLogin } = useOutletContext<ContextType>();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -17,6 +23,10 @@ const LoginForm = () => {
       [id]: value,
     }));
   };
+  
+    const handleLogin = () => {
+      onLogin(formData.email);
+    };
 
   // const handleUsernameChange = (e: any) => setFormData(e.target.value);
   // const handlePasswordChange = (e: any) => setFormData(e.target.value);
@@ -34,11 +44,13 @@ const LoginForm = () => {
       },
       body: JSON.stringify(formData),
     })
+ 
       .then((response) => response.json())
       .then((data) => {
         console.log("User logged in successfully:", data);
         // Handle response data
         // Redirect the user, show a success message, etc.
+        navigate("/userProfile");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -102,6 +114,7 @@ const LoginForm = () => {
           <button
             type="submit"
             className="w-full py-2 text-textColor bg-primaryColor font-Poppins font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={handleLogin}
           >
             Logga in
           </button>
