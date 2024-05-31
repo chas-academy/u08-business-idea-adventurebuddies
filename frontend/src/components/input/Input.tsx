@@ -10,7 +10,7 @@ interface InputProps {
     | "time"
     | "number"
     | "datetime-local"
-    | "password"
+    | "password";
   label?: string;
   name: string;
   value?: string;
@@ -59,6 +59,7 @@ const Input: React.FC<InputProps> = ({
             onChange={onChange}
             checked={checked}
             className="size-5 border checked:bg-primaryColor mr-1"
+            required
           />
         </div>
       ) : type === "text" || type === "email" || type === "password" ? (
@@ -73,8 +74,9 @@ const Input: React.FC<InputProps> = ({
             max={max}
             inputMode={inputMode}
             placeholder={placeholder}
-            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor 
               focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            required
           />
         </div>
       ) : type === "datetime-local" ? (
@@ -87,8 +89,9 @@ const Input: React.FC<InputProps> = ({
               name={name}
               value={value}
               onChange={onChange}
-              className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+              className="border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor 
             focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+              required
             />
             {/* <input name={timeName} /> */}
           </div>
@@ -102,6 +105,7 @@ const Input: React.FC<InputProps> = ({
             name={name}
             value={value}
             onChange={onChange}
+            required
           />
         </div>
       ) : (
@@ -114,8 +118,9 @@ const Input: React.FC<InputProps> = ({
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+            className="w-full h-full border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor 
             focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+            required
           />
         </div>
       )}
