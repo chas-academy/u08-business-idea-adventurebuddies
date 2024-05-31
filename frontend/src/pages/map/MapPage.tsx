@@ -1,9 +1,10 @@
 import React from "react"; 
+import Maps2 from "./Maps2";
 const MapPage = () => {
 
     return (
         <>
-        Map
+            <Maps2 />
         </>
     )
 }
