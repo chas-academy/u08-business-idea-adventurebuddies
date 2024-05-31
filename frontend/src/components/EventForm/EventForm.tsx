@@ -18,14 +18,14 @@ const EventForm = () => {
     participantsMin: 0,
     participantsMax: 0,
     equipment: "",
-    age: "18+",
+    age: "",
     lat: "",
     lon: "",
-    venue: "Inomhus",
-    gender: "Female",
-    language: "Svenska",
+    venue: "",
+    gender: "",
+    language: "",
     price: "",
-    experience: "Nybörjare",
+    experience: "",
     totalParticipant: 0,
     message: "",
     start_time: Date(),
@@ -135,77 +135,80 @@ const EventForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm ">
-    <div className="box-border md:box-content bg-gray-200 p-2 md:py-5 glass-container ">
-      <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6 ">
-        Skapa event
-      </h1>
-      <form className="flex flex-col items-center space-y-4 text-sm font-medium" onSubmit={onSubmit}>
-        <div className="md:w-2/3">
-          <Input
-            label="User_ID"
-            type="text"
-            name="user_id"
-            onChange={handleChange}
-            placeholder="User_ID"
-          />
-          <Input
-            label="Aktivitet"
-            type="text"
-            name="activity"
-            onChange={handleChange}
-            placeholder="Aktivitet"
-          />
-          <Input
-            label="Plats"
-            type="text"
-            name="location"
-            onChange={handleChange}
-            placeholder="Plats"
-          />
-          <Input
-            label="Datum & tid"
-            type="datetime-local"
-            name="start_time"
-            onChange={handleChange}
-          />
-          <Input
-            label="Min/max deltagare:"
-            type="number"
-            name="participantsMin"
-            min="1"
-            max="30"
-            inputMode="numeric"
-            onChange={handleChange}
-          />
-          <Input
-            type="number"
-            name="participantsMax"
-            min="1"
-            max="30"
-            onChange={handleChange}
-          />
+      <div className="box-border md:box-content bg-gray-200 p-2 md:py-5 glass-container ">
+        <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6 ">
+          Skapa event
+        </h1>
+        <form
+          className="flex flex-col items-center space-y-4 text-sm font-medium"
+          onSubmit={onSubmit}
+        >
+          <div className="md:w-2/3">
+            <Input
+              label="User_ID"
+              type="text"
+              name="user_id"
+              onChange={handleChange}
+              placeholder="User_ID"
+            />
+            <Input
+              label="Aktivitet"
+              type="text"
+              name="activity"
+              onChange={handleChange}
+              placeholder="Aktivitet"
+            />
+            <Input
+              label="Plats"
+              type="text"
+              name="location"
+              onChange={handleChange}
+              placeholder="Plats"
+            />
+            <Input
+              label="Datum & tid"
+              type="datetime-local"
+              name="start_time"
+              onChange={handleChange}
+            />
+            <Input
+              label="Min/max deltagare:"
+              type="number"
+              name="participantsMin"
+              min="1"
+              max="30"
+              inputMode="numeric"
+              onChange={handleChange}
+            />
+            <Input
+              type="number"
+              name="participantsMax"
+              min="1"
+              max="30"
+              onChange={handleChange}
+            />
 
-          <div className="flex flex-row overflow-hidden">
-            <div className="place-self-start w-1/3">
-              <Input
-                label="Ja"
-                type="radio"
-                name="equipment"
-                value="Ja"
-                onChange={handleChange}
-              />
+            <div className="flex flex-row overflow-hidden">
+              <div className="place-self-start w-1/3">
+                <Input
+                  label="Ja"
+                  type="radio"
+                  name="equipment"
+                  value="Ja"
+                  onChange={handleChange}
+                />
               </div>
               <div className="place-self-start w-1/3">
-              <Input
-                label="Nej"
-                type="radio"
-                name="equipment"
-                value="Nej"
-                onChange={handleChange}
-              />
-          </div>
-          </div>
-          {equipmentNeeded && (
+                <Input
+                  label="Nej"
+                  type="radio"
+                  name="equipment"
+                  value="Nej"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            {equipmentNeeded && (
               <div className="w-1/3">
                 <Input
                   label="Denna utrustning finns!"
@@ -215,145 +218,165 @@ const EventForm = () => {
                 />
               </div>
             )}
-          <div className="flex flex-col items-start w-full pl-3">
-            <div className="flex flex-row items-center w-full">
-              <div className="flex flex-col w-full items-start">
-            <label htmlFor="Ålder" className="">
-              Ålder
-            </label>
-            <select
-              id="Ålder"
-              name="age"
-              onChange={handleChange}
-              className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+            <div className="flex flex-col items-start w-full pl-3">
+              <div className="flex flex-row items-center w-full">
+                <div className="flex flex-col w-full items-start">
+                  <label htmlFor="Ålder" className="">
+                    Ålder
+                  </label>
+                  <select
+                    id="Ålder"
+                    name="age"
+                    onChange={handleChange}
+                    className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            >
-              <option value="18 - 25">18 - 25</option>
-              <option value="25 - 35">25 - 35</option>
-              <option value="35 - 45">35 - 45</option>
-              <option value="45 - 55">45 - 55</option>
-              <option value="55 - 65">55 - 65</option>
-              <option value="65+">65+</option>
-              <option value="18+">18+</option>
-            </select>
-            </div>
+                    required
+                  >
+                    <option className="text-textGray">Välj Ålder...</option>
 
-            <div className="flex flex-col w-full items-start">
-            <label htmlFor="Plats" className="">
-              Plats
-            </label>
-            <select
-              id="venue"
-              name="venue"
-              onChange={handleChange}
-              className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+                    <option value="18 - 25">18 - 25</option>
+                    <option value="25 - 35">25 - 35</option>
+                    <option value="35 - 45">35 - 45</option>
+                    <option value="45 - 55">45 - 55</option>
+                    <option value="55 - 65">55 - 65</option>
+                    <option value="65+">65+</option>
+                    <option value="18+">18+</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col w-full items-start">
+                  <label htmlFor="Plats" className="">
+                    Plats
+                  </label>
+                  <select
+                    id="venue"
+                    name="venue"
+                    onChange={handleChange}
+                    className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            >
-              <option value="Inomhus">Inomhus</option>
-              <option value="Utomhus">Utomhus</option>
-              <option value="Online">Online</option>
-            </select>
-            </div>
-            </div>
+                    required
+                  >
+                    <option className="text-textGray">Välj Plats...</option>
 
-            <div className="flex flex-row items-center w-full">
-              <div className="flex flex-col w-full items-start">
-            <label htmlFor="gender" className="">
-              Kön
-            </label>
-            <select
-              name="gender"
-              id="gender"
-              onChange={handleChange}
-              className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+                    <option value="Inomhus">Inomhus</option>
+                    <option value="Utomhus">Utomhus</option>
+                    <option value="Online">Online</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-row items-center w-full">
+                <div className="flex flex-col w-full items-start">
+                  <label htmlFor="gender" className="">
+                    Kön
+                  </label>
+                  <select
+                    name="gender"
+                    id="gender"
+                    onChange={handleChange}
+                    className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
               focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-              >
-              <option value="Female">Female</option>
-              <option value="Male">Male</option>
-              <option value="Other">Other</option>
-            </select>
-            </div>
+                    required
+                  >
+                    <option className="text-textGray">Välj Kön...</option>
 
-            <div className="flex flex-col w-full items-start ">
-            <label htmlFor="language" className="">
-              Språk
-            </label>
-            <select
-              name="language"
-              id="language"
-              onChange={handleChange}
-              className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col w-full items-start ">
+                  <label htmlFor="language" className="">
+                    Språk
+                  </label>
+                  <select
+                    name="language"
+                    id="language"
+                    onChange={handleChange}
+                    className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            >
-              <option value="Svenska">Svenska</option>
-              <option value="Engelska">Engelska</option>
-            </select>
-            </div>
-            </div>
+                    required
+                  >
+                    <option className="text-textGray">Välj Språk...</option>
 
-            <div className="flex flex-row items-center w-full">
-              <div className="flex flex-col items-start w-full">
-            <label htmlFor="price" className="">
-              Pris
-            </label>
-            <select
-              name="price"
-              id="price"
-              onChange={handleChange}
-              className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+                    <option value="Svenska">Svenska</option>
+                    <option value="Engelska">Engelska</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-row items-center w-full">
+                <div className="flex flex-col items-start w-full">
+                  <label htmlFor="price" className="">
+                    Pris
+                  </label>
+                  <select
+                    name="price"
+                    id="price"
+                    onChange={handleChange}
+                    className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            >
-              <option value="Gratis">Gratis</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="200 eller mer">200 eller mer</option>
-            </select>
-            </div>
+                    required
+                  >
+                    <option className="text-textGray">Välj Pris...</option>
 
-            <div className="flex flex-col items-start w-full">
-            <label htmlFor="experience" className="">
-              Erfarenhet
-            </label>
-            <select
-              name="experience"
-              id="experience"
-              onChange={handleChange}
-              className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
+                    <option value="Gratis">Gratis</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200 eller mer">200 eller mer</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col items-start w-full">
+                  <label htmlFor="experience" className="">
+                    Erfarenhet
+                  </label>
+                  <select
+                    name="experience"
+                    id="experience"
+                    onChange={handleChange}
+                    className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-            >
-              <option value="Nybörjare">Nybörjare</option>
-              <option value="Mellanliggande">Mellanliggande</option>
-              <option value="Avancerad">Avancerad</option>
-            </select>
-            </div>
-            </div>
-          </div>
+                    required
+                  >
+                    <option>Välj Erfarenhet...</option>
 
-          <Input
-            label="Antal deltagare"
-            type="number"
-            name="totalParticipants"
-            onChange={handleChange}
-          />
+                    <option value="Nybörjare" className="text-textGray">
+                      Nybörjare
+                    </option>
+                    <option value="Mellanliggande">Mellanliggande</option>
+                    <option value="Avancerad">Avancerad</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-          <div className="flex flex-col items-start justify-center px-3">
-            <label htmlFor="Övrigt">Övrigt</label>
-            <textarea
-              rows={5}
-              id="Övrigt"
-              name="message"
-              placeholder="Skriv här..."
+            <Input
+              label="Antal deltagare"
+              type="number"
+              name="totalParticipants"
               onChange={handleChange}
-              className="rounded border border-primaryColor w-full p-1"
             />
+
+            <div className="flex flex-col items-start justify-center px-3">
+              <label htmlFor="Övrigt">Övrigt</label>
+              <textarea
+                rows={5}
+                id="Övrigt"
+                name="message"
+                placeholder="Skriv här..."
+                onChange={handleChange}
+                className="rounded border border-primaryColor w-full p-1"
+              />
+            </div>
           </div>
-        </div>
-        <Button type="submit" variant="primary">
-          Skicka
-        </Button>
-      </form>
+          <Button type="submit" variant="primary">
+            Skicka
+          </Button>
+        </form>
+      </div>
     </div>
-  </div>
   );
 };
 

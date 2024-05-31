@@ -9,7 +9,7 @@ export default {
       },
     },
     fontFamily: {
-      'sans': ["Poppins", "sans-serif"],
+      sans: ["Poppins", "sans-serif"],
     },
     colors: {
       hoverOnLink: "#B5C0F8",
@@ -24,6 +24,8 @@ export default {
       thirdColor: "#FC5D41",
       //darker shade of primary
       hoverOnButton: "#4e60bf",
+      // Gray
+      textGray: "#979797",
     },
   },
   plugins: [],
