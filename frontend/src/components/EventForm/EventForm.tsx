@@ -4,6 +4,7 @@ import React from "react";
 import { useEventLatitude } from "../../store/useIEventLatitude";
 import Input from "../input/Input";
 import Button from "../button/Button";
+import { useNavigate } from "react-router-dom";
 
 const EventForm = () => {
   // Denna lagras platsen du säker på och uppdateras när användaren trycker på submit
@@ -62,10 +63,13 @@ const EventForm = () => {
     }
   };
 
+  const navigate = useNavigate();
   // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPlace(formData.location);
+    console.log("Denna ska byta sida");
+    navigate("/");
   };
 
   // Denna gör ett API kall när Place ändras och sätter sedan lon, lat kordinaterna in i formdata
@@ -230,7 +234,6 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-                    required
                   >
                     <option className="text-textGray">Välj Ålder...</option>
 
@@ -254,7 +257,6 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-                    required
                   >
                     <option className="text-textGray">Välj Plats...</option>
 
@@ -276,7 +278,6 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
               focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-                    required
                   >
                     <option className="text-textGray">Välj Kön...</option>
 
@@ -296,7 +297,6 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-                    required
                   >
                     <option className="text-textGray">Välj Språk...</option>
 
@@ -317,7 +317,6 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-                    required
                   >
                     <option className="text-textGray">Välj Pris...</option>
 
@@ -338,7 +337,6 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
-                    required
                   >
                     <option>Välj Erfarenhet...</option>
 
