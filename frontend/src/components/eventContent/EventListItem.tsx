@@ -1,8 +1,6 @@
 import React from "react";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
-import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { faVolleyball } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faCalendarDays, faClock, faVolleyball, faFootball, faBasketball, faBaseball, faTableTennisPaddleBall, faDumbbell, faBaseballBatBall, faBowlingBall, faGolfBallTee } from "@fortawesome/free-solid-svg-icons";
+import { faFutbol } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface EventListItemProps {
@@ -24,7 +22,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
   time,
 }) => {
   const formatDate = (date: Date): string => {
-    const days = ["Sön", "Mån", "Tis", "Ons", "Tors", "Fre", "Lör"];
+    const days = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
     const day = days[date.getDay()];
     const dayOfMonth = date.getDate();
     const month = date.getMonth() + 1;
@@ -60,3 +58,12 @@ const EventListItem: React.FC<EventListItemProps> = ({
 };
 
 export default EventListItem;
+
+
+//<FontAwesomeIcon icon={faPeopleGroup} /> 
+//<FontAwesomeIcon icon={faMarsAndVenus} />
+//<FontAwesomeIcon icon={faHandHoldingDollar} />
+// <FontAwesomeIcon icon={faPersonShelter} />
+// <FontAwesomeIcon icon={faLanguage} />
+// <FontAwesomeIcon icon={faSeedling} />
+// <FontAwesomeIcon icon="fa-solid fa-people-roof" />
