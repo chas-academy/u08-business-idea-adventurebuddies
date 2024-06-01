@@ -224,9 +224,29 @@ export const updateEvent = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const deleteEvent = async (req: any, res: any) => {
+export const deleteEvent = async (req: CustomRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const id = req.params.id;
+
+    // Ensure that the user owns the event being deleted
+    const existingEvent = await read(id);
+
+    if (!existingEvent) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (
+      !existingEvent ||
+      existingEvent.user_id.trim() !== req.user._id.toString().trim()
+    ) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to delete this event" });
+    }
     const deletedEvent = await deleteOne(id);
     if (!deletedEvent) {
       return res.status(404).json({ message: "Event not found" });
@@ -237,8 +257,12 @@ export const deleteEvent = async (req: any, res: any) => {
   }
 };
 
-export const addEventToUserList = async (req: any, res: any) => {
+export const addEventToUserList = async (req: CustomRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const userId = req.params.userId;
     const eventId = req.params.eventId;
     await addToUserList(userId, eventId);
@@ -250,8 +274,15 @@ export const addEventToUserList = async (req: any, res: any) => {
   }
 };
 
-export const removeEventFromUserList = async (req: any, res: any) => {
+export const removeEventFromUserList = async (
+  req: CustomRequest,
+  res: Response
+) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const userId = req.params.userId;
     const eventId = req.params.eventId;
     await removeFromUserList(userId, eventId);
@@ -265,8 +296,12 @@ export const removeEventFromUserList = async (req: any, res: any) => {
   }
 };
 
-export const attend = async (req: Request, res: Response): Promise<void> => {
+export const attend = async (req: CustomRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const { userId, eventId } = req.params as {
       userId: string;
       eventId: string;
@@ -282,8 +317,12 @@ export const attend = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const unattend = async (req: Request, res: Response): Promise<void> => {
+export const unattend = async (req: CustomRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const { userId, eventId } = req.params as {
       userId: string;
       eventId: string;
