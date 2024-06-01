@@ -2,9 +2,11 @@ import User from "../models/userModel";
 import { IEvent } from "../interfaces/IEvent";
 import Event from "../models/eventModel";
 import { Request, Response } from "express";
+import { CustomRequest } from "middleware/auth";
 
 const create = async (data: IEvent) => {
   await Event.create(data);
+  return Event;
 };
 
 const attendEvent = async (
@@ -52,11 +54,21 @@ const readAll = async () => {
   return events;
 };
 const read = async (id: any) => {
-  return await Event.findById(id)
-    .populate("user_id")
+  const event = await Event.findById(id)
+    .populate("user_id", "_id")
     .populate("participants")
     .exec();
+
+  if (!event) {
+    return null;
+  }
+
+  return {
+    ...event.toObject(),
+    user_id: event.user_id._id.toString(),
+  };
 };
+
 const update = async (id: any, data: IEvent) => {
   return await Event.findByIdAndUpdate(id, data, { new: true });
 };
@@ -73,15 +85,23 @@ const removeFromUserList = async (userId: any, eventId: any) => {
   await User.findByIdAndUpdate(userId, { $pull: { events: eventId } });
 };
 
-export const createEvent = async (req: any, res: any) => {
+export const createEvent = async (req: CustomRequest, res: Response) => {
   try {
-    // const newEvent = new Event(req.body);
-    // const savedEvent = await create(newEvent);
-    const savedEvent = await Event.create(req.body);
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    const newEvent = {
+      ...req.body,
+      user_id: req.user._id,
+    };
+
+    const savedEvent = await create(newEvent);
+
     res.status(201).json({ message: "Event created successfully", savedEvent });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Event not created", error: error });
+    console.log("Error creating event:", error);
+    res.status(500).json({ message: "Event not created", error });
   }
 };
 
@@ -153,10 +173,45 @@ export const getEventById = async (req: any, res: any) => {
   }
 };
 
-export const updateEvent = async (req: any, res: any) => {
+export const updateEvent = async (req: CustomRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
     const id = req.params.id;
     const updatedEventData = req.body;
+
+    // Log user ID extracted from the token
+    console.log("User ID from token:", req.user._id);
+    console.log("Type of User ID from token:", typeof req.user._id);
+
+    // Ensure that the user owns the event being updated
+    const existingEvent = await read(id);
+    console.log("Existing event:", existingEvent); // Log the existing event
+
+    if (!existingEvent) {
+      console.log("Event not found");
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    console.log("User ID associated with the event:", existingEvent.user_id);
+    console.log(
+      "Type of User ID associated with the event:",
+      typeof existingEvent.user_id
+    );
+
+    if (
+      !existingEvent ||
+      existingEvent.user_id.trim() !== req.user._id.toString().trim()
+    ) {
+      // Log user ID associated with the event being updated
+      // console.log("User ID associated with the event:", existingEvent?.user_id);
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update this event" });
+    }
+
     const updatedEvent = await update(id, updatedEventData);
     // const updatedEvent = await update(req.body, id);
     if (!updatedEvent) {
@@ -164,7 +219,8 @@ export const updateEvent = async (req: any, res: any) => {
     }
     res.status(200).json({ message: "Update succeded", updatedEvent });
   } catch (error) {
-    res.status(500).json({ message: "Opps something bad happend" });
+    console.error("Error updating event:", error);
+    res.status(500).json({ message: "Opps something bad happend", error });
   }
 };
 
