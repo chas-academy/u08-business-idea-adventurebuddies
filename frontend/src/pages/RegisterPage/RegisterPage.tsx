@@ -199,6 +199,9 @@ const RegisterPage: React.FC = () => {
               Logga in här!
             </Link>
           </div>
+          <small className="text-gray-400 mt-1 italic">
+            *Obligatoriskt fält
+          </small>
         </div>
       </div>
     </>
