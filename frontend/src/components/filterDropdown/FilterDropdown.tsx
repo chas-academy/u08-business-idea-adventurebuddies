@@ -6,7 +6,7 @@ import { IEvent } from "../../../../backend/src/interfaces/IEvent";
 
 interface FilterDropdownProps {
   events: IEvent[];
-  onFilter: (filteredEvents: IEvent[]) => void;
+  onFilter: (filteredEventsUrl: string) => void;
 }
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
@@ -49,7 +49,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         setSelectedVenue(selectedVenue.filter((v) => v !== value));
         console.log('selected', selectedVenue)
     } else {
-        setSelectedVenue([value]);
+        setSelectedVenue([...selectedVenue, value]);
     }
   };
 
@@ -91,31 +91,30 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         return;
     }
 
-    let filteredEvents = [...events];
+    let queryParams: Record<string, string> = {};
 
     if (selectedVenue && selectedVenue?.length > 0) {
-      filteredEvents = filteredEvents.filter((event) => selectedVenue?.includes(event.venue));
+      queryParams.venue = selectedVenue.join(',');
     }
     if (selectedGender && selectedGender?.length > 0) {
-      filteredEvents = filteredEvents.filter(
-        (event) => selectedGender?.includes(event.gender));
+        queryParams.gender = selectedGender.join(',');
     }
     if (selectedLanguage && selectedLanguage?.length > 0) {
-      filteredEvents = filteredEvents.filter(
-        (event) => selectedLanguage?.includes(event.language));
+        queryParams.language = selectedLanguage.join(',');
     }
     if (selectedPrice && selectedPrice?.length > 0) {
-      filteredEvents = filteredEvents.filter(
-        (event) => selectedPrice?.includes(event.price));
+        queryParams.price = selectedPrice.join(',');
     }
     if (selectedExperience && selectedExperience?.length > 0) {
-      filteredEvents = filteredEvents.filter(
-        (event) => selectedExperience?.includes(event.experience));
+        queryParams.experience = selectedExperience.join(',');
     }
 
+    const queryString = new URLSearchParams(queryParams).toString();
     console.log(events)
-    onFilter(filteredEvents);
-    console.log(selectedVenue)
+    const filteredEventsUrl = `/api/events/query?${encodeURIComponent(queryString)}`;
+    console.log('filtered events url:', filteredEventsUrl)
+    onFilter(filteredEventsUrl);
+    console.log(selectedVenue, selectedGender, selectedPrice, selectedExperience, selectedLanguage)
   };
 
 
