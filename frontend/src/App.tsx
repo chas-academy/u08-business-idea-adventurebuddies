@@ -2,12 +2,13 @@ import "./App.css";
 import React, { useState } from "react";
 import Footer from "./components/footer/Footer";
 // import HomePage from "./pages/homePage/HomePage";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import Header from "./components/header/Header";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (email: string) => {
     setIsAuthenticated(true);
@@ -17,17 +18,18 @@ function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setEmail("");
+    navigate("/login");
   };
   return (
     <>
       <nav>
       <ul>
-        <li>
+        {/* <li>
           <Link to="/">Home</Link>
         </li>
         <li>
           <Link to="/login">Login</Link>
-        </li>
+        </li> */}
         <li>
           <Link to="/register">Register</Link>
         </li>
@@ -37,9 +39,9 @@ function App() {
         <li>
           <Link to="/eventInfo">Event info</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/createEvent">Create event</Link>
-        </li>
+        </li> */}
         <li>
           <Link to="/userProfile">User profile</Link>
         </li>
@@ -48,11 +50,11 @@ function App() {
         </li>
       </ul>
     </nav>
-      {/* <Header
+      <Header
         isAuthenticated={isAuthenticated}
         email={email}
         onLogout={handleLogout}
-      /> */}
+      />
       <main className="flex flex-col justify-center items-center z-10">
         <Outlet
           context={{
