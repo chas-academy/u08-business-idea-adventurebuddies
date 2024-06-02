@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "./navbar/Navbar";
-import React from "react";
 
 interface HeaderProps {
   isAuthenticated: boolean;
