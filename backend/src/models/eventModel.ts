@@ -35,28 +35,28 @@ const eventSchema = new Schema<IEvent>(
     message: { type: String, required: false },
     venue: {
       type: String,
-      enum: ["Inomhus", "Utomhus", "Online"],
-      required: true,
+      enum: ["Inomhus", "Utomhus", "Online", ""],
+      required: false,
     },
     gender: {
       type: String,
-      enum: ["Female", "Male", "Other"],
-      required: true,
+      enum: ["Female", "Male", "Other", ""],
+      required: false,
     },
     language: {
       type: String,
-      enum: ["Svenska", "Engelska"],
-      required: true,
+      enum: ["Svenska", "Engelska", ""],
+      required: false,
     },
     price: {
       type: String,
-      enum: ["Gratis", "50", "100", "200 eller mer"],
-      required: true,
+      enum: ["Gratis", "50", "100", "200 eller mer", ""],
+      required: false,
     },
     experience: {
       type: String,
-      enum: ["Nybörjare", "Mellanliggande", "Avancerad"],
-      required: true,
+      enum: ["Nybörjare", "Mellanliggande", "Avancerad", ""],
+      required: false,
     },
   },
   {
