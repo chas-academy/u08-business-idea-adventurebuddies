@@ -1,53 +1,87 @@
 import React, { useEffect, useState } from "react";
 import UserUpdate from "../../components/UserUpdate/UserUpdate";
+import { useAuth } from "../../components/header/navbar/AuthContext";
 
-const UserProfilePage = () => {
 
-  const [formData, setFormData] = useState({
+
+
+const UserProfilePage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  const [userData, setUserData] = useState({
     userName: "",
     description: "",
-    profileImageUrl:""
+    profileImageUrl:"",
+    name: "",
+    email: "",
+    gender: "",
+    phoneNumber: "",
+    password: "",
   });
-  
+
   useEffect(() => {
-    // Funktion för att hämta data från backend
-    const fetchData = async () => {
+     console.log("isAuthenticated:", isAuthenticated);
+    if (!isAuthenticated) return; 
+  
+    const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/users/:id");
+        const id = localStorage.getItem('id');
+        const token = localStorage.getItem('token');
+         console.log("User ID retrieved from local storage:", id);
+         console.log("Token retrieved from local storage:", token);
+        if (!id || !token) {
+          throw new Error('User ID or token not found');
+        }
+    
+        // Fetch user data using stored userId
+        const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+    
         const data = await response.json();
-        setFormData(data);
+        console.log('User data:', data);
+        setUserData(data);
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Fetch user data error:', error);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchUserData();
+  }, [isAuthenticated]); // Fetch data when authentication state changes
+
+  if (!isAuthenticated) {
+    return <div>Vargod och logga in för att se din profil</div>;
+  }
 
     return (
         <>      
         <div className="grid rounded-lg shadow bg-textColor mx-4 min-h-full">
-        <UserUpdate/>
+        <UserUpdate userData={userData} setUserData={setUserData} />
          <div>
-          <img
-            className="border rounded-full h-20 w-20 ml-2"
-            src={formData.profileImageUrl}
-            alt="Profil bild"
-          />
+         {userData.profileImageUrl && (
+        <img src={userData.profileImageUrl} alt="Profile" />
+      )}
         </div>
         <div className="text-left ml-4">
-          <h3 className="font-bold">{formData.userName}</h3>
+          <h3 className="font-bold">{userData.userName}</h3>
           <p className="text-xs">
-            {formData.description}
+            {userData.description}
           </p>
 
           <div>
-            <p>Aktiviteter:</p>
-            <p className="text-xs">Dans, minigolf, frisbee</p>
+            <p>Mobilnummer:</p>
+            <p className="text-xs">{userData.phoneNumber}</p>
           </div>
           <div>
-            <p>Språk:</p>
-            <p className="text-xs">Svenska, Engelska, Spanska</p>
+            <p>Kön:</p>
+            <p className="text-xs">{userData.gender}</p>
           </div>
         </div>
 
