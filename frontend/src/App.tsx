@@ -2,12 +2,13 @@ import "./App.css";
 import React, { useState } from "react";
 import Footer from "./components/footer/Footer";
 // import HomePage from "./pages/homePage/HomePage";
-import { Outlet, Link } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import Header from "./components/header/Header";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (email: string) => {
     setIsAuthenticated(true);
@@ -17,6 +18,7 @@ function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setEmail("");
+    navigate("/login");
   };
 
   return (
