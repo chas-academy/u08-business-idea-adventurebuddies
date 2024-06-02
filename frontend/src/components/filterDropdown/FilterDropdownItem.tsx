@@ -5,9 +5,10 @@ import Button from "../button/Button";
 
 interface FilterDropdownItemProps {
   label: string;
-  type: 'venue' | 'gender' | 'language' | 'price' | 'experience';
+  type: "venue" | "gender" | "language" | "price" | "experience";
   selectedValues?: string[];
   onSelect: (value: string) => void;
+  options: string[];
 }
 
 const FilterDropdownItem: React.FC<FilterDropdownItemProps> = ({
@@ -15,30 +16,34 @@ const FilterDropdownItem: React.FC<FilterDropdownItemProps> = ({
   type,
   selectedValues,
   onSelect,
+  options,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsDropdownOpen(false);
-        }
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prevState) => !prevState);
   };
 
   const handleSelect = (value: string) => {
     onSelect(value);
-  }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center max-w-80 border rounded border-darkPurple">
@@ -46,11 +51,12 @@ const FilterDropdownItem: React.FC<FilterDropdownItemProps> = ({
         {label}
       </Button>
       {isDropdownOpen && (
-        <div >
+        <div>
           <FilterItem
             type={type}
             selectedValues={selectedValues || []}
             onSelect={handleSelect}
+            options={options}
           />
         </div>
       )}

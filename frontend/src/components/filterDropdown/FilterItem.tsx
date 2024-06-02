@@ -1,43 +1,22 @@
 import * as React from "react";
-import Button from "../button/Button";
-import { useEffect, useState } from "react";
 import Input from "../input/Input";
-import {
-  EXPERIENCES,
-  GENDERS,
-  LANGUAGES,
-  PRICES,
-  VENUES,
-} from "../../utils/enums";
 
 interface FilterItemProps {
   type: "venue" | "gender" | "language" | "price" | "experience";
   selectedValues: string[];
   onSelect: (value: string) => void;
+  options: string[];
 }
 
 const FilterItem: React.FC<FilterItemProps> = ({
   type,
   selectedValues,
   onSelect,
+  options,
 }) => {
-  const options = {
-    venue: VENUES,
-    gender: GENDERS,
-    language: LANGUAGES,
-    experience: EXPERIENCES,
-    age: "",
-    price: PRICES,
-  }[type];
-
-  const handleCheckboxChange = (option: string) => {
-    console.log(`Clicked checkbox for option: ${option}`)
-    if (selectedValues.includes(option)) {
-        onSelect(option);
-    } else {
-        onSelect(option);
+    if (!options || options.length === 0) {
+        return null;
     }
-  };
 
   return (
     <div>
@@ -47,8 +26,8 @@ const FilterItem: React.FC<FilterItemProps> = ({
             type="checkbox"
             name={`${type}-${option}`}
             label={option}
-            checked={selectedValues?.includes(option)}
-            onChange={() => handleCheckboxChange(option)}
+            checked={selectedValues.includes(option)}
+            onChange={() => onSelect(option)}
           />
         </div>
       ))}
