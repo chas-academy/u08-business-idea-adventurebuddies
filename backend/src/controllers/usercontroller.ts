@@ -53,10 +53,19 @@ export const registerUser = async (user: Partial<IUser>) => {
       };
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return {
         error: "User with that email already exists.",
+      };
+    }
+
+    const existingUserName = await User.findOne({
+      userName: userName.toLowerCase(),
+    });
+    if (existingUserName) {
+      return {
+        error: "User with that username already exists.",
       };
     }
 
@@ -71,8 +80,8 @@ export const registerUser = async (user: Partial<IUser>) => {
 
     const newUser = new User({
       name,
-      userName,
-      email,
+      userName: userName.toLowerCase(),
+      email: email.toLowerCase(),
       password,
       dateOfBirth,
       gender,
