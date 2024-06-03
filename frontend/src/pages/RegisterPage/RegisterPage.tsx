@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/input/Input";
 import React from "react";
 import Button from "../../components/button/Button";
@@ -33,6 +33,8 @@ const RegisterPage: React.FC = () => {
 
   const [registrationStatus, setRegistrationStatus] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Hantera formulär här
@@ -50,6 +52,7 @@ const RegisterPage: React.FC = () => {
           setRegistrationStatus("error");
         } else {
           setRegistrationStatus("success");
+          navigate("/Login");
         }
 
         console.log("Användaren är registrerad:", data);
@@ -199,6 +202,9 @@ const RegisterPage: React.FC = () => {
               Logga in här!
             </Link>
           </div>
+          <small className="text-gray-400 mt-1 italic">
+            *Obligatoriskt fält
+          </small>
         </div>
       </div>
     </>
