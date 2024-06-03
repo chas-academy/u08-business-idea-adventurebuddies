@@ -59,6 +59,7 @@ const HomePage = () => {
 
   return (
     <div className="h-screen">
+      <SearchBar />
       <Maps2 />
       <FilterDropdown events={events} onFilter={handleFilter} />
       {/* <>

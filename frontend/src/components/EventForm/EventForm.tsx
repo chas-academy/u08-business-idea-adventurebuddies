@@ -108,14 +108,17 @@ const EventForm = () => {
           console.log("Detta är backend data", formData);
           const token = localStorage.getItem("token");
 
-          const response = await fetch("http://localhost:3000/api/events/", {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await fetch(
+            "https://u08-business-idea-adventurebuddies.onrender.com/api/events/",
+            {
+              method: "POST",
+              body: JSON.stringify(formData),
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           if (!response.ok) {
             throw new Error("Failed");
           }
