@@ -9,6 +9,7 @@ import {
   deleteUser,
   getUserEvents,
   deleteOwnAccount,
+  getFriends,
 } from "../controllers/usercontroller";
 import { IUser } from "../interfaces/IUser";
 import { auth, admin, CustomRequest } from "../middleware/auth";
@@ -110,5 +111,7 @@ userRouter.delete("/:id", auth, admin, async (req, res) => {
   const deletedUser = await deleteUser(id);
   res.status(200).json({ message: "User deleted", deletedUser });
 });
+
+userRouter.get("/:id/friends", auth, getFriends); // example route in insomnia: http://localhost:3000/api/users/66565815996906b11ee4ae26/friends
 
 export default userRouter;

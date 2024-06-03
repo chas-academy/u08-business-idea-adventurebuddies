@@ -3,6 +3,7 @@ import User from "../models/userModel";
 import Event from "../models/eventModel";
 import { Request, Response } from "express";
 import { CustomRequest } from "middleware/auth";
+import Friend from "../models/friendModel";
 
 // Authentication
 export const registerUser = async (user: Partial<IUser>) => {
@@ -198,5 +199,21 @@ export const getUserEvents = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching user's events:", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getFriends = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.user!._id;
+    const friends = await Friend.find({
+      $or: [
+        { requester: userId, status: "accepted" },
+        { recipient: userId, status: "accepted" },
+      ],
+    }).populate("requester recipient", "name"); // assuming 'name' is a property you want to return
+
+    res.status(200).json({ friends });
+  } catch (error) {
+    res.status(500).json({ error: error });
   }
 };
