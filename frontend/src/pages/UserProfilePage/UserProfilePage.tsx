@@ -3,6 +3,8 @@ import UserUpdate from "../../components/UserUpdate/UserUpdate";
 import { useAuth } from "../../components/header/navbar/AuthContext";
 import { UserPage } from "./UserProfilePage.interface";
 
+
+
 const UserProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
@@ -59,14 +61,17 @@ const UserProfilePage: React.FC = () => {
     return <div>Vargod och logga in för att se din profil</div>;
   }
 
+
   return (
     <>
       <div className="grid rounded-lg shadow bg-textColor mx-4 min-h-full">
         <UserUpdate userData={userData} setUserData={setUserData} />
-        <div>
-          {userData.profileImageUrl && (
-            <img src={userData.profileImageUrl} alt="Profile" />
-          )}
+        <div>             
+            <img className="ring ring-primaryColor"
+              src={userData.profileImageUrl}
+              alt="Profile"
+              style={{ width: '150px', height: '150px', borderRadius: '50%' }}
+            />
         </div>
         <div className="text-left ml-4">
           <h3 className="font-bold">{userData.userName}</h3>
