@@ -25,7 +25,7 @@ export const useMapsFormData = create<MapsFormDataState>((set) => ({
       lon: "",
     },
   },
-  option: "option1",
+  option: "",
 
   // Detta är funktionen för att uppdatera lat,lon i storen
   updateUserLocation: (lat: string, lon: string) =>

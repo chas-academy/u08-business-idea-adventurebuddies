@@ -45,7 +45,7 @@ Variabeln updateOption är sedan kopplad till useMapsFormData funktionen som i s
 
 useMapsFormData
 
-Detta är en store som satts upp för att kunna skicka variabler mellan olika komponenter. userLocation och option är vaiablerna som kommer bli uppdaterade med värden i storen. updateUserLocation är funktionen i storen som används för att uppdatera variablerna med de nya värdenna för lat och lon. updateOpten är funktionen i storen aom används för att uppdatera variabeln option med nya värden.
+Detta är en store som satts upp för att kunna skicka variabler mellan olika komponenter. userLocation och option är vaiablerna som kommer bli uppdaterade med värden i storen. updateUserLocation är funktionen i storen som används för att uppdatera variablerna med de nya värdenna för lat och lon. updateOpten är funktionen i storen som används för att uppdatera variabeln option med nya värden. Denna stor behöv som nämt för att kunna dela lon och lat mellan searchbaren och map2 för att kunna söka på ett område och att kartan ska kunna visa det området.
 
 ![alt text](frontend/DokumentationBilder/SearchBar/image-11.png)
 
@@ -55,7 +55,7 @@ Interfacen som används i storen är till för att deffinera typerna av värden 
 
 Maps2
 
-När denna component skapas så körs denna useEffekt som triggar funktionen getUserLocation och sätter användarens värden i useState Latitude och Longitude
+När denna component skapas så körs denna useEffekt som triggar funktionen getUserLocation och sätter användarens värden i useState Latitude och Longitude användaren kommer också kunna se event som är skapade och markers på kartan. Detta för att denna komponent gör en fetch till databasen när den skapas och då går en loop igenom alla event som finns och lägger ut dom på kartan.
 
 ![alt text](frontend/DokumentationBilder/SearchBar/image-13.png)
 
@@ -63,7 +63,7 @@ För att uppdatera med en ny plats som användare söker efter så tar vi in lat
 
 ![alt text](frontend/DokumentationBilder/SearchBar/image-14.png)
 
-useEffekten har userLocation som dependensie så när den uppdateras med nua värden från storen så kommer denna att triggas och den kommer då att uppdatera useState Latitude och Longitude med nya värden.
+useEffekten har userLocation som dependensie så när den uppdateras med nya värden från storen så kommer denna att triggas och den kommer då att uppdatera useState Latitude och Longitude med nya värden.
 ![alt text](frontend/DokumentationBilder/SearchBar/image-15.png)
 
 Option hämtas också från store och läggs in i variabeln option.
@@ -73,19 +73,31 @@ Option hämtas också från store och läggs in i variabeln option.
 Variablerna från usestate för lon. lat kommer sedan uppdatera esuEffekten för kartan. Kartan har Latitude, Longitude och option som dependesie och detta betyder att när något av dessa värden ändras så kommer denna att uppdateras. Lat och lon skulle då sättas in för arr uppdatera kartan och denna vy och option finns i if för att se om värdet är option 1 eller 2 som då bestämmer vilken kart vy som kommer visas
 ![alt text](frontend/DokumentationBilder/SearchBar/image-17.png)
 
+För att adda Marker när en användare lägger till ett nytt event så gjorde jag en useEffekt som triggas varjegång komponenten skapas denna useEffekt har en fetch i sig som gör en get request till databasen för att hämta alla event.
+
+![alt text](frontend/DokumentationBilder/Maps2/image-1.png)
+
+I hamtaBackend så har jag en setBackendMarker som uppdaterar detta useState med all data från backend. För att sedan få ut en marker på kartan för varje event som har skapats så gjorde jag sedan en forEach på backendMarker för att sätta ut en pin för varje destination jag lade även till `binPopup()` för att lägga till aktivitet vid varje pin.
+
+![alt text](frontend/DokumentationBilder/Maps2/image-2.png)
+
+Föratt dölja API KEY i frontend så skapade jag en .env fil där jag satte in nyckeln och sedan hämtade jag nyckeln därifrån med hjälp av import för att sedan sätta in den i url:en.
+
+![alt text](frontend/DokumentationBilder/Maps2/image-3.png)
+
 EventForm:
 
 Detta form tar in data om event och skall skicka över lon, lat till maps för att kunna trigga en funktion som lägger till en marker på användarens event destination.
 
-![alt text](frontend/DokumentationBilder/EventForm/image-1.png)
+![alt text](frontend/DokumentationBilder/EventForm/image-6.png)
 
-Jag tog in interfacet IEvent från shared mappen som ligger bredvid backend och frontend mapparna. Denna shared mapp finns för att kunna dela interface mellan backend och frontend. Jag använde detta interface på useStaten och sedan deffinerade jag vad variablerna har för default värden.
+Till detta form hade jag först ett interface men upptäckte att man intebehöer ha ett interface om typeerna tolkas korrekt. Detta sätt att typbestämma utan att använda interface heter inlined state initialization med detta menas att typescript aoutomatiskt försöker bestämma typerna utifrån de initiala värdenna som sätts.
 
-![alt text](frontend/DokumentationBilder/EventForm/image-2.png)
+![alt text](frontend/DokumentationBilder/EventForm/image-7.png)
 
-Jag upprättade sedan en fetch funktion som skulle kunna skicka ordet som skrivs in på plats till API:t för att kunna få kordinater. För att bara skicka ett API call var jag tvungen att göra yttliggare en useState som inte uppdateras på onchange utan på sumbit. setFormdata uppdateras på onchanger varjegång användaren gör någonting med formet. När användaren känner sig klar och trycker på submit så kommer onsubmit att köras och i den funktionen finns preventDefault() som hindrar så att inte sidan laddas om och setPlace() som kommer att hämta location från formData och sätta den i SetPlace.
+Jag upprättade sedan en fetch funktion som skulle kunna skicka ordet som skrivs in på plats till API:t för att kunna få kordinater. För att bara skicka ett API call var jag tvungen att göra yttliggare en useState som inte uppdateras på onchange utan på sumbit. setFormdata uppdateras på onchanger varjegång användaren gör någonting med formet. När användaren känner sig klar och trycker på submit så kommer onsubmit att köras och i den funktionen finns preventDefault() som hindrar så att inte sidan laddas om och setPlace() som kommer att hämta location från formData och sätta den i SetPlace. Efter data är satt så omdirrigeras användaren till en annan sida med hjälp av navigate().
 
-![alt text](frontend/DokumentationBilder/EventForm/image-3.png)
+![alt text](frontend/DokumentationBilder/EventForm/image-8.png)
 
 Min fetchData har jag satt i en useEffekt som har place som trigger och kommer när användare trycker på sumbit och place uppdateras att triggas och då göra ett api call.
 
@@ -93,6 +105,14 @@ Min fetchData har jag satt i en useEffekt som har place som trigger och kommer n
 
 I denna useEffekt har jag seddan tagit jsondatan med lon, lat och satt in dessa i formData för att sammla all info på en och samma plats.
 
-Jag upprättade sedan en Zustandstore som heter useEventLatitude för att kunna skicka dessa kordinater till maps två för att sedan kunna göra en funktion där som triggas när dessa uppdateras och lägger till en marker. I EventForm så så hämtar jag först storen och binder den till updateLatitude variabeln sedan så har jag en useEffect under som har forData.lat och formData.lon som beroende och uppdaterar storen om de blir triggade.
+För att säkerställa att place är satt innan ett försök att skicka formet tillbackend görs så var jag tvungen att lägga till ett nytt usestate för att ha koll på när formet är redo för att skickas
 
-![alt text](frontend/DokumentationBilder/EventForm/image-5.png)
+![alt text](frontend/DokumentationBilder/EventForm/image-9.png)
+
+if sattsen som finns nedan kommer att köras om formIfylltOchKlart är false då kommer den sätta denna usestate till true och sätta fkordinaterna i setPlace()
+
+![alt text](frontend/DokumentationBilder/EventForm/image-10.png)
+
+efter detta så kommer sendDataBackend att köras på grund av att formData.lat och formdata.lon finns i dependesi arrayen på useEffekten. i denna finns en navigate som kommer köras och finally kommer att ändra formIfylltOchKlart till false.
+
+![alt text](frontend/DokumentationBilder/EventForm/image-13.png)

@@ -1,18 +1,20 @@
 import User from "../models/userModel";
+// import User from "../models/userSchema";
 import { IEvent } from "../interfaces/IEvent";
 import Event from "../models/eventModel";
 import { Request, Response } from "express";
 import { CustomRequest } from "middleware/auth";
 
 const create = async (data: IEvent) => {
-  await Event.create(data);
-  return Event;
+  const event = await Event.create(data);
+  return event;
 };
 
-const attendEvent = async (
-  userId: string,
-  eventId: string
-): Promise<IEvent | null> => {
+const attendEvent = async (userId: string, eventId: string) => {
+  await User.findByIdAndUpdate(userId, {
+    $push: { attendingEvents: eventId },
+  });
+
   const event = await Event.findByIdAndUpdate(
     eventId,
     {
@@ -21,16 +23,13 @@ const attendEvent = async (
     },
     { new: true }
   );
-  if (event) {
-    await addToUserList(userId, eventId);
-  }
   return event;
 };
 
-const unattendEvent = async (
-  userId: string,
-  eventId: string
-): Promise<IEvent | null> => {
+const unattendEvent = async (userId: string, eventId: string) => {
+  await User.findByIdAndUpdate(userId, {
+    $pull: { attendingEvents: eventId },
+  });
   const event = await Event.findByIdAndUpdate(
     eventId,
     {
@@ -39,9 +38,6 @@ const unattendEvent = async (
     },
     { new: true }
   );
-  if (event) {
-    await removeFromUserList(userId, eventId);
-  }
   return event;
 };
 
@@ -75,14 +71,13 @@ const update = async (id: any, data: IEvent) => {
 const deleteOne = async (id: any) => {
   return await Event.findByIdAndDelete(id);
 };
+// Save Events
 const addToUserList = async (userId: any, eventId: any) => {
-  // Find the user by ID and update their list of events to include the new event
-  await User.findByIdAndUpdate(userId, { $addToSet: { events: eventId } });
+  await User.findByIdAndUpdate(userId, { $addToSet: { savedEvents: eventId } });
 };
-
+// Unsave Events
 const removeFromUserList = async (userId: any, eventId: any) => {
-  // Find the user by ID and remove the specified event from their list
-  await User.findByIdAndUpdate(userId, { $pull: { events: eventId } });
+  await User.findByIdAndUpdate(userId, { $pull: { savedEvents: eventId } });
 };
 
 export const createEvent = async (req: CustomRequest, res: Response) => {
@@ -97,6 +92,14 @@ export const createEvent = async (req: CustomRequest, res: Response) => {
     };
 
     const savedEvent = await create(newEvent);
+
+    // this will update the created events feild in the user schema
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.createdEvents.push(savedEvent._id);
+    await user.save();
 
     res.status(201).json({ message: "Event created successfully", savedEvent });
   } catch (error) {
@@ -257,6 +260,7 @@ export const deleteEvent = async (req: CustomRequest, res: Response) => {
   }
 };
 
+// Save Events
 export const addEventToUserList = async (req: CustomRequest, res: Response) => {
   try {
     if (!req.user) {
@@ -273,7 +277,7 @@ export const addEventToUserList = async (req: CustomRequest, res: Response) => {
     res.status(500).json({ message: "Failed to add event to user's list" });
   }
 };
-
+// Unsave Events
 export const removeEventFromUserList = async (
   req: CustomRequest,
   res: Response
@@ -306,12 +310,16 @@ export const attend = async (req: CustomRequest, res: Response) => {
       userId: string;
       eventId: string;
     };
+
     const event = await attendEvent(userId, eventId);
     if (!event) {
       res.status(404).json({ message: "Event not found" });
       return;
     }
-    res.status(200).json({ message: "User has attended the event", event });
+
+    res
+      .status(200)
+      .json({ message: "User is going to attend the event", event });
   } catch (error) {
     res.status(500).json({ message: `Failed to attend event: ${error}` });
   }

@@ -18,9 +18,9 @@ const HomePage = () => {
       setEvents(data);
       setFilteredEvents(data);
       } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error("Error fetching events:", error);
       }
-    }; 
+    };
     fetchEvents();
   }, []);
 

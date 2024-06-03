@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Button from "../button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Input from "../input/Input";
 import { UserPage } from "../../pages/UserProfilePage/UserProfilePage.interface";
-
+import { useNavigate } from "react-router-dom";
 
 interface UserUpdateProps {
   userData: UserPage;
-  setUserData: React.Dispatch<React.SetStateAction<UserPage>>
+  setUserData: React.Dispatch<React.SetStateAction<UserPage>>;
 }
 
 const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
-  const handleClick = () => {
-    console.log("click");
-  };
-
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState<UserPage>({
     userName: userData.userName,
     description: userData.description,
     profileImageUrl: userData.profileImageUrl,
@@ -28,6 +26,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
     password: userData.password,
   });
 
+  // Hämtar och visar datan i formet från db
   useEffect(() => {
     setFormData({
       userName: userData.userName,
@@ -40,85 +39,99 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
       password: userData.password,
     });
   }, [userData]);
-  
-  const handleDropdownToggle = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevData) => ({
+          ...prevData,
+          profileImageUrl: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleUpdate = async () => {
     try {
-      const id = localStorage.getItem('id');
-      const token = localStorage.getItem('token');
+      const id = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
       if (!id || !token) {
-        throw new Error('User ID or token not found in local storage');
+        throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(`http://localhost:3000/api/users/${id}`, {
-        method: 'PUT',
+      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update user data');
+        throw new Error("Failed to update user data");
       }
 
-      const updatedUserData  = await response.json();
-      setUserData(updatedUserData ); // Update the state in UserProfilePage
-      setIsDropdownVisible(false); // Close the dropdown
+      const updatedUserData = await response.json();
+      setUserData(updatedUserData.updatedUser);
+      setIsDropdownVisible(false);
     } catch (error) {
-      console.error('Update user data error:', error);
+      console.error("Update user data error:", error);
     }
   };
 
-  // useEffect(() => {
-  //   // Hämta användaruppgifter
-  //   // const id = ;
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await fetch(`/api/user/`);
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const data = await response.json();
-  //       setUserData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
+  const handleDropdownToggle = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
 
-    // Hämta händelsedetaljer
-  //   const fetchEventData = async () => {
-  //     try {
-  //       const response = await fetch("/api/event");
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const data = await response.json();
-  //       setEventData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching event data:", error);
-  //     }
-  //   };
+  const handleRemoveAccount = async () => {
+    // Extra bekräftelse ifall man råkar trycka på radera och det inte var meningen.
+    const confirmed = window.confirm(
+      "Är du säker på att du vill radera ditt konto?"
+    );
+    if (!confirmed) {
+      return;
+    }
 
-  //   fetchUserData();
-  //   fetchEventData();
-  // }, []);
+    try {
+      const id = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
+      if (!id || !token) {
+        throw new Error("User ID or token not found in local storage");
+      }
 
-  // const handleDropdownToggle = () => {
-  //   setIsDropdownVisible(!isDropdownVisible);
-  // };
+      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/me`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.status);
+
+      if (response.ok) {
+        window.alert("Ditt konto har blivit borttaget.");
+
+        localStorage.removeItem("id");
+        localStorage.removeItem("token");
+
+        console.log("Account deleted successfully");
+
+        navigate("/login");
+      } else {
+        throw new Error("Lyckades inte radera ditt konto");
+      }
+    } catch (error) {
+      console.error("Update user data error:", error);
+    }
+  };
+
   return (
     <>
       <div className="col-start-1 col-end-3">
@@ -132,16 +145,24 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
 
         {isDropdownVisible && (
           <form
-            action=""
+            action="submit"
             method="post"
             className="absolute right-2 top-60 bg-textColor"
           >
             <div>
-              <p>Profilbild URL</p>
-              <Input
-                type="text"
+              <FontAwesomeIcon
+                icon={faXmark}
+                size="xl"
+                style={{ color: "#000000" }}
+                onClick={handleDropdownToggle}
+              />
+            </div>
+            <div>
+              <p>Profilbild</p>
+              <input
+                type="file"
                 name="profileImageUrl"
-                value={formData.profileImageUrl || ""}
+                accept="image/*"
                 onChange={handleInputChange}
               />
             </div>
@@ -190,7 +211,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div>
+            {/* <div>
               <p>Ändra lösenord</p>
               <Input
                 type="text"
@@ -198,7 +219,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 value={formData.password || ""}
                 onChange={handleInputChange}
               />
-            </div>
+            </div> */}
             <div>
               <p>Mobil nummer</p>
               <Input
@@ -220,7 +241,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
               type="button"
               size="small"
               variant="danger"
-              onClick={handleClick}
+              onClick={handleRemoveAccount}
             >
               Radera konto
             </Button>
@@ -232,4 +253,3 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
 };
 
 export default UserUpdate;
-

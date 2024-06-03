@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import UserUpdate from "../../components/UserUpdate/UserUpdate";
 import { useAuth } from "../../components/header/navbar/AuthContext";
-
+import { UserPage } from "./UserProfilePage.interface";
+import UserEvents from "../../components/userEvents/userEvents";
 
 
 
 const UserProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [userData, setUserData] = useState({
+
+  const [userData, setUserData] = useState<UserPage>({
     userName: "",
     description: "",
-    profileImageUrl:"",
+    profileImageUrl: "",
     name: "",
     email: "",
     gender: "",
@@ -19,37 +21,37 @@ const UserProfilePage: React.FC = () => {
   });
 
   useEffect(() => {
-     console.log("isAuthenticated:", isAuthenticated);
-    if (!isAuthenticated) return; 
-  
+    console.log("isAuthenticated:", isAuthenticated);
+    if (!isAuthenticated) return;
+
     const fetchUserData = async () => {
       try {
-        const id = localStorage.getItem('id');
-        const token = localStorage.getItem('token');
-         console.log("User ID retrieved from local storage:", id);
-         console.log("Token retrieved from local storage:", token);
+        const id = localStorage.getItem("id");
+        const token = localStorage.getItem("token");
+        console.log("User ID retrieved from local storage:", id);
+        console.log("Token retrieved from local storage:", token);
         if (!id || !token) {
-          throw new Error('User ID or token not found');
+          throw new Error("User ID or token not found");
         }
-    
+
         // Fetch user data using stored userId
-        const response = await fetch(`http://localhost:3000/api/users/${id}`, {
-          method: 'GET',
+        const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
-    
+
         if (!response.ok) {
-          throw new Error('Failed to fetch user data');
+          throw new Error("Failed to fetch user data");
         }
-    
+
         const data = await response.json();
-        console.log('User data:', data);
+        console.log("User data:", data);
         setUserData(data);
       } catch (error) {
-        console.error('Fetch user data error:', error);
+        console.error("Fetch user data error:", error);
       }
     };
 
@@ -60,20 +62,21 @@ const UserProfilePage: React.FC = () => {
     return <div>Vargod och logga in för att se din profil</div>;
   }
 
-    return (
-        <>      
-        <div className="grid rounded-lg shadow bg-textColor mx-4 min-h-full">
+
+  return (
+    <>
+      <div className="grid rounded-lg shadow bg-textColor py-4 min-h-full w-96 mb-8">
         <UserUpdate userData={userData} setUserData={setUserData} />
-         <div>
-         {userData.profileImageUrl && (
-        <img src={userData.profileImageUrl} alt="Profile" />
-      )}
+        <div className="flex">
+        <div className="ml-6 w-[25%]">             
+            <img className="ring ring-primaryColor w-[80px] h-[80px] rounded-full"
+              src={userData.profileImageUrl}
+              alt="Profile"
+            />
         </div>
-        <div className="text-left ml-4">
+        <div className="text-left ml-4 w-[75%]">
           <h3 className="font-bold">{userData.userName}</h3>
-          <p className="text-xs">
-            {userData.description}
-          </p>
+          <p className="text-xs">{userData.description}</p>
 
           <div>
             <p>Mobilnummer:</p>
@@ -84,10 +87,13 @@ const UserProfilePage: React.FC = () => {
             <p className="text-xs">{userData.gender}</p>
           </div>
         </div>
-
         </div>
-        </>
-    )
-}
+      </div>
+      <div className="p-1.5">
+        <UserEvents />
+      </div>
+    </>
+  );
+};
 
 export default UserProfilePage;

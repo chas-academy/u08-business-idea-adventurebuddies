@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import React from "react";
-// import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
-import { useEventLatitude } from "../../store/useIEventLatitude";
 import Input from "../input/Input";
 import Button from "../button/Button";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +9,13 @@ const EventForm = () => {
   const [place, setPlace] = useState<string>("");
 
   const [equipmentNeeded, setEquipmentNeeded] = useState<boolean>(false);
+
+  // Lägg till denna state-variabel
+  const [formIfylltOchKlart, setFormIfylltOchKlart] = useState<boolean>(false);
+
   // Denna lagrar formDatan, den blir även uppdaterad med lon, lat från api anropet
   const [formData, setFormData] = useState({
-    user_id: "",
+    // user_id: "",
     activity: "",
     location: "",
     participantsMin: 0,
@@ -40,13 +42,13 @@ const EventForm = () => {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    if (e.target.value === "Ja") {
+    const { name, value } = e.target;
+
+    if (value === "Ja") {
       setEquipmentNeeded(true);
-    } else {
+    } else if (value === "Nej") {
       setEquipmentNeeded(false);
     }
-
-    const { name, value } = e.target;
     if (name === "start_time") {
       console.log(name, Math.floor(new Date(value).getTime() / 1000));
       console.log(
@@ -54,7 +56,6 @@ const EventForm = () => {
         new Date(Math.floor(new Date(value).getTime() / 1000) * 1000)
       );
       console.log(value);
-      // start with ISO time otherwise this time
     } else {
       setFormData({
         ...formData,
@@ -67,9 +68,10 @@ const EventForm = () => {
   // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setPlace(formData.location);
-    console.log("Denna ska byta sida");
-    navigate("/");
+    if (!formIfylltOchKlart) {
+      setFormIfylltOchKlart(true);
+      setPlace(formData.location);
+    }
   };
 
   // Denna gör ett API kall när Place ändras och sätter sedan lon, lat kordinaterna in i formdata
@@ -95,9 +97,6 @@ const EventForm = () => {
     };
     fetchData();
 
-    // hamtaBackend();
-    // console.log("Detta är backend data", formData);
-
     console.log("uppdaterad", formData);
   }, [place]);
 
@@ -107,35 +106,34 @@ const EventForm = () => {
       if (formData.lat && formData.lon) {
         try {
           console.log("Detta är backend data", formData);
+          const token = localStorage.getItem("token");
 
-          const response = await fetch("http://localhost:3000/api/events/", {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const response = await fetch(
+            "https://u08-business-idea-adventurebuddies.onrender.com/api/events/",
+            {
+              method: "POST",
+              body: JSON.stringify(formData),
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           if (!response.ok) {
             throw new Error("Failed");
           }
+          navigate("/eventInfo");
           // Om responsen är OK, fortsätt med lämplig hantering
         } catch (error) {
           console.error("Error sending data to backend: ", error);
           // Hantera fel här
+        } finally {
+          setFormIfylltOchKlart(false);
         }
       }
     };
     sendDataBackend();
   }, [formData.lat, formData.lon]);
-
-  // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
-  // const updateLatitude = useEventLatitude(
-  //   (state) => state.updateLatitudeIEvent
-  // );
-  // Denna useEffekt har triggers för att uppdatera storen när formData lon, lat uppdateras
-  // useEffect(() => {
-  //   updateLatitude(formData.lat, formData.lon);
-  // }, [formData.lat, formData.lon]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm ">
@@ -148,13 +146,6 @@ const EventForm = () => {
           onSubmit={onSubmit}
         >
           <div className="md:w-2/3">
-            <Input
-              label="User_ID"
-              type="text"
-              name="user_id"
-              onChange={handleChange}
-              placeholder="User_ID"
-            />
             <Input
               label="Aktivitet"
               type="text"
@@ -234,6 +225,7 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+                    required
                   >
                     <option className="text-textGray">Välj Ålder...</option>
 
@@ -257,6 +249,7 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+                    required
                   >
                     <option className="text-textGray">Välj Plats...</option>
 
@@ -278,6 +271,7 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
               focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+                    required
                   >
                     <option className="text-textGray">Välj Kön...</option>
 
@@ -297,6 +291,7 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+                    required
                   >
                     <option className="text-textGray">Välj Språk...</option>
 
@@ -317,6 +312,7 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+                    required
                   >
                     <option className="text-textGray">Välj Pris...</option>
 
@@ -337,6 +333,7 @@ const EventForm = () => {
                     onChange={handleChange}
                     className="w-4/5 h-full mb-3 border rounded border-primaryColor p-2 focus:outline-none focus:ring-1 focus:ring-primaryColor invalid:border-thirdColor invalid:text-thirdColor
                 focus:invalid:border-thirdColor focus:invalid:ring-thirdColor"
+                    required
                   >
                     <option>Välj Erfarenhet...</option>
 
