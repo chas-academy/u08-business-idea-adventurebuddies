@@ -17,6 +17,7 @@ export interface IUser extends Document {
   phoneNumber?: string;
   createdEvents: ObjectId[];
   attendingEvents: ObjectId[];
+  savedEvents: ObjectId[];
   profileImageUrl?: string;
 }
 

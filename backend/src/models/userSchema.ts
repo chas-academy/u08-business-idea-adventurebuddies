@@ -35,6 +35,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
     createdEvents: [{ type: Types.ObjectId, ref: "Event" }],
     attendingEvents: [{ type: Types.ObjectId, ref: "Event" }],
+    savedEvents: [{ type: Types.ObjectId, ref: "Event" }],
     profileImageUrl: { type: String, required: false },
   },
   {
@@ -53,9 +54,9 @@ userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign(
     { _id: user._id.toString() },
-    process.env.JWT_KEY as string, 
+    process.env.JWT_KEY as string,
     {
-      expiresIn: '1h',
+      expiresIn: "1h",
     }
   );
   user.tokens = [{ token }]; // Will replace the existing token with a new one
