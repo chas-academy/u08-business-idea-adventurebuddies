@@ -2,39 +2,48 @@ import * as React from "react";
 import Button from "../button/Button";
 import { useState, useRef, useEffect } from "react";
 import FilterDropdownItem from "./FilterDropdownItem";
-import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+import { ISelectedFilters } from "../../utils/types";
+import {
+  GENDERS,
+  LANGUAGES,
+  VENUES,
+  EXPERIENCES,
+  PRICES,
+} from "../../utils/enums";
+import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
 
 interface FilterDropdownProps {
-  events: IEvent[];
-  onFilter: (filteredEventsUrl: string) => void;
+  events: IEvent2[];
+  onFilter: (queryParams: Record<string, string>) => void;
 }
 
-const FilterDropdown: React.FC<FilterDropdownProps> = ({
-  events,
-  onFilter,
-}) => {
-  const [selectedVenue, setSelectedVenue] = useState<string[]>([]);
-  const [selectedGender, setSelectedGender] = useState<string[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
-  const [selectedPrice, setSelectedPrice] = useState<string[]>([]);
-  const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
+const FilterDropdown: React.FC<FilterDropdownProps> = ({ onFilter }) => {
+  const [selectedFilters, setSelectedFilters] = useState<ISelectedFilters>({
+    venue: "",
+    gender: "",
+    language: "",
+    price: "",
+    experience: "",
+  });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsDropdownOpen(false);
-        }
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -42,131 +51,74 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
   // skapa en switch och sätt handleSelect till switch case istället.
 
-
-
-  const handleVenueSelect = (value: string) => {
-    if (selectedVenue.includes(value)) {
-        setSelectedVenue(selectedVenue.filter((v) => v !== value));
-        console.log('selected', selectedVenue)
-    } else {
-        setSelectedVenue([...selectedVenue, value]);
-    }
+  const handleFilterSelect = (type: keyof ISelectedFilters, value: string) => {
+    setSelectedFilters((prevState) => ({ ...prevState, [type]: value }));
   };
 
-  const handleGenderSelect = (value: string) => {
-    if (selectedGender.includes(value)) {
-        setSelectedGender(selectedGender.filter((v) => v !== value));
-    } else {
-        setSelectedGender([value]);
-    }
+  const handleFilterSubmit = () => {
+    const queryParams = Object.entries(selectedFilters).reduce(
+      (acc, [key, values]) => {
+        if (values.length > 0) {
+          acc[key] = values;
+        }
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+
+    onFilter(queryParams);
+    setIsDropdownOpen(false);
   };
 
-  const handleLanguageSelect = (value: string) => {
-    if (selectedLanguage.includes(value)) {
-        setSelectedLanguage(selectedLanguage.filter((v) => v !== value));
-    } else {
-        setSelectedLanguage([value]);
-    }
-  };
-
-  const handlePriceSelect = (value: string) => {
-    if (selectedPrice.includes(value)) {
-        setSelectedPrice(selectedPrice.filter((v) => v !== value));
-    } else {
-        setSelectedPrice([value]);
-    }
-  };
-
-  const handleExperienceSelect = (value: string) => {
-    if (selectedExperience.includes(value)) {
-        setSelectedExperience(selectedExperience.filter((v) => v !== value));
-    } else {
-        setSelectedExperience([value]);
-    }
-  };
-
-
-  const handleFilterChange = () => {
-    if (!events) {
-        return;
-    }
-
-    let queryParams: Record<string, string> = {};
-
-    if (selectedVenue && selectedVenue?.length > 0) {
-      queryParams.venue = selectedVenue.join(',');
-    }
-    if (selectedGender && selectedGender?.length > 0) {
-        queryParams.gender = selectedGender.join(',');
-    }
-    if (selectedLanguage && selectedLanguage?.length > 0) {
-        queryParams.language = selectedLanguage.join(',');
-    }
-    if (selectedPrice && selectedPrice?.length > 0) {
-        queryParams.price = selectedPrice.join(',');
-    }
-    if (selectedExperience && selectedExperience?.length > 0) {
-        queryParams.experience = selectedExperience.join(',');
-    }
-
-    const queryString = new URLSearchParams(queryParams).toString();
-    console.log(events)
-    const filteredEventsUrl = `/api/events/query?${encodeURIComponent(queryString)}`;
-    console.log('filtered events url:', filteredEventsUrl)
-    onFilter(filteredEventsUrl);
-    console.log(selectedVenue, selectedGender, selectedPrice, selectedExperience, selectedLanguage)
-  };
-
+  const filterDropdownItems = [
+    { label: "Plats", type: "venue", options: VENUES },
+    { label: "Kön", type: "gender", options: GENDERS },
+    { label: "Språk", type: "language", options: LANGUAGES },
+    { label: "Pris", type: "price", options: PRICES },
+    { label: "Erfarenhet", type: "experience", options: EXPERIENCES },
+  ];
 
   return (
-    <div ref={dropdownRef}>
-      <Button
-        type="button"
-        variant="primary"
-        icon={`${isDropdownOpen ? "faChevronUp" : "faChevronDown"}`}
-        onClick={toggleDropdown}
-        filterButton="filterButton"
-      >
-        Filtrera sökning
-      </Button>
-      {isDropdownOpen && (
-        <div>
-        <FilterDropdownItem
-          label="Plats"
-          type="venue"
-          selectedValues={selectedVenue}
-          onSelect={handleVenueSelect}
-        />
-        <FilterDropdownItem
-          label="Kön"
-          type="gender"
-          selectedValues={selectedGender}
-          onSelect={handleGenderSelect}
-        />
-        <FilterDropdownItem
-          label="Språk"
-          type="language"
-          selectedValues={selectedLanguage}
-          onSelect={handleLanguageSelect}
-        />
-        <FilterDropdownItem
-          label="Pris"
-          type="price"
-          selectedValues={selectedPrice}
-          onSelect={handlePriceSelect}
-        />
-        <FilterDropdownItem
-          label="Erfarenhet"
-          type="experience"
-          selectedValues={selectedExperience}
-          onSelect={handleExperienceSelect}
-        />
-        <Button type="button" variant="secondary" size="small" onClick={handleFilterChange} >Filtrera</Button>
-        </div>
-      )}
+    <div className="flex flex-col justify-center items-center mt-2 ">
+      <div ref={dropdownRef} className="flex flex-col items-center">
+        <Button
+          type="button"
+          variant="primary"
+          icon={`${isDropdownOpen ? "faChevronUp" : "faChevronDown"}`}
+          onClick={toggleDropdown}
+          filterButton="filterButton"
+        >
+          Filtrera sökning
+        </Button>
+        {isDropdownOpen && (
+          <div className="w-full flex flex-col glass-container">
+            <div className="md:flex justify-center flex-wrap">
+              {filterDropdownItems.map(({ label, type, options }) => (
+                <FilterDropdownItem
+                  key={label}
+                  label={label}
+                  type={type}
+                  options={options}
+                  selectedValues={selectedFilters[type]}
+                  onSelect={(value) => handleFilterSelect(type, value)}
+                />
+              ))}
+            </div>
+            <div className="m-2 md:flex justify-end">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="small"
+                  onClick={handleFilterSubmit}
+                >
+                  Filtrera
+                </Button>
+              </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
-
 
 export default FilterDropdown;
