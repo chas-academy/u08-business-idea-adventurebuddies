@@ -4,15 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import Input from "../input/Input";
 import { UserPage } from "../../pages/UserProfilePage/UserProfilePage.interface";
-
+import { useNavigate } from "react-router-dom";
 
 interface UserUpdateProps {
   userData: UserPage;
-  setUserData: React.Dispatch<React.SetStateAction<UserPage>>
-};
+  setUserData: React.Dispatch<React.SetStateAction<UserPage>>;
+}
 
 const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const navigate = useNavigate();
+  const [deleteMessage, setDeleteMessage] = useState("");
 
   const [formData, setFormData] = useState<UserPage>({
     userName: userData.userName,
@@ -49,30 +51,30 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
 
   const handleUpdate = async () => {
     try {
-      const id = localStorage.getItem('id');
-      const token = localStorage.getItem('token');
+      const id = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
       if (!id || !token) {
-        throw new Error('User ID or token not found in local storage');
+        throw new Error("User ID or token not found in local storage");
       }
 
       const response = await fetch(`http://localhost:3000/api/users/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update user data');
+        throw new Error("Failed to update user data");
       }
 
-      const updatedUserData  = await response.json();
-      setUserData(updatedUserData ); // Update the state in UserProfilePage
+      const updatedUserData = await response.json();
+      setUserData(updatedUserData); // Update the state in UserProfilePage
       setIsDropdownVisible(false); // Close the dropdown
     } catch (error) {
-      console.error('Update user data error:', error);
+      console.error("Update user data error:", error);
     }
   };
 
@@ -80,8 +82,33 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
     setIsDropdownVisible(!isDropdownVisible);
   };
 
-    const handleClick = () => {
-    console.log("click");
+  const handleRemoveAccount = async () => {
+    try {
+      const id = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
+      if (!id || !token) {
+        throw new Error("User ID or token not found in local storage");
+      }
+
+      const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.status);
+
+      if (response.ok) {
+        setDeleteMessage("Ditt konto har blivit borttaget.");
+      } else {
+        throw new Error("Lyckades inte radera ditt konto");
+      }
+      console.log("Account deleted successfully");
+      navigate("/");
+    } catch (error) {
+      console.error("Update user data error:", error);
+    }
   };
 
   return (
@@ -185,10 +212,11 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
               type="button"
               size="small"
               variant="danger"
-              onClick={handleClick}
+              onClick={handleRemoveAccount}
             >
               Radera konto
             </Button>
+            {deleteMessage && <p className="text-success">{deleteMessage}</p>}
           </form>
         )}
       </div>
@@ -197,4 +225,3 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
 };
 
 export default UserUpdate;
-
