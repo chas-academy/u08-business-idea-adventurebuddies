@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Input from "../input/Input";
 import { UserPage } from "../../pages/UserProfilePage/UserProfilePage.interface";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,6 @@ interface UserUpdateProps {
 const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const navigate = useNavigate();
-  const [deleteMessage, setDeleteMessage] = useState("");
 
   const [formData, setFormData] = useState<UserPage>({
     userName: userData.userName,
@@ -83,6 +82,13 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   };
 
   const handleRemoveAccount = async () => {
+    const confirmed = window.confirm(
+      "Är du säker på att du vill radera ditt konto?"
+    );
+    if (!confirmed) {
+      return; // If the user clicks "Cancel", exit the function
+    }
+
     try {
       const id = localStorage.getItem("id");
       const token = localStorage.getItem("token");
@@ -90,7 +96,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/users/me`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -100,12 +106,17 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
       console.log(response.status);
 
       if (response.ok) {
-        setDeleteMessage("Ditt konto har blivit borttaget.");
+        window.alert("Ditt konto har blivit borttaget.");
+
+        localStorage.removeItem("id");
+        localStorage.removeItem("token");
+
+        console.log("Account deleted successfully");
+
+        navigate("/login");
       } else {
         throw new Error("Lyckades inte radera ditt konto");
       }
-      console.log("Account deleted successfully");
-      navigate("/");
     } catch (error) {
       console.error("Update user data error:", error);
     }
@@ -128,6 +139,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
             method="post"
             className="absolute right-2 top-60 bg-textColor"
           >
+            <div>
+              <FontAwesomeIcon
+                icon={faXmark}
+                size="xl"
+                style={{ color: "#000000" }}
+                onClick={handleDropdownToggle}
+              />
+            </div>
             <div>
               <p>Profilbild URL</p>
               <Input
@@ -182,7 +201,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div>
+            {/* <div>
               <p>Ändra lösenord</p>
               <Input
                 type="text"
@@ -190,7 +209,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 value={formData.password || ""}
                 onChange={handleInputChange}
               />
-            </div>
+            </div> */}
             <div>
               <p>Mobil nummer</p>
               <Input
@@ -216,7 +235,6 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
             >
               Radera konto
             </Button>
-            {deleteMessage && <p className="text-success">{deleteMessage}</p>}
           </form>
         )}
       </div>
