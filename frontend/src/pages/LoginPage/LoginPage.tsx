@@ -39,13 +39,16 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     console.log({ formData, checked });
 
-    fetch("http://localhost:3000/api/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
+    fetch(
+      "https://u08-business-idea-adventurebuddies.onrender.com/api/users/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Login response data:", data);
