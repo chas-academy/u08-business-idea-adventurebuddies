@@ -6,66 +6,72 @@ import { CustomRequest } from "middleware/auth";
 
 // Authentication
 export const registerUser = async (user: Partial<IUser>) => {
-  const {
-    name,
-    userName,
-    email,
-    password,
-    dateOfBirth,
-    gender,
-    description,
-    phoneNumber,
-    profileImageUrl,
-  } = user;
-  if (
-    !name ||
-    !userName ||
-    !email ||
-    !password ||
-    !dateOfBirth ||
-    !gender ||
-    !phoneNumber
-    // !description
-  ) {
-    return {
-      error: "Please provide all the required fields",
-    };
-  }
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return {
-      error: "User with that email already exists.",
-    };
-  }
-
-  if (phoneNumber) {
-    const existingPhone = await User.findOne({ phoneNumber });
-    if (existingPhone) {
+  try {
+    const {
+      name,
+      userName,
+      email,
+      password,
+      dateOfBirth,
+      gender,
+      description,
+      phoneNumber,
+      profileImageUrl,
+    } = user;
+    if (
+      !name ||
+      !userName ||
+      !email ||
+      !password ||
+      !dateOfBirth ||
+      !gender ||
+      !phoneNumber
+      // !description
+    ) {
       return {
-        error: "User with that phone number already exists.",
+        error: "Please provide all the required fields",
       };
     }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return {
+        error: "User with that email already exists.",
+      };
+    }
+
+    if (phoneNumber) {
+      const existingPhone = await User.findOne({ phoneNumber });
+      if (existingPhone) {
+        return {
+          error: "User with that phone number already exists.",
+        };
+      }
+    }
+
+    const newUser = new User({
+      name,
+      userName,
+      email,
+      password,
+      dateOfBirth,
+      gender,
+      description,
+      phoneNumber,
+      profileImageUrl,
+      role: user.role,
+    });
+
+    await newUser.save();
+    const token = await newUser.generateAuthToken();
+    return {
+      user: newUser,
+      token,
+    };
+  } catch (error) {
+    return {
+      error: error,
+    };
   }
-
-  const newUser = new User({
-    name,
-    userName,
-    email,
-    password,
-    dateOfBirth,
-    gender,
-    description,
-    phoneNumber,
-    profileImageUrl,
-    role: user.role,
-  });
-
-  await newUser.save();
-  const token = await newUser.generateAuthToken();
-  return {
-    user: newUser,
-    token,
-  };
 };
 
 export const loginUser = async (user: Partial<IUser>) => {
@@ -75,33 +81,51 @@ export const loginUser = async (user: Partial<IUser>) => {
       error: "Please provide all the required fields",
     };
   }
-  const existingUser = await User.findByCredentials(email, password);
-  if (!existingUser) {
-    return null;
+  try {
+    const existingUser = await User.findByCredentials(email, password);
+    if (!existingUser) {
+      return null;
+    }
+    const token = await existingUser.generateAuthToken();
+    return {
+      user: existingUser,
+      token,
+    };
+  } catch (error) {
+    return {
+      error: error,
+    };
   }
-  const token = await existingUser.generateAuthToken();
-  return {
-    user: existingUser,
-    token,
-  };
 };
 
 export const logoutUser = async (req: any) => {
-  req.user.tokens = req.user.tokens.filter((token: any) => {
-    return token.token !== req.token;
-  });
-  await req.user.save();
-  return { message: "User logged out successfully." };
+  try {
+    req.user.tokens = req.user.tokens.filter((token: any) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+    return { message: "User logged out successfully." };
+  } catch (error) {
+    return { error: error };
+  }
 };
 
 // User Profile
 export const getAllUsers = async () => {
-  const users = await User.find({});
-  return users;
+  try {
+    const users = await User.find({});
+    return users;
+  } catch (error) {
+    return { error: error };
+  }
 };
 
 export const getUser = async (id: string) => {
-  return await User.findById(id);
+  try {
+    return await User.findById(id);
+  } catch (error) {
+    return { error: error };
+  }
 };
 
 export const updateUser = async (id: string, data: Partial<IUser>) => {
@@ -126,10 +150,6 @@ export const updateUser = async (id: string, data: Partial<IUser>) => {
   }
 };
 
-export const deleteUser = async (id: string) => {
-  return await User.findByIdAndDelete(id);
-};
-
 export const deleteOwnAccount = async (req: CustomRequest, res: Response) => {
   try {
     if (!req.user) {
@@ -147,6 +167,14 @@ export const deleteOwnAccount = async (req: CustomRequest, res: Response) => {
   } catch (error) {
     console.error("Error deleting user's account:", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const deleteUser = async (id: string) => {
+  try {
+    return await User.findByIdAndDelete(id);
+  } catch (error) {
+    return { error: error };
   }
 };
 
