@@ -9,6 +9,10 @@ const EventForm = () => {
   const [place, setPlace] = useState<string>("");
 
   const [equipmentNeeded, setEquipmentNeeded] = useState<boolean>(false);
+
+  // Lägg till denna state-variabel
+  const [formIfylltOchKlart, setFormIfylltOchKlart] = useState<boolean>(false);
+
   // Denna lagrar formDatan, den blir även uppdaterad med lon, lat från api anropet
   const [formData, setFormData] = useState({
     // user_id: "",
@@ -64,8 +68,10 @@ const EventForm = () => {
   // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setPlace(formData.location);
-    navigate("/map");
+    if (!formIfylltOchKlart) {
+      setFormIfylltOchKlart(true);
+      setPlace(formData.location);
+    }
   };
 
   // Denna gör ett API kall när Place ändras och sätter sedan lon, lat kordinaterna in i formdata
@@ -113,10 +119,13 @@ const EventForm = () => {
           if (!response.ok) {
             throw new Error("Failed");
           }
+          navigate("/eventInfo");
           // Om responsen är OK, fortsätt med lämplig hantering
         } catch (error) {
           console.error("Error sending data to backend: ", error);
           // Hantera fel här
+        } finally {
+          setFormIfylltOchKlart(false);
         }
       }
     };
@@ -134,13 +143,6 @@ const EventForm = () => {
           onSubmit={onSubmit}
         >
           <div className="md:w-2/3">
-            {/* <Input
-              label="User_ID"
-              type="text"
-              name="user_id"
-              onChange={handleChange}
-              placeholder="User_ID"
-            /> */}
             <Input
               label="Aktivitet"
               type="text"

@@ -94,8 +94,8 @@ const Maps2 = () => {
     // Skapa en karta med Leaflet när komponenten har monterats
     const map = L.map("map").setView([parsedLatitude, parsedLongitude], 13);
 
-    if (option === "option1") {
-      const CartoDB_Voyager = L.tileLayer(
+    if (option === "option1" || option === null || option === "") {
+      L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
         {
           attribution:
@@ -104,9 +104,8 @@ const Maps2 = () => {
           maxZoom: 20,
         }
       ).addTo(map);
-      console.log("CartoDB_Voyager tile layer added:", CartoDB_Voyager);
     } else if (option === "option2") {
-      const Thunderforest_SpinalMap = L.tileLayer(
+      L.tileLayer(
         `https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=${apiKey}`,
         {
           attribution:
@@ -114,10 +113,6 @@ const Maps2 = () => {
           maxZoom: 22,
         }
       ).addTo(map);
-      console.log(
-        "Thunderforest_SpinalMap tile layer added:",
-        Thunderforest_SpinalMap
-      );
 
       // Denna ska bara lägga till marker med lon, lat som kommer från backend
     }

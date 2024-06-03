@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMapsFormData } from "../../store/useMapsFormData";
 import React from "react";
 
@@ -9,12 +9,15 @@ function SearchBar() {
   // Denna behövs för att man ska kunna se uppdateringar i inputrutan för text
   const [searchWord, setSearchWord] = useState<string>("");
   // Lagrar den sökta location datan med long lat etc
+
   const [locationData, setLocationData] = useState<LocationData>({
     lat: "",
     lon: "",
   });
-  // Detta är Usestate för Input Button som är inställda på default på option1
-  const [selectedValue, setSelectedValue] = useState<string>("option1");
+
+  // Detta är Usestate för Input Button som är inställda på default på null för att inte någon av options ska vara i fyllda
+  // Jag har dock satt option 1 som default vy i maps så att en kartbild visas. Men att ha null här hjälper till så att inget alternativ är iklickas från start
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   // Interface förlocationData
   interface LocationData {
@@ -32,11 +35,23 @@ function SearchBar() {
   }, [locationData]);
 
   // Denna variabel har en funktion bundit till sig för att kunna uppdatera storen med det nya värdet
-  const updateOption = useMapsFormData((state) => state.updateOption);
-  // Funktion för att uppdatera storen med värden
+  // const updateOption = useMapsFormData((state) => state.updateOption);
+
+  const updateOption = useMapsFormData(
+    useCallback((state) => state.updateOption, [])
+  );
+
+  // Funktion för att uppdatera storen med värden endast om typen i selectedValue är string
   useEffect(() => {
-    updateOption(selectedValue);
+    if (typeof selectedValue === "string") {
+      updateOption(selectedValue);
+    }
   }, [selectedValue]);
+
+  // Logga selectedValue vid varje rendering
+  useEffect(() => {
+    console.log("selectedValue:", selectedValue);
+  });
 
   // Denna gör ett api anrop och hämtar information om setwordet som du har matat in
   useEffect(() => {
