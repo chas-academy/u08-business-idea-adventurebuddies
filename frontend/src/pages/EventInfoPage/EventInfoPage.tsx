@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import Tab from "../../components/tabs/Tab";
-import Tabs from "../../components/tabs/Tabs";
-import { TabsProvider } from "../../components/tabs/TabsContext";
+// import Tab from "../../components/tabs/Tab";
+// import Tabs from "../../components/tabs/Tabs";
+// import { TabsProvider } from "../../components/tabs/TabsContext";
 import React from "react";
-import { IEvent2 } from "../CreateEventPage/CreateEventPage.interface";
 import Button from "../../components/button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,13 +10,32 @@ import {
   faLocationArrow,
   faPeopleRobbery,
 } from "@fortawesome/free-solid-svg-icons";
-import { Outlet } from "react-router-dom";
+// import { Outlet } from "react-router-dom";
 import Maps2 from "../map/Maps2";
 
 const EventInfoPage: React.FC = () => {
-  const [data, setData] = useState<IEvent2 | null>(null);
+  const [data, setData] = useState({
+    user_id: "",
+    activity: "",
+    location: "",
+    participantsMin: 0,
+    participantsMax: 0,
+    equipment: "",
+    age: "",
+    lat: "",
+    lon: "",
+    venue: "",
+    gender: "",
+    language: "",
+    price: "",
+    experience: "",
+    totalParticipant: 0,
+    message: "",
+    start_time: Date(),
+    userName: "",
+  });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | Error>(null);
   const EVENT_ID = "66585ef4a230d0661ecb3ed3";
   const API_URL = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${EVENT_ID}`;
 
@@ -30,7 +48,7 @@ const EventInfoPage: React.FC = () => {
         if (contentType && contentType.indexOf("application/json") !== -1) {
           const data = await response.json();
           console.log(data);
-          setData(data as IEvent2);
+          setData(data);
           console.log(data.age);
         } else {
           const text = await response.text();
@@ -39,7 +57,7 @@ const EventInfoPage: React.FC = () => {
         }
       } catch (error) {
         console.error("An error occurred:", error);
-        setError(error);
+        setError(new Error("Unknown error"));
       } finally {
         setLoading(false);
       }
@@ -70,6 +88,13 @@ const EventInfoPage: React.FC = () => {
     hour: "numeric",
     minute: "numeric",
   });
+
+  const handleAttend = () => {
+    console.log("Button clicked");
+  };
+  const handleSaveEvent = () => {
+    console.log("Button clicked!");
+  };
 
   console.log(formatedDate);
   return (
@@ -136,7 +161,7 @@ const EventInfoPage: React.FC = () => {
 
               <div className="mx-5">
                 <p className="font-semibold underline text-nowrap">
-                  {data.user_id?.userName}
+                  {data.userName}
                 </p>
                 <img className="h-10 w-10  rounded-full border-4 bg-halfDarkpurple  "></img>
               </div>
@@ -176,7 +201,7 @@ const EventInfoPage: React.FC = () => {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={onclick}
+                onClick={handleSaveEvent}
                 icon="faBookmark"
                 size="small"
               >
@@ -185,7 +210,7 @@ const EventInfoPage: React.FC = () => {
               <Button
                 type="button"
                 variant="primary"
-                onClick={onclick}
+                onClick={handleAttend}
                 icon="faCirclePlus"
                 size="small"
               >
