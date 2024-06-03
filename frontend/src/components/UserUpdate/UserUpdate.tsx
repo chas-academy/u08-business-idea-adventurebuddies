@@ -65,7 +65,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +106,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(`http://localhost:3000/api/users/me`, {
+      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/me`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
