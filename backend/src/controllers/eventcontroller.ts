@@ -71,14 +71,13 @@ const update = async (id: any, data: IEvent) => {
 const deleteOne = async (id: any) => {
   return await Event.findByIdAndDelete(id);
 };
+// Save Events
 const addToUserList = async (userId: any, eventId: any) => {
-  // Find the user by ID and update their list of events to include the new event
-  await User.findByIdAndUpdate(userId, { $addToSet: { events: eventId } });
+  await User.findByIdAndUpdate(userId, { $addToSet: { savedEvents: eventId } });
 };
-
+// Unsave Events
 const removeFromUserList = async (userId: any, eventId: any) => {
-  // Find the user by ID and remove the specified event from their list
-  await User.findByIdAndUpdate(userId, { $pull: { events: eventId } });
+  await User.findByIdAndUpdate(userId, { $pull: { savedEvents: eventId } });
 };
 
 export const createEvent = async (req: CustomRequest, res: Response) => {
@@ -261,6 +260,7 @@ export const deleteEvent = async (req: CustomRequest, res: Response) => {
   }
 };
 
+// Save Events
 export const addEventToUserList = async (req: CustomRequest, res: Response) => {
   try {
     if (!req.user) {
@@ -277,7 +277,7 @@ export const addEventToUserList = async (req: CustomRequest, res: Response) => {
     res.status(500).json({ message: "Failed to add event to user's list" });
   }
 };
-
+// Unsave Events
 export const removeEventFromUserList = async (
   req: CustomRequest,
   res: Response
