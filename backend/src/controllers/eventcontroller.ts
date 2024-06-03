@@ -10,10 +10,11 @@ const create = async (data: IEvent) => {
   return event;
 };
 
-const attendEvent = async (
-  userId: string,
-  eventId: string
-): Promise<IEvent | null> => {
+const attendEvent = async (userId: string, eventId: string) => {
+  await User.findByIdAndUpdate(userId, {
+    $push: { attendingEvents: eventId },
+  });
+
   const event = await Event.findByIdAndUpdate(
     eventId,
     {
@@ -22,16 +23,13 @@ const attendEvent = async (
     },
     { new: true }
   );
-  if (event) {
-    await addToUserList(userId, eventId);
-  }
   return event;
 };
 
-const unattendEvent = async (
-  userId: string,
-  eventId: string
-): Promise<IEvent | null> => {
+const unattendEvent = async (userId: string, eventId: string) => {
+  await User.findByIdAndUpdate(userId, {
+    $pull: { attendingEvents: eventId },
+  });
   const event = await Event.findByIdAndUpdate(
     eventId,
     {
@@ -40,9 +38,6 @@ const unattendEvent = async (
     },
     { new: true }
   );
-  if (event) {
-    await removeFromUserList(userId, eventId);
-  }
   return event;
 };
 
@@ -322,7 +317,9 @@ export const attend = async (req: CustomRequest, res: Response) => {
       return;
     }
 
-    res.status(200).json({ message: "User has attended the event", event });
+    res
+      .status(200)
+      .json({ message: "User is going to attend the event", event });
   } catch (error) {
     res.status(500).json({ message: `Failed to attend event: ${error}` });
   }
