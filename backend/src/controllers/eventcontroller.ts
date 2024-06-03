@@ -1,12 +1,13 @@
 import User from "../models/userModel";
+// import User from "../models/userSchema";
 import { IEvent } from "../interfaces/IEvent";
 import Event from "../models/eventModel";
 import { Request, Response } from "express";
 import { CustomRequest } from "middleware/auth";
 
 const create = async (data: IEvent) => {
-  await Event.create(data);
-  return Event;
+  const event = await Event.create(data);
+  return event;
 };
 
 const attendEvent = async (
@@ -97,6 +98,14 @@ export const createEvent = async (req: CustomRequest, res: Response) => {
     };
 
     const savedEvent = await create(newEvent);
+
+    // this will update the created events feild in the user schema
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.createdEvents.push(savedEvent._id);
+    await user.save();
 
     res.status(201).json({ message: "Event created successfully", savedEvent });
   } catch (error) {
@@ -306,11 +315,13 @@ export const attend = async (req: CustomRequest, res: Response) => {
       userId: string;
       eventId: string;
     };
+
     const event = await attendEvent(userId, eventId);
     if (!event) {
       res.status(404).json({ message: "Event not found" });
       return;
     }
+
     res.status(200).json({ message: "User has attended the event", event });
   } catch (error) {
     res.status(500).json({ message: `Failed to attend event: ${error}` });
