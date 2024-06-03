@@ -46,6 +46,13 @@ export const registerUser = async (user: Partial<IUser>) => {
       };
     }
 
+    const age = new Date().getFullYear() - new Date(dateOfBirth).getFullYear();
+    if (age < 18) {
+      return {
+        error: "User must be at least 18 years old",
+      };
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return {
