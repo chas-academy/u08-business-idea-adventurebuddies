@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import UserUpdate from "../../components/UserUpdate/UserUpdate";
 import { useAuth } from "../../components/header/navbar/AuthContext";
+import { UserPage } from "./UserProfilePage.interface";
 
 
 
 
 const UserProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [userData, setUserData] = useState({
+  
+  const [userData, setUserData] = useState<UserPage>({
     userName: "",
     description: "",
     profileImageUrl:"",
@@ -58,7 +60,7 @@ const UserProfilePage: React.FC = () => {
 
   if (!isAuthenticated) {
     return <div>Vargod och logga in för att se din profil</div>;
-  }
+  };
 
     return (
         <>      

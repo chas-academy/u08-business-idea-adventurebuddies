@@ -10,12 +10,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem("isAuthenticated") === "true";
-  });
-  const [email, setEmail] = useState(() => {
-    return localStorage.getItem("email") || "";
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState("");
 
   const login = (email: string) => {
     setIsAuthenticated(true);
@@ -27,6 +23,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setIsAuthenticated(false);
     setEmail("");
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
   };
 
   return (
