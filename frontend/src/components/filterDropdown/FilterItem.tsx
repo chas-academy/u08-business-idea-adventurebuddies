@@ -3,7 +3,7 @@ import Input from "../input/Input";
 
 interface FilterItemProps {
   type: "venue" | "gender" | "language" | "price" | "experience";
-  selectedValues: string[];
+  selectedValues: string;
   onSelect: (value: string) => void;
   options: string[];
 }
@@ -23,11 +23,12 @@ const FilterItem: React.FC<FilterItemProps> = ({
       {options.map((option) => (
         <div key={option} className="flex items-center">
           <Input
-            type="checkbox"
+            type="radio"
             name={`${type}-${option}`}
             label={option}
             checked={selectedValues.includes(option)}
             onChange={() => onSelect(option)}
+            filterItem="filterItem"
           />
         </div>
       ))}

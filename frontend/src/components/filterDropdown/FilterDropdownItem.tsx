@@ -6,7 +6,7 @@ import Button from "../button/Button";
 interface FilterDropdownItemProps {
   label: string;
   type: "venue" | "gender" | "language" | "price" | "experience";
-  selectedValues?: string[];
+  selectedValues: string;
   onSelect: (value: string) => void;
   options: string[];
 }
@@ -46,15 +46,15 @@ const FilterDropdownItem: React.FC<FilterDropdownItemProps> = ({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center max-w-80 border rounded border-darkPurple">
-      <Button type="button" variant="secondary" onClick={toggleDropdown}>
+    <div className="flex flex-col items-center my-3 md:mx-1">
+      <Button type="button" variant="secondary" onClick={toggleDropdown} filterItem="filterItem" icon={`${isDropdownOpen ? "faChevronUp" : "faChevronDown"}`}>
         {label}
       </Button>
       {isDropdownOpen && (
-        <div>
+        <div className="md:h-56">
           <FilterItem
             type={type}
-            selectedValues={selectedValues || []}
+            selectedValues={selectedValues}
             onSelect={handleSelect}
             options={options}
           />

@@ -16,6 +16,7 @@ interface ButtonProps {
   size?: "small";
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   filterButton?: "filterButton";
+  filterItem?: "filterItem";
 }
 
 // Guide Hur man lägger till en knapp
@@ -35,6 +36,7 @@ const Button: React.FC<ButtonProps> = ({
   size,
   onClick,
   filterButton,
+  filterItem,
 }) => {
   const getIcon = () => {
     switch (icon) {
@@ -73,7 +75,7 @@ const Button: React.FC<ButtonProps> = ({
         <button
           className={`${
             size === "small" ? "min-h-12 min-w-44" : "min-h-12 w-80"
-          } 'cursor-pointer rounded bg-primaryColor hover:bg-hoverOnButton text-textColor font-semibold text-base hover:text-lg m-4 font-poppins shadow-custom '`}
+          } h-fit 'cursor-pointer rounded bg-primaryColor hover:bg-hoverOnButton text-textColor font-semibold text-base hover:text-lg font-poppins shadow-custom'`}
           type={type}
           onClick={onClick}
         >
@@ -98,24 +100,30 @@ const Button: React.FC<ButtonProps> = ({
             )}
           </div>
         </button>
-      ) : variant === "secondary" ? (
+      ) : variant === "secondary" || filterItem ? (
         <button
           className={`${
-            size === "small" ? "min-h-12 min-w-44" : "min-h-12 min-w-80"
-          }  'cursor-pointer rounded border border-primaryColor hover:outline-none hover:ring hover:ring-primaryColor font-medium text-base hover:text-lg m-4 font-poppins shadow-custom '`}
+            size === "small" ? "min-h-12 min-w-44" : `min-h-12 ${filterItem ? 'min-w-72 md:min-w-56' : 'w-80'}`
+          } h-fit 'cursor-pointer rounded border border-primaryColor hover:outline-none hover:ring hover:ring-primaryColor font-medium text-base hover:text-lg font-poppins shadow-custom '`}
           type={type}
           onClick={onClick}
         >
-          <div className="flex flex-row justify-center items-center ">
-            {children}
-            {icon && getIcon()}
+          <div
+            className={`flex flex-row ${
+              filterItem ? "justify-between pr-4 pl-4" : "justify-center"
+            } items-center `}
+          >
+              <>
+                {children}
+                {icon && getIcon()}
+              </>
           </div>
         </button>
       ) : (
         <button
           className={`${
             size === "small" ? "min-h-12 min-w-44" : "min-h-12 min-w-80"
-          } 'cursor-pointer rounded border border-thirdColor hover:bg-thirdColor text-black font-medium hover:text-textColor text-base hover:text-lg m-4 font-poppins shadow-custom '`}
+          } h-fit 'cursor-pointer rounded border border-thirdColor hover:bg-thirdColor text-black font-medium hover:text-textColor text-base hover:text-lg font-poppins shadow-custom '`}
           type={type}
           onClick={onClick}
         >

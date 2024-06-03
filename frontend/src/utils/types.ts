@@ -1,12 +1,12 @@
 import { Venue, Gender, Language, Price, Experience } from "./enums";
 
 export interface ISelectedFilters {
-  [key: string]: string[];
-  venue: string[];
-  gender: string[];
-  language: string[];
-  price: string[];
-  experience: string[];
+  [key: string]: string;
+  venue: string;
+  gender: string;
+  language: string;
+  price: string;
+  experience: string;
 }
 
 export interface IEvent {

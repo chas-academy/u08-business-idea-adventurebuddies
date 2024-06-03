@@ -1,4 +1,5 @@
 import React from "react";
+import FilterItem from '../filterDropdown/FilterItem';
 
 interface InputProps {
   type:
@@ -20,6 +21,7 @@ interface InputProps {
   min?: string;
   max?: string;
   inputMode?: "numeric";
+  filterItem?: "filterItem";
 }
 
 // För att använda denna komponent i din komponent:
@@ -39,10 +41,11 @@ const Input: React.FC<InputProps> = ({
   min,
   max,
   inputMode,
+  filterItem,
 }) => {
   return (
-    <div className={`flex flex-row md:min-w-80 m-3`}>
-      {type === "checkbox" ? (
+    <div className={`flex flex-row ${filterItem ? 'w-64 md:w-52 m-2' : 'md:min-w-80 m-3'} `}>
+      {type === "checkbox" || type === "radio" && filterItem ? (
         <div className="flex flex-row justify-between items-center w-full p-2 border rounded border-primaryColor">
           {label && <label htmlFor={name}>{label}</label>}
           <input
