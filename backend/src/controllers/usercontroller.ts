@@ -13,6 +13,7 @@ export const registerUser = async (user: Partial<IUser>) => {
       userName,
       email,
       password,
+      confirmPassword,
       dateOfBirth,
       gender,
       description,
@@ -24,6 +25,7 @@ export const registerUser = async (user: Partial<IUser>) => {
       !userName ||
       !email ||
       !password ||
+      !confirmPassword ||
       !dateOfBirth ||
       !gender ||
       !phoneNumber
@@ -33,6 +35,17 @@ export const registerUser = async (user: Partial<IUser>) => {
         error: "Please provide all the required fields",
       };
     }
+    if (password !== confirmPassword) {
+      return {
+        error: "Password and confirm password do not match",
+      };
+    }
+    if (password.length < 8 || password.length > 10) {
+      return {
+        error: "Password should be between 8 and 10 characters",
+      };
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return {
