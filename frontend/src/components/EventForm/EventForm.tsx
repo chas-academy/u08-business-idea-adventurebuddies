@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import Input from "../input/Input";
 import Button from "../button/Button";
+import { useNavigate } from "react-router-dom";
 
 const EventForm = () => {
   // Denna lagras platsen du säker på och uppdateras när användaren trycker på submit
@@ -10,7 +11,7 @@ const EventForm = () => {
   const [equipmentNeeded, setEquipmentNeeded] = useState<boolean>(false);
   // Denna lagrar formDatan, den blir även uppdaterad med lon, lat från api anropet
   const [formData, setFormData] = useState({
-    user_id: "",
+    // user_id: "",
     activity: "",
     location: "",
     participantsMin: 0,
@@ -59,10 +60,12 @@ const EventForm = () => {
     }
   };
 
+  const navigate = useNavigate();
   // Denna förhindrar sidan från att ladda om och uppdaterar Place endast vid onSubmit
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPlace(formData.location);
+    navigate("/map");
   };
 
   // Denna gör ett API kall när Place ändras och sätter sedan lon, lat kordinaterna in i formdata
@@ -97,12 +100,14 @@ const EventForm = () => {
       if (formData.lat && formData.lon) {
         try {
           console.log("Detta är backend data", formData);
+          const token = localStorage.getItem("token");
 
           const response = await fetch("http://localhost:3000/api/events/", {
             method: "POST",
             body: JSON.stringify(formData),
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
           });
           if (!response.ok) {
@@ -129,13 +134,13 @@ const EventForm = () => {
           onSubmit={onSubmit}
         >
           <div className="md:w-2/3">
-            <Input
+            {/* <Input
               label="User_ID"
               type="text"
               name="user_id"
               onChange={handleChange}
               placeholder="User_ID"
-            />
+            /> */}
             <Input
               label="Aktivitet"
               type="text"
