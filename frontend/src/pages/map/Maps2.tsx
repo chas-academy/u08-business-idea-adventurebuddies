@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useMapsFormData } from "../../store/useMapsFormData";
-import { useEventLatitude } from "../../store/useIEventLatitude";
 import React from "react";
-// import { CartoDB } from "ol/source";
 
 const Maps2 = () => {
   const [latitude, setLatitude] = useState<string>("");
@@ -19,28 +17,6 @@ const Maps2 = () => {
       activity: string;
     }[]
   >([]);
-
-  // ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ
-  // Skicka eventform till backend
-  // Gör en fetch till backend och mappa i backend och skicka tillbaka lon,lat
-  // och gör sedan så att du får med aktivitet från backend
-
-  // const [eventMarker, setEventMarker] = useState<
-  //   { lat: number; lon: number }[]
-  // >([]);
-
-  // Denna får ut värdet från storen till denna fil nu kan du jobba vidare på för att försöka trigga en pil för dessa kordinater
-  // const { latitudeEvent } = useEventLatitude();
-  // useEffect(() => {
-  //   setEventMarker((prevMarkers) => [
-  //     ...prevMarkers,
-  //     {
-  //       lat: parseFloat(latitudeEvent.lat),
-  //       lon: parseFloat(latitudeEvent.lon),
-  //     },
-  //   ]);
-  //   console.log(eventMarker);
-  // }, []);
 
   useEffect(() => {
     const hamtaBackend = async () => {
@@ -68,8 +44,6 @@ const Maps2 = () => {
     console.log("Detta är markerrrrrrr", backendMarker);
   }, []);
 
-  // ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ
-
   // Denna hämtar värdena från store till lat, lon
   const { userLocation } = useMapsFormData((state) => ({
     userLocation: state.userLocation.locationData,
@@ -86,6 +60,9 @@ const Maps2 = () => {
 
   //Hämtar Option från store
   const option = useMapsFormData((state) => state.option);
+
+  // Hämtar nyckeln till battlemap i .env filen
+  const apiKey = import.meta.env.VITE_REACT_APP_API_KEY;
 
   //Denna Hämtar geolacation och sätter in Lat och Long i usestate när komonenten skapas
   useEffect(() => {
@@ -117,12 +94,6 @@ const Maps2 = () => {
     // Skapa en karta med Leaflet när komponenten har monterats
     const map = L.map("map").setView([parsedLatitude, parsedLongitude], 13);
 
-    // const eventLat = latitudeEvent.lat;
-    // const eventLon = latitudeEvent.lon;
-
-    // const eventMarkerlat: number = parseFloat(latitudeEvent.lat);
-    // const eventMarkerlon: number = parseFloat(latitudeEvent.lon);
-
     if (option === "option1") {
       const CartoDB_Voyager = L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
@@ -136,11 +107,10 @@ const Maps2 = () => {
       console.log("CartoDB_Voyager tile layer added:", CartoDB_Voyager);
     } else if (option === "option2") {
       const Thunderforest_SpinalMap = L.tileLayer(
-        `https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=93300a9709214326825865733ab161ce`,
+        `https://{s}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png?apikey=${apiKey}`,
         {
           attribution:
             '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          // apikey: "93300a9709214326825865733ab161ce",
           maxZoom: 22,
         }
       ).addTo(map);
@@ -149,7 +119,7 @@ const Maps2 = () => {
         Thunderforest_SpinalMap
       );
 
-      // Denna ska bara lägga till marker med lon, lat som kommer från sustansstoren från event form
+      // Denna ska bara lägga till marker med lon, lat som kommer från backend
     }
     if (backendMarker) {
       backendMarker.forEach((marker) => {
@@ -157,9 +127,6 @@ const Maps2 = () => {
           .addTo(map)
           .bindPopup(marker.activity);
       });
-
-      // const marker = L.marker([latitudeEvent.lat, latitudeEvent.lon]);
-      // marker.addTo(map);
     }
 
     // Återställ kartan när komponenten rensas från DOM

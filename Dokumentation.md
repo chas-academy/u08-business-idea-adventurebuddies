@@ -45,7 +45,7 @@ Variabeln updateOption är sedan kopplad till useMapsFormData funktionen som i s
 
 useMapsFormData
 
-Detta är en store som satts upp för att kunna skicka variabler mellan olika komponenter. userLocation och option är vaiablerna som kommer bli uppdaterade med värden i storen. updateUserLocation är funktionen i storen som används för att uppdatera variablerna med de nya värdenna för lat och lon. updateOpten är funktionen i storen aom används för att uppdatera variabeln option med nya värden.
+Detta är en store som satts upp för att kunna skicka variabler mellan olika komponenter. userLocation och option är vaiablerna som kommer bli uppdaterade med värden i storen. updateUserLocation är funktionen i storen som används för att uppdatera variablerna med de nya värdenna för lat och lon. updateOpten är funktionen i storen som används för att uppdatera variabeln option med nya värden.
 
 ![alt text](frontend/DokumentationBilder/SearchBar/image-11.png)
 
@@ -72,6 +72,18 @@ Option hämtas också från store och läggs in i variabeln option.
 
 Variablerna från usestate för lon. lat kommer sedan uppdatera esuEffekten för kartan. Kartan har Latitude, Longitude och option som dependesie och detta betyder att när något av dessa värden ändras så kommer denna att uppdateras. Lat och lon skulle då sättas in för arr uppdatera kartan och denna vy och option finns i if för att se om värdet är option 1 eller 2 som då bestämmer vilken kart vy som kommer visas
 ![alt text](frontend/DokumentationBilder/SearchBar/image-17.png)
+
+För att adda Marker när en användare lägger till ett nytt event så gjorde jag en useEffekt som triggas varjegång komponenten skapas denna useEffekt har en fetch i sig som gör en get request till databasen för att hämta alla event.
+
+![alt text](frontend/DokumentationBilder/Maps2/image-1.png)
+
+I hamtaBackend så har jag en setBackendMarker som uppdaterar detta useState med all data från backend. För att sedan få ut en marker på kartan för varje event som har skapats så gjorde jag sedan en forEach på backendMarker för att sätta ut en pin för varje destination jag lade även till `binPopup()` för att lägga till aktivitet vid varje pin.
+
+![alt text](frontend/DokumentationBilder/Maps2/image-2.png)
+
+Föratt dölja API KEY i frontend så skapade jag en .env fil där jag satte in nyckeln och sedan hämtade jag nyckeln därifrån med hjälp av import för att sedan sätta in den i url:en.
+
+![alt text](frontend/DokumentationBilder/Maps2/image-3.png)
 
 EventForm:
 
