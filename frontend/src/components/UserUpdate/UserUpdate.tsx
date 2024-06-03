@@ -41,11 +41,20 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   }, [userData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevData) => ({
+          ...prevData,
+          profileImageUrl: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleUpdate = async () => {
@@ -70,8 +79,8 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
       }
 
       const updatedUserData = await response.json();
-      setUserData(updatedUserData); // Update the state in UserProfilePage
-      setIsDropdownVisible(false); // Close the dropdown
+      setUserData(updatedUserData.updatedUser);
+      setIsDropdownVisible(false);
     } catch (error) {
       console.error("Update user data error:", error);
     }
@@ -82,11 +91,12 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   };
 
   const handleRemoveAccount = async () => {
+    // Extra bekräftelse ifall man råkar trycka på radera och det inte var meningen.
     const confirmed = window.confirm(
       "Är du säker på att du vill radera ditt konto?"
     );
     if (!confirmed) {
-      return; // If the user clicks "Cancel", exit the function
+      return;
     }
 
     try {
@@ -148,11 +158,11 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
               />
             </div>
             <div>
-              <p>Profilbild URL</p>
-              <Input
-                type="text"
+              <p>Profilbild</p>
+              <input
+                type="file"
                 name="profileImageUrl"
-                value={formData.profileImageUrl || ""}
+                accept="image/*"
                 onChange={handleInputChange}
               />
             </div>
