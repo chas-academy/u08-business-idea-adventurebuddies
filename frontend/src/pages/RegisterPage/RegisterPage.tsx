@@ -49,15 +49,17 @@ const RegisterPage: React.FC = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setRegistrationStatus("error");
-        } else {
           setRegistrationStatus("success");
+          window.alert("Registrering misslyckades. Var god försök igen.");
+        } else {
+          setRegistrationStatus("error");
+          window.alert("Woho, du är nu registrerad & dirigeras till Login!");
+          // Redirect the user, show a success message, etc.
           navigate("/Login");
         }
 
-        console.log("Användaren är registrerad:", data);
+        console.log("Det här är data från DB:", data);
         // Handle response data
-        // Redirect the user, show a success message, etc.
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -67,7 +69,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <>
-      {registrationStatus === "success" && (
+      {/* {registrationStatus === "success" && (
         <div className="alert alert-success" role="alert">
           <p className="text-green-700">Registrering lyckad!</p>
         </div>
@@ -78,7 +80,7 @@ const RegisterPage: React.FC = () => {
             Registrering misslyckad. Var god prova igen.
           </p>
         </div>
-      )}
+      )} */}
       <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
         <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
           <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6">
@@ -95,7 +97,7 @@ const RegisterPage: React.FC = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Ange användarnamn"
+                placeholder="Ange namn"
               />
               <Input
                 type="text"
