@@ -1,6 +1,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../button/Button";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 import { faHouseChimneyWindow } from "@fortawesome/free-solid-svg-icons";
@@ -8,9 +8,21 @@ import { faMap } from "@fortawesome/free-regular-svg-icons/faMap";
 import { faUserLarge } from "@fortawesome/free-solid-svg-icons/faUserLarge";
 import React from "react";
 
-const Navbar = () => {
-  const handleClick = () => {
-    console.log("click");
+interface NavbarProps {
+  isAuthenticated: boolean;
+  email: string;
+  onLogout: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({
+  isAuthenticated,
+  email,
+  onLogout,
+}) => {
+  const navigate = useNavigate();
+
+  const handleChange = () => {
+    navigate("/login");
   };
   return (
     <>
@@ -47,47 +59,65 @@ const Navbar = () => {
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </Link>
             </button>
-            <Button type="button" size="small" variant="secondary" onClick={handleClick}>
-              Logga in
-            </Button>
+            {isAuthenticated ? (
+              <div>
+                <Button
+                  type="button"
+                  size="small"
+                  variant="secondary"
+                  onClick={onLogout}
+                >
+                  {email}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                size="small"
+                variant="secondary"
+                onClick={handleChange}
+              >
+                Login
+              </Button>
+            )}
           </div>
         </div>
 
         <div className="py-6 sm:hidden fixed bottom-0 left-0 w-full bg-textColor z-10">
           <ul className="grid grid-cols-5">
             <li className="px-6">
-              <a href="#">
+            <Link to="/">
                 <FontAwesomeIcon
                   icon={faHouseChimneyWindow}
                   style={{ color: "#1E0707" }}
                 />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+            <Link to="/map">
                 <FontAwesomeIcon icon={faMap} style={{ color: "#1e0707" }} />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+              <Link to="/createEvent">
                 <FontAwesomeIcon icon={faPlus} style={{ color: "#1E0707" }} />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+              <Link to="/">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
                   style={{ color: "#1E0707" }}
                 />
-              </a>
+              </Link>
             </li>
             <li className="px-6">
-              <a href="#">
+              <Link to="/userProfile">
                 <FontAwesomeIcon
                   icon={faUserLarge}
                   style={{ color: "#1E0707" }}
                 />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

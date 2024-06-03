@@ -1,18 +1,81 @@
 import { useState } from "react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { useAuth } from "../../components/header/navbar/AuthContext";
 
-const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+interface ContextType {
+  onLogin: (email: string) => void;
+}
+
+const LoginForm: React.FC = () => {
   const [checked, setChecked] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { onLogin } = useOutletContext<ContextType>();
 
-  const handleUsernameChange = (e: any) => setUsername(e.target.value);
-  const handlePasswordChange = (e: any) => setPassword(e.target.value);
-  const handleChange = (e: any) => setChecked(e.target.checked);
-  const handleSubmit = (e: any) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+  const handleLogin = () => {
+    onLogin(formData.email);
+  };
+
+  // const handleUsernameChange = (e: any) => setFormData(e.target.value);
+  // const handlePasswordChange = (e: any) => setFormData(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setChecked(e.target.checked);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ username, password, checked });
+    console.log({ formData, checked });
+
+    fetch(
+      "https://u08-business-idea-adventurebuddies.onrender.com/api/users/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Login response data:", data);
+        const { user, token } = data;
+
+        // console.log("User logged in successfully:", data);
+        // // Handle response data
+        // // Redirect the user, show a success message, etc.
+        if (user && user._id && token) {
+          const userId = user._id;
+          console.log("User ID received from backend:", userId);
+          localStorage.setItem("id", userId);
+          localStorage.setItem("token", token);
+          console.log("User ID and token stored in local storage:", {
+            userId: localStorage.getItem("id"),
+            token: localStorage.getItem("token"),
+          });
+          login(user.email);
+          navigate("/userProfile");
+        } else {
+          console.error("User ID or token is undefined in the response");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+      });
   };
 
   return (
@@ -24,15 +87,15 @@ const LoginForm = () => {
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col items-start w-full">
-            <label htmlFor="username" className="text-sm font-medium">
-              Användarnamn:
+            <label htmlFor="email" className="text-sm font-medium">
+              Email:
             </label>
             <div className="w-full border p-2 rounded border-[#6278EF]">
               <input
                 type="text"
-                id="username"
-                value={username}
-                onChange={handleUsernameChange}
+                id="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 className="w-full h-full"
               />
             </div>
@@ -45,8 +108,8 @@ const LoginForm = () => {
               <input
                 type="password"
                 id="password"
-                value={password}
-                onChange={handlePasswordChange}
+                value={formData.password}
+                onChange={handleInputChange}
                 className="w-full h-full"
               />
             </div>
@@ -71,6 +134,7 @@ const LoginForm = () => {
           <button
             type="submit"
             className="w-full py-2 text-textColor bg-primaryColor font-Poppins font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={handleLogin}
           >
             Logga in
           </button>
@@ -88,5 +152,4 @@ const LoginForm = () => {
     </div>
   );
 };
-
 export default LoginForm;

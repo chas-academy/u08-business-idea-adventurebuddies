@@ -12,7 +12,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     dateOfBirth: { type: Date, required: true },
     gender: {
       type: String,
-      enum: ["male", "female", "other"],
+      enum: ["male", "female", "other", "non-binary"],
       required: true,
     },
     description: { type: String, required: false },
@@ -35,6 +35,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
     createdEvents: [{ type: Types.ObjectId, ref: "Event" }],
     attendingEvents: [{ type: Types.ObjectId, ref: "Event" }],
+    savedEvents: [{ type: Types.ObjectId, ref: "Event" }],
     profileImageUrl: { type: String, required: false },
   },
   {
@@ -53,9 +54,12 @@ userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign(
     { _id: user._id.toString() },
-    process.env.JWT_KEY as string
+    process.env.JWT_KEY as string,
+    {
+      expiresIn: "1h",
+    }
   );
-  user.tokens = user.tokens.concat({ token });
+  user.tokens = [{ token }]; // Will replace the existing token with a new one
   await user.save();
   return token;
 };
@@ -69,7 +73,7 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
-userSchema.statics.findByCredentials = async (email, password) => {
+userSchema.statics.findByCredentials = async function (email, password) {
   const user = await User.findOne({ email });
   if (!user) {
     throw new Error("Unable to login");

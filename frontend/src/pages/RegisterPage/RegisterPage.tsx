@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/input/Input";
 import React from "react";
 import Button from "../../components/button/Button";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
+    userName: "",
     password: "",
     email: "",
     confirmPassword: "",
@@ -16,11 +17,10 @@ const RegisterPage: React.FC = () => {
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,13 +31,60 @@ const RegisterPage: React.FC = () => {
     }));
   };
 
+  const [registrationStatus, setRegistrationStatus] = useState("");
+
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Hantera formulär här
+
+    fetch(
+      "https://u08-business-idea-adventurebuddies.onrender.com/api/users/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setRegistrationStatus("success");
+          window.alert("Registrering misslyckades. Var god försök igen.");
+        } else {
+          setRegistrationStatus("error");
+          window.alert("Woho, du är nu registrerad & dirigeras till Login!");
+          // Redirect the user, show a success message, etc.
+          navigate("/Login");
+        }
+
+        console.log("Det här är data från DB:", data);
+        // Handle response data
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+        window.alert("Registrering misslyckades. Var god försök igen.");
+      });
   };
 
   return (
     <>
+      {/* {registrationStatus === "success" && (
+        <div className="alert alert-success" role="alert">
+          <p className="text-green-700">Registrering lyckad!</p>
+        </div>
+      )}
+      {registrationStatus === "error" && (
+        <div className="alert alert-error" role="alert">
+          <p className="text-red-700">
+            Registrering misslyckad. Var god prova igen.
+          </p>
+        </div>
+      )} */}
       <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
         <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
           <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6">
@@ -50,13 +97,26 @@ const RegisterPage: React.FC = () => {
             <div className="flex flex-col">
               <Input
                 type="text"
-                label="Användarnamn*"
-                name="username"
-                value={formData.username}
+                label="Namn*"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Ange namn"
+              />
+              <Input
+                type="text"
+                label="Användarnamn**"
+                name="userName"
+                value={formData.userName}
                 onChange={handleInputChange}
                 placeholder="Ange användarnamn"
               />
-              {/* Text som ska finnas med under Användarnamn: Avoid using any personally identifiable information when creating your username, such as your last name, birthdate, address, or social security number. */}
+              {/* Försök att snygga till detta meddelande */}
+              <small className="text-gray-500 mt-1 italic">
+                **Undvik att använda någon personlig identifierbar information
+                när du skapar ditt användarnamn, såsom ditt efternamn,
+                födelsedatum, adress eller personnummer.
+              </small>
               <Input
                 type="text"
                 label="Email*"
@@ -66,7 +126,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange email"
               />
               <Input
-                type="text"
+                type="password"
                 label="Lösenord*"
                 name="password"
                 value={formData.password}
@@ -74,7 +134,7 @@ const RegisterPage: React.FC = () => {
                 placeholder="Ange lösenord"
               />
               <Input
-                type="text"
+                type="password"
                 label="Upprepa lösenord*"
                 name="confirmPassword"
                 value={formData.confirmPassword}
@@ -89,23 +149,12 @@ const RegisterPage: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="Ange födelsedatum"
               />
-              {/* <Input
-              type="text"
-              label="Kön"
-              name="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-              placeholder="Välj kön"
-            /> */}
-              {/* kolla select istället för input */}
-
               <label
                 htmlFor="gender"
                 className="flex flex-col items-start pl-3 mb-0"
               >
                 Kön*
               </label>
-
               <div className="flex flex-col items-start w-full pl-3">
                 <select
                   name="gender"
@@ -118,11 +167,10 @@ const RegisterPage: React.FC = () => {
                   <option value="">Välj kön</option>
                   <option value="female">Kvinna</option>
                   <option value="male">Man</option>
-                  {/* LÄGG TILL I DB <option value="non-binary">Icke-binär</option> */}
+                  <option value="non-binary">Icke-binär</option>
                   <option value="other">Annat</option>
                 </select>
               </div>
-
               <Input
                 type="text"
                 label="Telefonnummer*"
@@ -160,6 +208,9 @@ const RegisterPage: React.FC = () => {
               Logga in här!
             </Link>
           </div>
+          <small className="text-gray-400 mt-1 italic">
+            *Obligatoriskt fält
+          </small>
         </div>
       </div>
     </>

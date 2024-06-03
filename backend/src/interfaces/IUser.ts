@@ -8,7 +8,7 @@ export interface IUser extends Document {
   email: string;
   dateOfBirth: Date;
   gender: string;
-  description?: object;
+  description?: string;
   password: string;
   confirmPassword?: string;
   tokens: { token: string }[];
@@ -17,6 +17,7 @@ export interface IUser extends Document {
   phoneNumber?: string;
   createdEvents: ObjectId[];
   attendingEvents: ObjectId[];
+  savedEvents: ObjectId[];
   profileImageUrl?: string;
 }
 

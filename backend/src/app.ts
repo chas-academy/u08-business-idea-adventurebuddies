@@ -7,6 +7,7 @@ import userRouter from "./routes/users";
 import friendRouter from "./routes/friends";
 import sportRouter from "./routes/sport";
 import connectSportDB from "./db/db";
+import path from "path";
 
 connectSportDB;
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use("/api/users", userRouter);
 app.use("/api/sports", sportRouter);
 app.use("/api/events", eventRouter);

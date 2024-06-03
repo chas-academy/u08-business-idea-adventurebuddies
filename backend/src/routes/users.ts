@@ -8,6 +8,8 @@ import {
   updateUser,
   deleteUser,
   getUserEvents,
+  deleteOwnAccount,
+  getFriends,
 } from "../controllers/usercontroller";
 import { IUser } from "../interfaces/IUser";
 import { auth, admin, CustomRequest } from "../middleware/auth";
@@ -97,15 +99,33 @@ userRouter.get("/", auth, admin, async (req, res) => {
 });
 
 userRouter.put("/:id", auth, async (req, res) => {
-  const id = req.params.id;
-  const updatedUser = await updateUser(id, req.body);
-  res.status(200).json({ message: "Update succeeded", updatedUser });
-});
+    try {
+      const id = req.params.id;
+      let userData = req.body;
+
+      // Kollar om det finns en uppladad fil (vi använder multer för filuppladningar)
+      if (req.file) {
+        userData.profileImageUrl = req.file.filename; // Tilldela sökvägen till profileImageUrl
+      }
+
+      const updatedUser = await updateUser(id, userData);
+
+      res.status(200).json({ message: "Update succeeded", updatedUser });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+);
+
+userRouter.delete("/me", auth, deleteOwnAccount);
 
 userRouter.delete("/:id", auth, admin, async (req, res) => {
   const id = req.params.id;
   const deletedUser = await deleteUser(id);
   res.status(200).json({ message: "User deleted", deletedUser });
 });
+
+userRouter.get("/:id/friends", auth, getFriends); // example route in insomnia: http://localhost:3000/api/users/66565815996906b11ee4ae26/friends
 
 export default userRouter;
