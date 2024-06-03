@@ -53,9 +53,10 @@ userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign(
     { _id: user._id.toString() },
-    process.env.JWT_KEY as string
+    process.env.JWT_KEY as string,
+    { expiresIn: "1h" }
   );
-  user.tokens = user.tokens.concat({ token });
+  user.tokens = [{ token }]; // Will replace the existing token with a new one
   await user.save();
   return token;
 };
