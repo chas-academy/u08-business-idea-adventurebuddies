@@ -13,6 +13,7 @@ export const registerUser = async (user: Partial<IUser>) => {
       userName,
       email,
       password,
+      confirmPassword,
       dateOfBirth,
       gender,
       description,
@@ -24,6 +25,7 @@ export const registerUser = async (user: Partial<IUser>) => {
       !userName ||
       !email ||
       !password ||
+      !confirmPassword ||
       !dateOfBirth ||
       !gender ||
       !phoneNumber
@@ -33,10 +35,37 @@ export const registerUser = async (user: Partial<IUser>) => {
         error: "Please provide all the required fields",
       };
     }
-    const existingUser = await User.findOne({ email });
+    if (password !== confirmPassword) {
+      return {
+        error: "Password and confirm password do not match",
+      };
+    }
+    if (password.length < 8 || password.length > 10) {
+      return {
+        error: "Password should be between 8 and 10 characters",
+      };
+    }
+
+    const age = new Date().getFullYear() - new Date(dateOfBirth).getFullYear();
+    if (age < 18) {
+      return {
+        error: "User must be at least 18 years old",
+      };
+    }
+
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return {
         error: "User with that email already exists.",
+      };
+    }
+
+    const existingUserName = await User.findOne({
+      userName: userName.toLowerCase(),
+    });
+    if (existingUserName) {
+      return {
+        error: "User with that username already exists.",
       };
     }
 
@@ -51,8 +80,8 @@ export const registerUser = async (user: Partial<IUser>) => {
 
     const newUser = new User({
       name,
-      userName,
-      email,
+      userName: userName.toLowerCase(),
+      email: email.toLowerCase(),
       password,
       dateOfBirth,
       gender,
