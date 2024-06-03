@@ -16,11 +16,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (email: string) => {
     setIsAuthenticated(true);
     setEmail(email);
+    localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem("email", email);
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setEmail("");
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
   };
 
   return (

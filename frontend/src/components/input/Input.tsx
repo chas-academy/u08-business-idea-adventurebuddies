@@ -15,11 +15,8 @@ interface InputProps {
   name: string;
   value?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onTimeChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   checked?: boolean;
-  timeName?: string;
-  timeValue?: string;
   min?: string;
   max?: string;
   inputMode?: "numeric";
@@ -37,14 +34,11 @@ const Input: React.FC<InputProps> = ({
   name,
   value,
   onChange,
-  // onTimeChange,
   placeholder,
   checked,
-  timeName,
   min,
   max,
   inputMode,
-  // timeValue,
 }) => {
   return (
     <div className={`flex flex-row md:min-w-80 m-3`}>
@@ -55,8 +49,10 @@ const Input: React.FC<InputProps> = ({
             type={type}
             id={name}
             name={name}
-            value={value}
-            onChange={onChange}
+            onChange={(e) => {
+              if (onChange) {
+                onChange(e);
+              }}}
             checked={checked}
             className="size-5 border checked:bg-primaryColor mr-1"
             required

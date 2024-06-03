@@ -31,6 +31,8 @@ const RegisterPage: React.FC = () => {
     }));
   };
 
+  const [registrationStatus, setRegistrationStatus] = useState("");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Hantera formulär här
@@ -44,7 +46,13 @@ const RegisterPage: React.FC = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("User registered successfully:", data);
+        if (data.success) {
+          setRegistrationStatus("error");
+        } else {
+          setRegistrationStatus("success");
+        }
+
+        console.log("Användaren är registrerad:", data);
         // Handle response data
         // Redirect the user, show a success message, etc.
       })
@@ -56,6 +64,18 @@ const RegisterPage: React.FC = () => {
 
   return (
     <>
+      {registrationStatus === "success" && (
+        <div className="alert alert-success" role="alert">
+          <p className="text-green-700">Registrering lyckad!</p>
+        </div>
+      )}
+      {registrationStatus === "error" && (
+        <div className="alert alert-error" role="alert">
+          <p className="text-red-700">
+            Registrering misslyckad. Var god prova igen.
+          </p>
+        </div>
+      )}
       <div className="flex flex-col items-center justify-center min-h-screen max-w-sm m-2 md:max-w-screen-sm font-Poppins">
         <div className="box-border md:box-content bg-gray-200 p-2 md:px-20 md:py-10 glass-container">
           <h1 className="text-center-primaryColor leading-12 font-bold text-2xl my-6">
@@ -76,13 +96,18 @@ const RegisterPage: React.FC = () => {
               />
               <Input
                 type="text"
-                label="Användarnamn*"
+                label="Användarnamn**"
                 name="userName"
                 value={formData.userName}
                 onChange={handleInputChange}
                 placeholder="Ange användarnamn"
               />
-              {/* Text som ska finnas med under Användarnamn: Avoid using any personally identifiable information when creating your username, such as your last name, birthdate, address, or social security number. */}
+              {/* Försök att snygga till detta meddelande */}
+              <small className="text-gray-500 mt-1 italic">
+                **Undvik att använda någon personlig identifierbar information
+                när du skapar ditt användarnamn, såsom ditt efternamn,
+                födelsedatum, adress eller personnummer.
+              </small>
               <Input
                 type="text"
                 label="Email*"
@@ -115,23 +140,12 @@ const RegisterPage: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="Ange födelsedatum"
               />
-              {/* <Input
-              type="text"
-              label="Kön"
-              name="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-              placeholder="Välj kön"
-            /> */}
-              {/* kolla select istället för input */}
-
               <label
                 htmlFor="gender"
                 className="flex flex-col items-start pl-3 mb-0"
               >
                 Kön*
               </label>
-
               <div className="flex flex-col items-start w-full pl-3">
                 <select
                   name="gender"
@@ -148,7 +162,6 @@ const RegisterPage: React.FC = () => {
                   <option value="other">Annat</option>
                 </select>
               </div>
-
               <Input
                 type="text"
                 label="Telefonnummer*"

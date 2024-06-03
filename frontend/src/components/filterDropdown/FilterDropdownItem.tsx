@@ -1,24 +1,59 @@
-import Button from "../button/Button";
-import * as React from 'react';
+import * as React from "react";
 import FilterItem from "./FilterItem";
+import { useState, useRef, useEffect } from "react";
+import Button from "../button/Button";
 
-const FilterDropdownItem = () => {
+interface FilterDropdownItemProps {
+  label: string;
+  type: 'venue' | 'gender' | 'language' | 'price' | 'experience';
+  selectedValues?: string[];
+  onSelect: (value: string) => void;
+}
 
-    const handleSaveClick = () => {
-        console.log('Save filter preferences');
-    }
+const FilterDropdownItem: React.FC<FilterDropdownItemProps> = ({
+  label,
+  type,
+  selectedValues,
+  onSelect,
+}) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsDropdownOpen(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSelect = (value: string) => {
+    onSelect(value);
+  }
 
   return (
     <div className="flex flex-col justify-center items-center max-w-80 border rounded border-darkPurple">
-      <FilterItem />
-      <Button
-        type="button"
-        variant="secondary"
-        size="small"
-        onClick={handleSaveClick}
-      >
-        Spara filter
+      <Button type="button" variant="secondary" onClick={toggleDropdown}>
+        {label}
       </Button>
+      {isDropdownOpen && (
+        <div >
+          <FilterItem
+            type={type}
+            selectedValues={selectedValues || []}
+            onSelect={handleSelect}
+          />
+        </div>
+      )}
     </div>
   );
 };
