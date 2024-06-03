@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import "./Tabs.css";
 
 import { useTabs } from "./TabsContext";
@@ -36,7 +37,9 @@ const Tabs: React.FC<TabsProps> = ({children}) => {
           className=" h-10"
         >
  {React.Children.map(children, (child,index)=> {
-          if (React.isValidElement<{label: string}>(child)) {
+          if (React.isValidElement<{
+            children: ReactNode;label: string
+}>(child)) {
             return <div key={index} className={`tabs-content ${activeTab === index ? 'active' : ''}`}>
           {child.props.children}
 </div>
