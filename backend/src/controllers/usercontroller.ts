@@ -2,7 +2,9 @@ import { IUser } from "../interfaces/IUser";
 import User from "../models/userModel";
 import Event from "../models/eventModel";
 import { Request, Response } from "express";
+import { CustomRequest } from "middleware/auth";
 
+// Authentication
 export const registerUser = async (user: Partial<IUser>) => {
   const {
     name,
@@ -84,7 +86,15 @@ export const loginUser = async (user: Partial<IUser>) => {
   };
 };
 
-// Add these functions to your controller
+export const logoutUser = async (req: any) => {
+  req.user.tokens = req.user.tokens.filter((token: any) => {
+    return token.token !== req.token;
+  });
+  await req.user.save();
+  return { message: "User logged out successfully." };
+};
+
+// User Profile
 export const getAllUsers = async () => {
   const users = await User.find({});
   return users;
@@ -120,12 +130,24 @@ export const deleteUser = async (id: string) => {
   return await User.findByIdAndDelete(id);
 };
 
-export const logoutUser = async (req: any) => {
-  req.user.tokens = req.user.tokens.filter((token: any) => {
-    return token.token !== req.token;
-  });
-  await req.user.save();
-  return { message: "User logged out successfully." };
+export const deleteOwnAccount = async (req: CustomRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ message: "Authentication failed. User not found." });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await User.findByIdAndDelete(req.user._id);
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user's account:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 export const getUserEvents = async (req: Request, res: Response) => {
