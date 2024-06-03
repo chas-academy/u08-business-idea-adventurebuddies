@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserUpdate from "../../components/UserUpdate/UserUpdate";
 import { useAuth } from "../../components/header/navbar/AuthContext";
 import { UserPage } from "./UserProfilePage.interface";
+import UserEvents from "../../components/userEvents/userEvents";
 
 const UserProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -81,6 +82,9 @@ const UserProfilePage: React.FC = () => {
             <p className="text-xs">{userData.gender}</p>
           </div>
         </div>
+      </div>
+      <div className="p-1.5">
+        <UserEvents />
       </div>
     </>
   );
