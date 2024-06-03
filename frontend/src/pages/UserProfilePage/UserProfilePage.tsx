@@ -35,7 +35,7 @@ const UserProfilePage: React.FC = () => {
         }
 
         // Fetch user data using stored userId
-        const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+        const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -65,16 +65,16 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <>
-      <div className="grid rounded-lg shadow bg-textColor mx-4 min-h-full">
+      <div className="grid rounded-lg shadow bg-textColor py-4 min-h-full w-96 mb-8">
         <UserUpdate userData={userData} setUserData={setUserData} />
-        <div>             
-            <img className="ring ring-primaryColor"
+        <div className="flex">
+        <div className="ml-6 w-[25%]">             
+            <img className="ring ring-primaryColor w-[80px] h-[80px] rounded-full"
               src={userData.profileImageUrl}
               alt="Profile"
-              style={{ width: '150px', height: '150px', borderRadius: '50%' }}
             />
         </div>
-        <div className="text-left ml-4">
+        <div className="text-left ml-4 w-[75%]">
           <h3 className="font-bold">{userData.userName}</h3>
           <p className="text-xs">{userData.description}</p>
 
@@ -86,6 +86,7 @@ const UserProfilePage: React.FC = () => {
             <p>Kön:</p>
             <p className="text-xs">{userData.gender}</p>
           </div>
+        </div>
         </div>
       </div>
       <div className="p-1.5">
