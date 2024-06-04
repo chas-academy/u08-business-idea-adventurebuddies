@@ -3,8 +3,7 @@ import UserUpdate from "../../components/UserUpdate/UserUpdate";
 import { useAuth } from "../../components/header/navbar/AuthContext";
 import { UserPage } from "./UserProfilePage.interface";
 import UserEvents from "../../components/userEvents/userEvents";
-
-
+import FriendsList from "../../components/FriendsList/FriendsList";
 
 const UserProfilePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -35,13 +34,16 @@ const UserProfilePage: React.FC = () => {
         }
 
         // Fetch user data using stored userId
-        const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
@@ -62,35 +64,40 @@ const UserProfilePage: React.FC = () => {
     return <div>Vargod och logga in för att se din profil</div>;
   }
 
-
   return (
     <>
       <div className="grid rounded-lg shadow bg-textColor py-4 min-h-full w-96 mb-8">
         <UserUpdate userData={userData} setUserData={setUserData} />
         <div className="flex">
-        <div className="ml-6 w-[25%]">             
-            <img className="ring ring-primaryColor w-[80px] h-[80px] rounded-full"
+          <div className="ml-6 w-[25%]">
+            <img
+              className="ring ring-primaryColor w-[80px] h-[80px] rounded-full"
               src={userData.profileImageUrl}
               alt="Profile"
             />
-        </div>
-        <div className="text-left ml-4 w-[75%]">
-          <h3 className="font-bold">{userData.userName}</h3>
-          <p className="text-xs">{userData.description}</p>
+          </div>
+          <div className="text-left ml-4 w-[75%]">
+            <h3 className="font-bold">{userData.userName}</h3>
+            <p className="text-xs">{userData.description}</p>
 
-          <div>
-            <p>Mobilnummer:</p>
-            <p className="text-xs">{userData.phoneNumber}</p>
+            <div>
+              <p>Mobilnummer:</p>
+              <p className="text-xs">{userData.phoneNumber}</p>
+            </div>
+            <div>
+              <p>Kön:</p>
+              <p className="text-xs">{userData.gender}</p>
+            </div>
           </div>
-          <div>
-            <p>Kön:</p>
-            <p className="text-xs">{userData.gender}</p>
-          </div>
-        </div>
         </div>
       </div>
-      <div className="p-1.5">
-        <UserEvents />
+      <div className="flex flex-row p-1.5">
+        <div className="w-1/2 p-2">
+          <UserEvents />
+        </div>
+        <div className="w-1/2 p-2">
+          <FriendsList />
+        </div>
       </div>
     </>
   );
