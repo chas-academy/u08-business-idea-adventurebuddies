@@ -30,7 +30,7 @@ function App() {
         email={email}
         onLogout={handleLogout}
       />
-      <nav className="flex flex-row justify-center min-w-screen">
+      {/* <nav className="flex flex-row justify-center min-w-screen">
         <ul className="flex flex-row justify-between w-2/3">
           <li>
             <Link to="/login">Login</Link>
@@ -51,7 +51,7 @@ function App() {
             <Link to="/userProfile">User profile</Link>
           </li>
         </ul>
-      </nav>
+      </nav> */}
 
       <main className="flex flex-col justify-center items-center z-10 mt-10">
         <Outlet
