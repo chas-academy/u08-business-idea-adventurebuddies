@@ -7,12 +7,11 @@ interface HeaderProps {
   onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isAuthenticated, email, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) => {
   return (
     <>
     <Navbar
         isAuthenticated={isAuthenticated}
-        email={email}
         onLogout={onLogout}
       />
     </>
