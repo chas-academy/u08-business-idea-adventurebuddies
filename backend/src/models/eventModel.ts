@@ -58,13 +58,15 @@ const eventSchema = new Schema<IEvent>(
       enum: ["Nybörjare", "Mellanliggande", "Avancerad", ""],
       required: false,
     },
+    userName: { type: String }, 
+    userEmail: { type: String },
   },
   {
     timestamps: true,
   }
 );
 
-eventSchema.pre("save", async function (next) {
+eventSchema.pre<IEvent>("save", async function (next) {
   try {
     // Use Mongoose model to find and populate user information
     const user = await mongoose.model("User").findById(this.user_id);

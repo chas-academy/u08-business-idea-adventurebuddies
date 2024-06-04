@@ -18,6 +18,8 @@ function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setEmail("");
+    localStorage.removeItem("id");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 

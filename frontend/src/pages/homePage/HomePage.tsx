@@ -1,5 +1,5 @@
 import FilterDropdown from "../../components/filterDropdown/FilterDropdown";
-import MapPage from "../map/MapPage";
+// import MapPage from "../map/MapPage";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../map/SearchBar";
 import { IEvent } from "../../../../backend/src/interfaces/IEvent";

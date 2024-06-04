@@ -1,6 +1,6 @@
 import React from "react"; 
 import Maps2 from "./Maps2";
-import SearchBar from "./SearchBar";
+// import SearchBar from "./SearchBar";
 const MapPage = () => {
 
     return (
