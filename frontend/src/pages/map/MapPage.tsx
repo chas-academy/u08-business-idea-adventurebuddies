@@ -4,7 +4,7 @@ import Maps2 from "./Maps2";
 const MapPage = () => {
 
     return (
-        <div className="h-svh w-96">
+        <div className="h-svh w-full">
             <Maps2 />
         </div>
     )

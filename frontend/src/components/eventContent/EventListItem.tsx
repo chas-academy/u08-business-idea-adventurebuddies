@@ -47,7 +47,7 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
   }).format(new Date(event.start_time.toString()));
 
   return (
-    <div className="flex flex-row justify-between px-5 h-20 w-96 m-1.5 border border-borderShade rounded-full shadow-custom">
+    <div className="flex flex-row justify-between px-5 h-20 min-w-72 max-w-80 m-1.5 border border-borderShade rounded-full shadow-custom">
     <div className="flex flex-row items-center">
       {getActivityIcon()}
       <div className="text-start pl-3">
