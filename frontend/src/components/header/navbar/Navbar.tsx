@@ -29,14 +29,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
     phoneNumber: "",
     password: "",
   });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const token = localStorage.getItem("token") || ""; // Använd en tom sträng som standardvärde
-      setLocalStorageUpdated(token);
-    };
-    handleStorageChange();
-}, []);
   
 
   useEffect(() => {
@@ -95,6 +87,14 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const token = localStorage.getItem("token") || ""; // Använd en tom sträng som standardvärde
+      setLocalStorageUpdated(token);
+    };
+    handleStorageChange();
+}, []);
 
   const handleChange = () => {
     navigate("/login");
