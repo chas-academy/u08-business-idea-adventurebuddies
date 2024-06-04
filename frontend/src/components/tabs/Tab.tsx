@@ -1,12 +1,15 @@
 import { useTabs } from "./TabsContext";
 import "./Tabs.css";
+import React, { Dispatch, ReactNode, SetStateAction } from "react";
 
 interface TabProps {
+  children: ReactNode;
   tabLabel: string;
   index: number;
+  setActiveTabIndex: Dispatch<SetStateAction<number>>;
 }
 
-const Tab: React.FC<TabProps> = ({ tabLabel, index }) => {
+const Tab: React.FC<TabProps> = ({ children, tabLabel, index }) => {
   const { activeTab,setActiveTab } = useTabs();
   const handleTabClick = () => {
     setActiveTab(index); 
@@ -23,6 +26,7 @@ const Tab: React.FC<TabProps> = ({ tabLabel, index }) => {
       onClick={handleTabClick}
     >
       {tabLabel}
+      {children}
     </div>
     
   );
