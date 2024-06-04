@@ -17,6 +17,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const navigate = useNavigate();
+  const [localStorageUpdated, setLocalStorageUpdated] = useState("");  
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [userData, setUserData] = useState<UserPage>({
     userName: "",
@@ -30,6 +31,15 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
   });
 
   useEffect(() => {
+    const handleStorageChange = () => {
+      const token = localStorage.getItem("token") || ""; // Använd en tom sträng som standardvärde
+      setLocalStorageUpdated(token);
+    };
+    handleStorageChange();
+}, []);
+  
+
+  useEffect(() => {
     console.log("isAuthenticated:", isAuthenticated);
     if (!isAuthenticated) return;
 
@@ -37,6 +47,8 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
       try {
         const id = localStorage.getItem("id");
         const token = localStorage.getItem("token");
+        console.log("User ID retrieved from local storage:", id);
+        console.log("Token retrieved from local storage:", token);
         if (!id || !token) {
           throw new Error("User ID or token not found");
         }
@@ -66,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
     };
 
     fetchUserData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, localStorageUpdated]);
 
   const handleDropdownToggle = () => {
     setIsDropdownVisible(!isDropdownVisible);
