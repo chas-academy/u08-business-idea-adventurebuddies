@@ -1,8 +1,14 @@
 import { Response } from "express";
 import Friend from "../models/friendModel";
 import { CustomRequest } from "../middleware/auth";
+import User from "../models/userModel";
 
 const sendRequest = async (requesterId: string, recipientId: string) => {
+  const recipientUser = await User.findById(recipientId);
+  if (!recipientUser) {
+    throw new Error("Recipient user not found.");
+  }
+
   const existingFriendRequest = await Friend.findOne({
     requester: requesterId,
     recipient: recipientId,
