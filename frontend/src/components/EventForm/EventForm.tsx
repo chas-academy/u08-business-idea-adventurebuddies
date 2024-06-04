@@ -182,6 +182,9 @@ const EventForm = () => {
               max="30"
               onChange={handleChange}
             />
+            <div>
+              <p className="flex flex-start pl-4">Har Utrustning?</p>
+            </div>
 
             <div className="flex flex-row overflow-hidden">
               <div className="place-self-start w-1/3">

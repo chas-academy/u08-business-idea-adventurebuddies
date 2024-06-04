@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 // import Tab from "../../components/tabs/Tab";
 // import Tabs from "../../components/tabs/Tabs";
 // import { TabsProvider } from "../../components/tabs/TabsContext";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { IEvent } from "../../../../backend/src/interfaces/IEvent";
 import Button from "../../components/button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,46 +11,32 @@ import {
   faLocationArrow,
   faPeopleRobbery,
 } from "@fortawesome/free-solid-svg-icons";
-// import { Outlet } from "react-router-dom";
 import Maps2 from "../map/Maps2";
 
 const EventInfoPage: React.FC = () => {
-  const [data, setData] = useState({
-    user_id: "",
-    activity: "",
-    location: "",
-    participantsMin: 0,
-    participantsMax: 0,
-    equipment: "",
-    age: "",
-    lat: "",
-    lon: "",
-    venue: "",
-    gender: "",
-    language: "",
-    price: "",
-    experience: "",
-    totalParticipant: 0,
-    message: "",
-    start_time: Date(),
-    userName: "",
-  });
+  const [data, setData] = useState<IEvent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | Error>(null);
-  const EVENT_ID = "66585ef4a230d0661ecb3ed3";
+  const userId = localStorage.getItem("id");
+  const userToken = localStorage.getItem("token");
+  const EVENT_ID = "6658ad0bef0ddbeb30deab11";
   const API_URL = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${EVENT_ID}`;
 
+  const API_URL_ATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/attend/${EVENT_ID}`;
+
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+
   useEffect(() => {
-    const hamtaBackend = async () => {
+    const getBackend = async () => {
       try {
         const response = await fetch(API_URL);
         const contentType = response.headers.get("content-type");
 
         if (contentType && contentType.indexOf("application/json") !== -1) {
           const data = await response.json();
-          console.log(data);
-          setData(data);
-          console.log(data.age);
+
+          setData(data as IEvent);
+
         } else {
           const text = await response.text();
           console.error("Server returned non-JSON response:", text);
@@ -63,12 +50,40 @@ const EventInfoPage: React.FC = () => {
       }
     };
 
-    hamtaBackend();
+    getBackend();
+  }, [API_URL]);
 
-    // return () => { []
+  const handleAttendEvent = async () => {
+    if (!isAuthenticated) {
+      console.error("User is not authenticated");
 
-    // };
-  }, []);
+      return;
+    }
+
+    try {
+      const response = await fetch(API_URL_ATTEND, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({
+          eventId: EVENT_ID,
+          userId: userId,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Attending event successful!");
+        
+      } else {
+        console.error("Failed to attend event:", response.statusText);
+       
+      }
+    } catch (error) {
+      console.error("An error occurred while attending event:", error);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -77,6 +92,7 @@ const EventInfoPage: React.FC = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   const formatedDate = new Date(data.start_time).toLocaleString("sv-SV", {
     month: "short",
     day: "2-digit",
@@ -89,22 +105,19 @@ const EventInfoPage: React.FC = () => {
     minute: "numeric",
   });
 
-  const handleAttend = () => {
-    console.log("Button clicked");
-  };
   const handleSaveEvent = () => {
     console.log("Button clicked!");
   };
 
   console.log(formatedDate);
+
   return (
     <div className="">
       <div className="font-bold text-5xl py-10 md:none">
         {data.activity} {data.location}
       </div>
-      
+
       <div className="lg:grid lg:grid-cols-2 ">
-        
         {data ? (
           <div className="glass-container text-left p-5 mx-4  ">
             <div className=" flex justify-between items-baseline">
@@ -182,18 +195,16 @@ const EventInfoPage: React.FC = () => {
                 </div>
               </div>
 
-
               <div className="grid grid-cols-2 rounded border border-primaryColor shadow-custom px-2 mb-10 ">
                 <div className="flex space-x-1 py-3 ">
                   <FontAwesomeIcon size="xl" icon={faPeopleRobbery} />
                   <h2 className="font-bold ">Anmälda deltagare:</h2>
-                  </div>
-                  <div className="flex justify-end py-2 text-2xl">
-                    <p>
-                      {data.totalParticipant}/{data.participantsMax}
-                    </p>
-                  </div>
-                
+                </div>
+                <div className="flex justify-end py-2 text-2xl">
+                  <p>
+                    {data.totalParticipant}/{data.participantsMax}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -210,7 +221,7 @@ const EventInfoPage: React.FC = () => {
               <Button
                 type="button"
                 variant="primary"
-                onClick={handleAttend}
+                onClick={handleAttendEvent}
                 icon="faCirclePlus"
                 size="small"
               >
@@ -220,11 +231,9 @@ const EventInfoPage: React.FC = () => {
           </div>
         ) : null}
         <div className="invisible lg:visible">
-        <Maps2  />
+          <Maps2 />
         </div>
       </div>
-
-      
     </div>
   );
 };
