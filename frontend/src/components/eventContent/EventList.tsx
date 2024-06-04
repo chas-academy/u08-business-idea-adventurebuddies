@@ -13,7 +13,7 @@ const EventList: React.FC<EventListProps> = ({ events, filteredEvents }) => {
     }
 
     return (
-        <div>
+        <div className="flex flex-col md:items-center max-w-80 md:p-5">
             {filteredEvents && filteredEvents.length > 0 ? (
                 filteredEvents.map((event, index) => <EventListItem key={index} event={event}/>)
             ) : (
