@@ -7,6 +7,7 @@ import EventList from "../../components/eventContent/EventList";
 import { TabsProvider } from "../../components/tabs/TabsContext";
 import Tabs from "../../components/tabs/Tabs";
 import Tab from "../../components/tabs/Tab";
+import { useAuth } from "../../components/header/navbar/AuthContext";
 
 const HomePage = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
@@ -14,7 +15,7 @@ const HomePage = () => {
   const [filteredEvents, setFilteredEvents] = useState<IEvent[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,13 +31,6 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-
     const fetchEvents = async () => {
       try {
         const response = await fetch(
