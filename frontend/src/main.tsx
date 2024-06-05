@@ -41,7 +41,10 @@ const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
-      { path: "map", element: <MapPage /> },
+      { 
+        path: "map",
+        element: <ProtectedRoute  element= {<MapPage />} />
+        },
       {
         path: "eventInfo",
         element: <ProtectedRoute element={<EventInfoPage />} />,
