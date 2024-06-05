@@ -141,20 +141,57 @@ export const logoutUser = async (req: any) => {
 };
 
 // User Profile
-export const getAllUsers = async () => {
-  try {
-    const users = await User.find({});
-    return users;
-  } catch (error) {
-    return { error: error };
-  }
-};
+export const getAllUsers = async () =>
+  // req: Request, res: Response
+  {
+    try {
+      // const { search } = req.query;
+      // let query = {};
+
+      // if (search) {
+      //   query = {
+      //     $or: [
+      //       { name: { $regex: search, $options: "i" } },
+      //       { email: { $regex: search, $options: "i" } },
+      //     ],
+      //   };
+      // }
+
+      const users = await User.find({});
+      return users;
+      // res.status(200).json(users);
+    } catch (error) {
+      // res.status(500).json({ error: error });
+
+      return { error: error };
+    }
+  };
 
 export const getUser = async (id: string) => {
   try {
     return await User.findById(id);
   } catch (error) {
     return { error: error };
+  }
+};
+
+export const searchUsers = async (req: Request, res: Response) => {
+  try {
+    const { search } = req.query;
+    let query = {};
+
+    if (search) {
+      query = {
+        $or: [
+          { userName: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+        ],
+      };
+    }
+    const users = await User.find(query);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error });
   }
 };
 
@@ -239,7 +276,7 @@ export const getFriends = async (req: CustomRequest, res: Response) => {
         { requester: userId, status: "accepted" },
         { recipient: userId, status: "accepted" },
       ],
-    }).populate("requester recipient", "name"); // assuming 'name' is a property you want to return
+    }).populate("requester recipient", "name");
 
     res.status(200).json({ friends });
   } catch (error) {
