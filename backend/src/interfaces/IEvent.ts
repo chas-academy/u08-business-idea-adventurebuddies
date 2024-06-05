@@ -20,7 +20,7 @@ export interface IEvent {
   activity: string;
   user_id: ObjectId;
 
-  start_time: Number;
+  start_time: number;
   // end_time: Date;
 
   userName?: string;
