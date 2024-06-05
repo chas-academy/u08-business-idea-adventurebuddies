@@ -11,10 +11,10 @@ import { UserPage } from "../../../pages/UserProfilePage/UserProfilePage.interfa
 
 interface NavbarProps {
   isAuthenticated: boolean;
-  onLogout: () => void;
+  logout: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const navigate = useNavigate();
   const [localStorageUpdated, setLocalStorageUpdated] = useState("");  
@@ -157,7 +157,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                   >
                     <Link
                       to={"/"}
-                      onClick={onLogout}
+                      onClick={logout}
                       style={{
                         display: "block",
                         padding: "10px",

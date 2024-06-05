@@ -2,22 +2,22 @@ import "./App.css";
 import React, { useState } from "react";
 import Footer from "./components/footer/Footer";
 // import HomePage from "./pages/homePage/HomePage";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Header from "./components/header/Header";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (email: string) => {
+  const handleLogin = () => {
     setIsAuthenticated(true);
-    setEmail(email);
+    // setEmail(email);
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    setEmail("");
+    // setEmail("");
     localStorage.removeItem("id");
     localStorage.removeItem("token");
     navigate("/login");
@@ -27,8 +27,8 @@ function App() {
     <>
       <Header
         isAuthenticated={isAuthenticated}
-        email={email}
-        onLogout={handleLogout}
+        // email={email}
+        logout={handleLogout}
       />
       {/* <nav className="flex flex-row justify-center min-w-screen">
         <ul className="flex flex-row justify-between w-2/3">
