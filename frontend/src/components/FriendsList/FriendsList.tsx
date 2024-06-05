@@ -35,7 +35,7 @@ const FriendList = () => {
         throw new Error("User ID or token not found in local storage");
       }
       const response = await fetch(
-        `http://localhost:3000/api/users/${userId}/friends`,
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/${userId}/friends`,
         {
           method: "GET",
           headers: {
@@ -62,7 +62,7 @@ const FriendList = () => {
       }
 
       const incomingResponse = await fetch(
-        `http://localhost:3000/api/friends/received`,
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/received`,
         {
           method: "GET",
           headers: {
@@ -89,7 +89,7 @@ const FriendList = () => {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/users/search?search=${searchQuery}`,
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/search?search=${searchQuery}`,
         {
           method: "GET",
           headers: {
@@ -126,16 +126,16 @@ const FriendList = () => {
 
       switch (action) {
         case "send":
-          url = `http://localhost:3000/api/friends/request/${friendId}`;
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/request/${friendId}`;
           break;
         case "accept":
-          url = `http://localhost:3000/api/friends/accept/${friendId}`;
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/accept/${friendId}`;
           break;
         case "reject":
-          url = `http://localhost:3000/api/friends/reject/${friendId}`;
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/reject/${friendId}`;
           break;
         case "remove":
-          url = `http://localhost:3000/api/friends/${friendId}`;
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/${friendId}`;
           method = "DELETE";
           break;
         default:
