@@ -18,7 +18,7 @@ const eventSchema = new Schema<IEvent>(
     activity: { type: String, required: true },
     user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
-    start_time: { type: Date, default: () => new Date(), required: true },
+    start_time: { type: Number, required: true },
     // end_time: { type: Date, default: () => new Date(), required: true },
 
     location: { type: String, required: true },
@@ -58,7 +58,7 @@ const eventSchema = new Schema<IEvent>(
       enum: ["Nybörjare", "Mellanliggande", "Avancerad", ""],
       required: false,
     },
-    userName: { type: String }, 
+    userName: { type: String },
     userEmail: { type: String },
   },
   {

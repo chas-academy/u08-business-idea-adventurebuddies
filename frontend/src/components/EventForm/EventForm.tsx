@@ -31,7 +31,7 @@ const EventForm = () => {
     experience: "",
     totalParticipant: 0,
     message: "",
-    start_time: Date(),
+    start_time: "",
 
     // end_time: new Date(),
   });
@@ -42,6 +42,7 @@ const EventForm = () => {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
+    // console.log("start_time");
     const { name, value } = e.target;
 
     if (value === "Ja") {
@@ -51,11 +52,19 @@ const EventForm = () => {
     }
     if (name === "start_time") {
       console.log(name, Math.floor(new Date(value).getTime() / 1000));
+      const unixTimestamp = Math.floor(new Date(value).getTime() / 1000);
+      console.log("Detta är unix", unixTimestamp);
       console.log(
         "covertiing unix back to date ",
         new Date(Math.floor(new Date(value).getTime() / 1000) * 1000)
       );
       console.log(value);
+
+      // Uppdatera formData med Unix-tidstämpeln
+      setFormData({
+        ...formData,
+        [name]: unixTimestamp.toString(),
+      });
     } else {
       setFormData({
         ...formData,
@@ -108,17 +117,14 @@ const EventForm = () => {
           console.log("Detta är backend data", formData);
           const token = localStorage.getItem("token");
 
-          const response = await fetch(
-            "https://u08-business-idea-adventurebuddies.onrender.com/api/events/",
-            {
-              method: "POST",
-              body: JSON.stringify(formData),
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const response = await fetch("http://localhost:3000/api/events/", {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
           if (!response.ok) {
             throw new Error("Failed");
           }
