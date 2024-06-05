@@ -1,10 +1,10 @@
 import React from "react"; 
 import Maps2 from "./Maps2";
-import SearchBar from "./SearchBar";
+// import SearchBar from "./SearchBar";
 const MapPage = () => {
 
     return (
-        <div className="h-svh w-96">
+        <div className="h-svh w-full">
             <Maps2 />
         </div>
     )

@@ -135,7 +135,7 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   return (
     <>
       <div className="col-start-1 col-end-3">
-        <div id="updateDropdown" className="flex justify-end mr-2 mt-2">
+        <div id="updateDropdown" className="flex justify-end mr-2 mt-2 xl:mr-4">
           <FontAwesomeIcon
             icon={faGear}
             style={{ color: "#000000" }}
@@ -147,9 +147,9 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
           <form
             action="submit"
             method="post"
-            className="absolute right-2 top-60 bg-textColor"
+            className="absolute left-auto right-auto top-60 bg-textColor glass-container z-20 my-8"
           >
-            <div>
+            <div className="mt-4">
               <FontAwesomeIcon
                 icon={faXmark}
                 size="xl"
@@ -157,9 +157,10 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 onClick={handleDropdownToggle}
               />
             </div>
-            <div>
+            <div className="my-4">
               <p>Profilbild</p>
               <input
+                className="ml-32 my-4"
                 type="file"
                 name="profileImageUrl"
                 accept="image/*"

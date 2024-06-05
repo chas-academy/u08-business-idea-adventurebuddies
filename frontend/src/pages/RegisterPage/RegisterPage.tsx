@@ -54,6 +54,7 @@ const RegisterPage: React.FC = () => {
         if (data.success) {
           setRegistrationStatus("success");
           window.alert("Registrering misslyckades. Var god försök igen.");
+          console.log(registrationStatus);
         } else {
           setRegistrationStatus("error");
           window.alert("Woho, du är nu registrerad & dirigeras till Login!");

@@ -66,27 +66,31 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <>
-      <div className="grid rounded-lg shadow bg-textColor py-4 min-h-full w-96 mb-8">
+      <div className="grid rounded-lg shadow-2xl bg-textColor py-4 min-h-full w-96 mb-8 xl:w-[600px]">
         <UserUpdate userData={userData} setUserData={setUserData} />
         <div className="flex">
-          <div className="ml-6 w-[25%]">
+          <div className="ml-6 w-[30%] xl: w-[25%]">
             <img
-              className="ring ring-primaryColor w-[80px] h-[80px] rounded-full"
+              className="ring ring-primaryColor w-[80px] h-[80px] rounded-full xl:w-[100px] xl:h-[100px]"
               src={userData.profileImageUrl}
               alt="Profile"
             />
           </div>
-          <div className="text-left ml-4 w-[75%]">
-            <h3 className="font-bold">{userData.userName}</h3>
-            <p className="text-xs">{userData.description}</p>
+          <div className="text-left ml-4 w-[70%] xl:w-[75%]">
+            <h3 className="font-bold xl:text-xl">{userData.userName}</h3>
+            <p className="text-xs xl:text-sm">{userData.description}</p>
 
-            <div>
-              <p>Mobilnummer:</p>
-              <p className="text-xs">{userData.phoneNumber}</p>
-            </div>
-            <div>
-              <p>Kön:</p>
-              <p className="text-xs">{userData.gender}</p>
+            <div className="xl:flex xl:mt-4">
+              <div className="w-1/2">
+                <p>Mobilnummer:</p>
+                <p className="text-xs xl:text-lg">{userData.phoneNumber}</p>
+              </div>
+              <div className="w-1/2">
+                {/* <p>Kön:</p>
+            <p className="text-xs xl:text-lg">{userData.gender}</p> */}
+                <p>Email:</p>
+                <p className="text-xs xl:text-lg">{userData.email}</p>
+              </div>
             </div>
           </div>
         </div>

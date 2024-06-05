@@ -1,5 +1,5 @@
 import React from "react";
-import FilterItem from '../filterDropdown/FilterItem';
+// import FilterItem from '../filterDropdown/FilterItem';
 
 interface InputProps {
   type:
