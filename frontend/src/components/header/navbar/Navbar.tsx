@@ -76,12 +76,20 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
     }
   };
 
+  const handleLinkClick = () => {
+    setIsDropdownVisible(false);
+  };
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    setIsDropdownVisible(false);
+  }, [isAuthenticated]);
 
   const handleChange = () => {
     navigate("/login");
@@ -156,6 +164,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/userProfile"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -167,6 +176,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/createEvent"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -178,6 +188,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/eventInfo"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -189,6 +200,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/map"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
