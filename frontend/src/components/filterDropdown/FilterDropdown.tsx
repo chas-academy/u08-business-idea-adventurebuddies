@@ -19,7 +19,7 @@ interface FilterDropdownProps {
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({ onFilter }) => {
   const [selectedFilters, setSelectedFilters] = useState<ISelectedFilters>({
-    venue: "",git s
+    venue: "",
     gender: "",
     language: "",
     price: "",
