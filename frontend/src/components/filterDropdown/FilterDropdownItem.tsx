@@ -2,10 +2,11 @@ import * as React from "react";
 import FilterItem from "./FilterItem";
 import { useState, useRef, useEffect } from "react";
 import Button from "../button/Button";
+import { Experience, Gender, Language, Price, Venue } from "../../utils/enums";
 
 interface FilterDropdownItemProps {
   label: string;
-  type: "venue" | "gender" | "language" | "price" | "experience";
+  type: Venue | Gender | Language | Price | Experience;
   selectedValues: string;
   onSelect: (value: string) => void;
   options: string[];
