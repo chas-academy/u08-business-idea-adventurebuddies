@@ -20,7 +20,9 @@
 
 - TrelloBoard:
 
-## Future plans
+## Deployment
+
+- https://main--adventurebuddies.netlify.app/
 
 ## The Work Team
 
