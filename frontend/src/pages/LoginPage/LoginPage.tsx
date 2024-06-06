@@ -31,7 +31,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ formData, checked });
+    // console.log({ formData, checked });
 
     fetch(
       "https://u08-business-idea-adventurebuddies.onrender.com/api/users/login",
@@ -45,7 +45,7 @@ const LoginForm: React.FC = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Login response data:", data);
+        // console.log("Login response data:", data);
         const { user, token } = data;
 
         // console.log("User logged in successfully:", data);
