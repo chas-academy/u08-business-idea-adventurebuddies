@@ -20,15 +20,12 @@ const UserProfilePage: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log("isAuthenticated:", isAuthenticated);
     if (!isAuthenticated) return;
 
     const fetchUserData = async () => {
       try {
         const id = localStorage.getItem("id");
         const token = localStorage.getItem("token");
-        console.log("User ID retrieved from local storage:", id);
-        console.log("Token retrieved from local storage:", token);
         if (!id || !token) {
           throw new Error("User ID or token not found");
         }
@@ -50,7 +47,6 @@ const UserProfilePage: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log("User data:", data);
         setUserData(data);
       } catch (error) {
         console.error("Fetch user data error:", error);
