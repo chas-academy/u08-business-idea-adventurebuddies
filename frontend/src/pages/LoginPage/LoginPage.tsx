@@ -1,16 +1,14 @@
 import { useState } from "react";
 import React from "react";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { useAuth } from "../../components/header/navbar/AuthContext";
 
 interface ContextType {
-  onLogin: (email: string) => void;
+  onLogin: (email: string, userId: string, token: string) => void;
 }
 
 const LoginForm: React.FC = () => {
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
   const { onLogin } = useOutletContext<ContextType>();
 
   const [formData, setFormData] = useState({
@@ -26,10 +24,6 @@ const LoginForm: React.FC = () => {
     }));
   };
 
-  const handleLogin = () => {
-    onLogin(formData.email);
-  };
-
   // const handleUsernameChange = (e: any) => setFormData(e.target.value);
   // const handlePasswordChange = (e: any) => setFormData(e.target.value);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -37,7 +31,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ formData, checked });
+    // console.log({ formData, checked });
 
     fetch(
       "https://u08-business-idea-adventurebuddies.onrender.com/api/users/login",
@@ -51,22 +45,19 @@ const LoginForm: React.FC = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Login response data:", data);
+        // console.log("Login response data:", data);
         const { user, token } = data;
 
         // console.log("User logged in successfully:", data);
         // // Handle response data
         // // Redirect the user, show a success message, etc.
         if (user && user._id && token) {
-          const userId = user._id;
-          console.log("User ID received from backend:", userId);
-          localStorage.setItem("id", userId);
-          localStorage.setItem("token", token);
-          console.log("User ID and token stored in local storage:", {
-            userId: localStorage.getItem("id"),
-            token: localStorage.getItem("token"),
-          });
-          login(user.email);
+          // console.log("User ID received from backend:", user._id);
+          onLogin(user.email, user._id, token);
+          // console.log("User ID and token stored in local storage:", {
+          //   userId: localStorage.getItem("id"),
+          //   token: localStorage.getItem("token"),
+          // });
           navigate("/userProfile");
         } else {
           console.error("User ID or token is undefined in the response");
@@ -134,7 +125,7 @@ const LoginForm: React.FC = () => {
           <button
             type="submit"
             className="w-full py-2 text-textColor bg-primaryColor font-Poppins font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={handleLogin}
+            onClick={handleSubmit}
           >
             Logga in
           </button>

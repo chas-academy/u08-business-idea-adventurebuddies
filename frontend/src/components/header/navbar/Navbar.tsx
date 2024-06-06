@@ -11,13 +11,12 @@ import { UserPage } from "../../../pages/UserProfilePage/UserProfilePage.interfa
 
 interface NavbarProps {
   isAuthenticated: boolean;
-  onLogout: () => void;
+  logout: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const navigate = useNavigate();
-  const [localStorageUpdated, setLocalStorageUpdated] = useState("");  
+  const navigate = useNavigate(); 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [userData, setUserData] = useState<UserPage>({
     userName: "",
@@ -29,18 +28,14 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
     phoneNumber: "",
     password: "",
   });
-  
 
   useEffect(() => {
-    console.log("isAuthenticated:", isAuthenticated);
     if (!isAuthenticated) return;
 
     const fetchUserData = async () => {
       try {
         const id = localStorage.getItem("id");
         const token = localStorage.getItem("token");
-        console.log("User ID retrieved from local storage:", id);
-        console.log("Token retrieved from local storage:", token);
         if (!id || !token) {
           throw new Error("User ID or token not found");
         }
@@ -62,7 +57,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
         }
 
         const data = await response.json();
-        console.log("User data:", data);
         setUserData(data);
       } catch (error) {
         console.error("Fetch user data error:", error);
@@ -70,15 +64,20 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
     };
 
     fetchUserData();
-  }, [isAuthenticated, localStorageUpdated]);
+  }, [isAuthenticated]);
 
   const handleDropdownToggle = () => {
     setIsDropdownVisible(!isDropdownVisible);
   };
+
   const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsDropdownVisible(false);
     }
+  };
+
+  const handleLinkClick = () => {
+    setIsDropdownVisible(false);
   };
 
   useEffect(() => {
@@ -89,12 +88,8 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
   }, []);
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      const token = localStorage.getItem("token") || ""; // Använd en tom sträng som standardvärde
-      setLocalStorageUpdated(token);
-    };
-    handleStorageChange();
-}, []);
+    setIsDropdownVisible(false);
+  }, [isAuthenticated]);
 
   const handleChange = () => {
     navigate("/login");
@@ -157,7 +152,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                   >
                     <Link
                       to={"/"}
-                      onClick={onLogout}
+                      onClick={logout}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -169,6 +164,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/userProfile"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -180,6 +176,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/createEvent"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -191,6 +188,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/eventInfo"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -202,6 +200,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/map"}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
