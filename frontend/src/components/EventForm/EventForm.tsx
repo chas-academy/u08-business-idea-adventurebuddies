@@ -31,7 +31,8 @@ const EventForm = () => {
     experience: "",
     totalParticipant: 0,
     message: "",
-    start_time: "",
+    start_time: Date(),
+    // start_time: "",
 
     // end_time: new Date(),
   });
@@ -53,18 +54,18 @@ const EventForm = () => {
     if (name === "start_time") {
       console.log(name, Math.floor(new Date(value).getTime() / 1000));
       const unixTimestamp = Math.floor(new Date(value).getTime() / 1000);
-      console.log("Detta är unix", unixTimestamp);
+      // console.log("Detta är unix", unixTimestamp);
       console.log(
         "covertiing unix back to date ",
         new Date(Math.floor(new Date(value).getTime() / 1000) * 1000)
       );
       console.log(value);
 
-      // Uppdatera formData med Unix-tidstämpeln
-      setFormData({
-        ...formData,
-        [name]: unixTimestamp.toString(),
-      });
+      // // Uppdatera formData med Unix-tidstämpeln
+      // setFormData({
+      //   ...formData,
+      //   [name]: unixTimestamp.toString(),
+      // });
     } else {
       setFormData({
         ...formData,

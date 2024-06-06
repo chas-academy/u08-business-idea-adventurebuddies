@@ -1,6 +1,6 @@
-import React from 'react';
-import { IEvent } from '../../../../backend/src/interfaces/IEvent';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
   faCalendarDays,
@@ -14,64 +14,91 @@ import {
   // faBaseballBatBall,
   // faBowlingBall,
   faGolfBallTee,
-} from '@fortawesome/free-solid-svg-icons';
-import { faFutbol } from '@fortawesome/free-regular-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
+import { faFutbol } from "@fortawesome/free-regular-svg-icons";
 
 interface EventListItemProps {
   event: IEvent;
+  isAuthenticated: boolean;
 }
 
-const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
+const EventListItem: React.FC<EventListItemProps> = ({
+  event,
+  isAuthenticated,
+}) => {
   const getActivityIcon = () => {
     switch (event.activity) {
-      case 'Brännboll':
-        return <FontAwesomeIcon style={{ color: '#41B082' }} size="2xl" icon={faFutbol} />;
-      case 'Volleyboll':
-        return <FontAwesomeIcon style={{ color: '#41B082' }} size="2xl" icon={faVolleyball} />;
-      case 'Golf':
-        return <FontAwesomeIcon style={{ color: '#41B082' }} size="2xl" icon={faGolfBallTee} />;
+      case "Brännboll":
+        return (
+          <FontAwesomeIcon
+            style={{ color: "#41B082" }}
+            size="2xl"
+            icon={faFutbol}
+          />
+        );
+      case "Volleyboll":
+        return (
+          <FontAwesomeIcon
+            style={{ color: "#41B082" }}
+            size="2xl"
+            icon={faVolleyball}
+          />
+        );
+      case "Golf":
+        return (
+          <FontAwesomeIcon
+            style={{ color: "#41B082" }}
+            size="2xl"
+            icon={faGolfBallTee}
+          />
+        );
       default:
         return null;
     }
   };
 
-  const formattedDate = new Intl.DateTimeFormat('sv-SV', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
+  const formattedDate = new Intl.DateTimeFormat("sv-SV", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
   }).format(new Date(event.start_time.toString()));
 
-  const formattedTime = new Intl.DateTimeFormat('sv-SV', {
-    hour: 'numeric',
-    minute: 'numeric',
+  const formattedTime = new Intl.DateTimeFormat("sv-SV", {
+    hour: "numeric",
+    minute: "numeric",
   }).format(new Date(event.start_time.toString()));
 
   return (
     <div className="flex flex-row justify-between px-5 h-20 min-w-72 max-w-80 m-1.5 border border-borderShade rounded-full shadow-custom">
-    <div className="flex flex-row items-center">
-      {getActivityIcon()}
-      <div className="text-start pl-3">
-        <h2>{event.activity}</h2>
-        <p className="text-textGray">{event.participantsMax} deltagare</p>
+      <div className="flex flex-row items-center">
+        {getActivityIcon()}
+        <div className="text-start pl-3">
+          <h2>{event.activity}</h2>
+          <p className="text-textGray">{event.participantsMax} deltagare</p>
+        </div>
+      </div>
+      <div className="flex flex-col justify-center text-xs leading-relaxed">
+        <div className="flex flex-row items-center">
+          <FontAwesomeIcon icon={faLocationDot} />
+          <p className="pl-2">{event.location}</p>
+        </div>
+
+        {isAuthenticated && (
+          <>
+            <div className="flex flex-row items-center">
+              <FontAwesomeIcon icon={faCalendarDays} />
+              <p className="pl-2">{formattedDate}</p>
+            </div>
+            <div className="flex flex-row items-center">
+              <FontAwesomeIcon icon={faClock} />
+              <p className="pl-2">{formattedTime}</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
-    <div className="flex flex-col justify-center text-xs leading-relaxed">
-      <div className="flex flex-row items-center">
-        <FontAwesomeIcon icon={faLocationDot} />
-        <p className="pl-2">{event.location}</p>
-      </div>
-      <div className="flex flex-row items-center">
-        <FontAwesomeIcon icon={faCalendarDays} />
-        <p className="pl-2">{formattedDate}</p>
-      </div>
-      <div className="flex flex-row items-center">
-        <FontAwesomeIcon icon={faClock} />
-        <p className="pl-2">{formattedTime}</p>
-      </div>
-    </div>
-  </div>
-  )
-}
+  );
+};
 
 export default EventListItem;
 
