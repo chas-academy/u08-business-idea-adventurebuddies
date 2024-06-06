@@ -119,7 +119,7 @@ efter detta så kommer sendDataBackend att köras på grund av att formData.lat 
 
 ---
 
-LoginPage:
+<u>LoginPage:</u>
 
 Denna komponent hanterar inloggningen genom att samla användarens inmatning --> skicka den till en server --> och om inloggningen är lyckad, navigeras användaren till sin profil.
 
@@ -145,3 +145,19 @@ I `LogoinForm` komponenten har vi även funktioner som
 Funktionen `handleSubmit` hanterar formulärets inmatning genom att skicka inloggningsuppgifterna till servern via en POST-förfrågan och behandlar svaren för att logga in samt navigera användaren till sin profil.
 
 I returen framgår komponentens UI, det vill säga User Interface, vilket är själva formuläret som användaren ser framför sig. Den är för oss utvecklare, kopplad till en databas som tar in informationen från användaren.
+
+---
+
+<u>RegisterForm: </u>
+
+Som föregående formulär tar även denna in olika data från användaren för registrering.
+
+I komponenten `RegisterPage` har vi även här en `formData` och `setFormData` som hanterar tillståndet för all data som innehåller användaren registreringsuppgifter.
+
+Funktionerna som framgår här är bland annat `handleInputChange` (uppdaterar `formData` när använder ger oss ett värde i textfälten), `handleSelectChange` (uppdaterar `formData` när användaren väljer ett visst värde i vår dropdown-meny).
+
+Funktionen som hanterar formurlärets insändning av data är `handleSubmit` som också skickar allt, likt `LoginForm`, uppgifterna till servern via POST-förfrågan och behandlar svaren för att indikera om registreringen lyckades eller inte.
+
+I vår retur, som blir användarens UI, har vi ett formulär som tar in data som `namn`, `användarnamn`, `email`, `lösenord`, `födelsedatum`, `kön` och `telefonnummer`. Knappen till formuläret triggar igång funktionen `handleSubmit`.
+
+När detta är klart har vi en fullt registrerad användare i vår databas som är redo att logga in och skapa sina egna event samt få tillgång till sin profilsida.
