@@ -14,9 +14,10 @@ const HomePage = () => {
   const [query, setQuery] = useState<IEvent[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<IEvent[]>([]);
   const [isMobile, setIsMobile] = useState(false);
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [ activeTabIndex,setActiveTabIndex] = useState(0);
   const { isAuthenticated } = useAuth();
-
+console.log(activeTabIndex);
+console.log(query);
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -98,9 +99,23 @@ const HomePage = () => {
       {isMobile && (
         <TabsProvider>
           <Tabs>
+            
             <Tab
+            
               tabLabel="Upcoming Events"
               index={0}
+              setActiveTabIndex={setActiveTabIndex}
+            > 
+              <EventList
+                events={events}
+                filteredEvents={filteredEvents}
+                isAuthenticated={isAuthenticated}
+              />
+           </Tab>
+            <Tab
+            
+              tabLabel="Upcoming Events"
+              index={1}
               setActiveTabIndex={setActiveTabIndex}
             >
               <EventList

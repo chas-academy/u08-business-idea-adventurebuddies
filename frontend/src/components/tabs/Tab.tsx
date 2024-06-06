@@ -2,19 +2,19 @@ import { useTabs } from "./TabsContext";
 import "./Tabs.css";
 import React, {
   Dispatch,
-  // ReactNode,
+  ReactNode,
   SetStateAction,
 } from "react";
 
 interface TabProps {
-  // children: ReactNode;
+  children: ReactNode;
   tabLabel: string;
   index: number;
   setActiveTabIndex: Dispatch<SetStateAction<number>>;
 }
 
 const Tab: React.FC<TabProps> = ({
-  // children,
+  
   tabLabel,
   index,
 }) => {
