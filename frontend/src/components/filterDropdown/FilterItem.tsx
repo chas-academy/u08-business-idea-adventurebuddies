@@ -1,8 +1,9 @@
 import * as React from "react";
 import Input from "../input/Input";
+import { Experience, Gender, Language, Price, Venue } from "../../utils/enums";
 
 interface FilterItemProps {
-  type: "venue" | "gender" | "language" | "price" | "experience";
+  type: Venue | Gender | Language | Price | Experience;
   selectedValues: string;
   onSelect: (value: string) => void;
   options: string[];
