@@ -3,7 +3,6 @@ import Navbar from "./navbar/Navbar";
 
 interface HeaderProps {
   isAuthenticated: boolean;
-  // email: string;
   logout: () => void;
 }
 
