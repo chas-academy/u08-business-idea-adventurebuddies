@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { IEvent } from "../../../../backend/src/interfaces/IEvent";
 import Button from "../../components/button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faClock,
   faLocationArrow,
@@ -12,18 +13,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Maps2 from "../map/Maps2";
 
+
+
+
 const EventInfoPage: React.FC = () => {
   const [data, setData] = useState<IEvent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | Error>(null);
   const userId = localStorage.getItem("id");
   const userToken = localStorage.getItem("token");
-  const EVENT_ID = "6658ad0bef0ddbeb30deab11";
+  
+  const EVENT_ID = "6661aea1e5a1729c92669550";
   const API_URL = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${EVENT_ID}`;
 
   const API_URL_ATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/attend/${EVENT_ID}`;
 
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  let dateObject: Date;
+  const [formattedDate, setFormattedDate] = useState('');
+  const [formattedTime, setFormattedTime] = useState('');
 
   useEffect(() => {
     const getBackend = async () => {
@@ -35,7 +43,25 @@ const EventInfoPage: React.FC = () => {
           const data = await response.json();
 
           setData(data as IEvent);
+          if (data) {
+            dateObject =  new Date(Math.floor(new Date(data.start_time).getTime() / 1000) * 1000)
+console.log(data.profileImageUrl)
+            const formattedDate = dateObject.toLocaleDateString("sv-SE", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            });
 
+            const formattedTime = dateObject.toLocaleTimeString("sv-SE", {
+              hour: "numeric",
+              minute: "numeric",
+            });
+
+            setFormattedDate(formattedDate);
+            setFormattedTime(formattedTime);
+          }
         } else {
           const text = await response.text();
           console.error("Server returned non-JSON response:", text);
@@ -92,28 +118,17 @@ const EventInfoPage: React.FC = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const formatedDate = new Date(data.start_time).toLocaleString("sv-SV", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  });
-  const formatedTime = new Date(data.start_time).toLocaleString("sv-SV", {
-    hour: "numeric",
-    minute: "numeric",
-  });
+  
 
-  const handleSaveEvent = () => {
-    console.log("Button clicked!");
-  };
 
-  console.log(formatedDate);
+  
+
+const handleSaveEvent= ( )=> {console.log("tjo")} 
 
   return (
     <div className="">
       <div className="font-bold text-5xl py-10 md:none">
-        {data.activity} {data.location}
+        {data?.activity} {data?.location}
       </div>
 
       <div className="lg:grid lg:grid-cols-2 ">
@@ -135,7 +150,7 @@ const EventInfoPage: React.FC = () => {
 
                 <div className="flex  space-x-1 py-3">
                   <h2 className="font-bold">Tid och datum:</h2>
-                  <p>{formatedDate}</p>
+                  <p>{formattedDate}</p>
                 </div>
                 <div className="flex space-x-1 py-3">
                   <h2 className="font-bold">Utrustning:</h2>
@@ -175,7 +190,11 @@ const EventInfoPage: React.FC = () => {
                 <p className="font-semibold underline text-nowrap">
                   {data.userName}
                 </p>
-                <img className="h-10 w-10  rounded-full border-4 bg-halfDarkpurple  "></img>
+                <img
+              className=" w-[80px] h-[80px] l xl:w-[100px] xl:h-[100px]"
+              src={data.profileImageUrl}
+              alt="Profile"
+            />
               </div>
             </div>
 
@@ -184,7 +203,7 @@ const EventInfoPage: React.FC = () => {
                 <div className="flex space-x-1 py-3 ">
                   <FontAwesomeIcon size="xl" icon={faClock} />
                   <h2 className="font-bold ">Start:</h2>
-                  <p>{formatedTime}</p>
+                  <p>{formattedTime}</p>
                 </div>
 
                 <div className="flex justify-end space-x-1 py-3 ">

@@ -26,7 +26,7 @@ export interface IEvent {
 
   userName?: string;
   userEmail?: string;
-
+  profileImageUrl?: string;
   location: string;
   equipment: string;
   age: string;

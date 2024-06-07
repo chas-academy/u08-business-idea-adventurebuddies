@@ -28,7 +28,7 @@ const FriendList = () => {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("id");
-
+  console.log(activeTabIndex); //låt stå annars ERROOOOORR
   const fetchFriends = async () => {
     try {
       if (!userId || !token) {
