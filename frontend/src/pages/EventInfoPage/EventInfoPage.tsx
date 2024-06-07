@@ -23,7 +23,9 @@ const EventInfoPage: React.FC = () => {
   const userId = localStorage.getItem("id");
   const userToken = localStorage.getItem("token");
   
-  const EVENT_ID = "6661aea1e5a1729c92669550";
+  const EVENT_ID = "6662e1313abf0dbbff7a022c";
+
+  
   const API_URL = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${EVENT_ID}`;
 
   const API_URL_ATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/attend/${EVENT_ID}`;
@@ -44,8 +46,8 @@ const EventInfoPage: React.FC = () => {
 
           setData(data as IEvent);
           if (data) {
-            dateObject =  new Date(Math.floor(new Date(data.start_time).getTime() / 1000) * 1000)
-console.log(data.profileImageUrl)
+            dateObject =  new Date(Math.floor(new Date(data.start_time).getTime() ) * 1000)
+
             const formattedDate = dateObject.toLocaleDateString("sv-SE", {
               month: "short",
               day: "2-digit",
