@@ -26,7 +26,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
   event,
   isAuthenticated,
 }) => {
-  const dateObject = new Date(event.start_time.toString());
+  const dateObject = new Date(Math.floor(new Date(event.start_time).getTime()) * 1000);
 
   const getActivityIcon = () => {
     switch (event.activity) {
