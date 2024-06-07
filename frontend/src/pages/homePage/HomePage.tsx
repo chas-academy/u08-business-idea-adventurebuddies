@@ -2,12 +2,13 @@ import FilterDropdown from "../../components/filterDropdown/FilterDropdown";
 import MapPage from "../map/MapPage";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../map/SearchBar";
-import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+
 import EventList from "../../components/eventContent/EventList";
 import { TabsProvider } from "../../components/tabs/TabsContext";
 import Tabs from "../../components/tabs/Tabs";
 import Tab from "../../components/tabs/Tab";
 import { useAuth } from "../../components/header/navbar/AuthContext";
+import { IEvent } from "../../utils/IEvents";
 
 const HomePage = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
