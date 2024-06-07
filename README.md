@@ -16,7 +16,7 @@ The idea for this business came when one of our colleagues was eager to play Br√
 
 <i>"EUREKA! I FOUND IT!"</i>
 
-In all the morninghaste, he showed up with the biggest enthusiasm in his eyes to our first daily standup meeting. <i>"Hey guys, you gotta listen to this. This is going to be huge!"</i>
+In all the morning haste, he showed up with the biggest enthusiasm in his eyes to our first daily standup meeting. <i>"Hey guys, you gotta listen to this. This is going to be huge!"</i>
 
 Having all of our attention, he outbursts the sadness and joy he felt during that rainy day in G√§rdet. The desperation and longing in his voice echoes in our office and he goes, determined: <i>"I believe in this". </i>
 
@@ -28,7 +28,7 @@ The foundation of this application is an eventplanner. Where you can create your
 
 ## Additional references for the project
 
-- GoogleDrive folder containing planning, cost estimate sheet, Figma, FigJam, Trelloboard etc. will be sent separetly to examinator.
+- GoogleDrive folder containing planning: cost estimate sheet, preparation for personas, groupcontract and setup for backend, including links to: Figma, FigJam, Trelloboard, will be sent separately to examinator.
 
 ## Deployment
 
