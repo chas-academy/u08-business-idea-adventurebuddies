@@ -20,8 +20,8 @@ export interface IEvent {
   activity: string;
   user_id: ObjectId;
 
-  // start_time: Number;
-  start_time: Date;
+  start_time: number;
+  // start_time: Date;
   // end_time: Date;
 
   userName?: string;
