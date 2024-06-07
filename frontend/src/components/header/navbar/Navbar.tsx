@@ -66,34 +66,31 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
     fetchUserData();
   }, [isAuthenticated]);
 
-  const handleDropdownToggle = () => {
-    setIsDropdownVisible(!isDropdownVisible);
+  const handleLogin = () => {
+    navigate("/login");
   };
 
-  const handleClickOutside = (event: any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsDropdownVisible(false);
-    }
-  };
-
-  const handleLinkClick = () => {
-    setIsDropdownVisible(false);
-  };
-
+  {/* Dropdown */}
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownVisible(false);
+      }
+    };
+  
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+  
   useEffect(() => {
     setIsDropdownVisible(false);
   }, [isAuthenticated]);
+  
+  const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
+  const closeDropdown = () => setIsDropdownVisible(false);
 
-  const handleChange = () => {
-    navigate("/login");
-  };
   return (
     <>
       <nav className="font-poppins m-10 xl:m-0 xl:my-10  h-[100px]">
@@ -135,7 +132,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                   type="button"
                   size="small"
                   variant="secondary"
-                  onClick={handleDropdownToggle}
+                  onClick={toggleDropdown}
                 >
                   {userData.userName}
                 </Button>
@@ -164,7 +161,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/userProfile"}
-                      onClick={handleLinkClick}
+                      onClick={closeDropdown}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -176,7 +173,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/createEvent"}
-                      onClick={handleLinkClick}
+                      onClick={closeDropdown}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -188,7 +185,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/eventInfo"}
-                      onClick={handleLinkClick}
+                      onClick={closeDropdown}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -200,7 +197,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     </Link>
                     <Link
                       to={"/map"}
-                      onClick={handleLinkClick}
+                      onClick={closeDropdown}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -219,7 +216,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                 type="button"
                 size="small"
                 variant="secondary"
-                onClick={handleChange}
+                onClick={handleLogin}
               >
                 Login
               </Button>
@@ -227,6 +224,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
           </div>
         </div>
 
+        {/* Mobil Navbar, är längst ned på sidan och gömd på större skärmar */}
         <div className="py-6 sm:hidden fixed bottom-0 left-0 w-full bg-textColor z-10">
           <ul className="grid grid-cols-5">
             <li className="px-6">
