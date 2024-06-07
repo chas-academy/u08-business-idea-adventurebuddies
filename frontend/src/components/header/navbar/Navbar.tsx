@@ -6,20 +6,90 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyin
 import { faHouseChimneyWindow } from "@fortawesome/free-solid-svg-icons";
 import { faMap } from "@fortawesome/free-regular-svg-icons/faMap";
 import { faUserLarge } from "@fortawesome/free-solid-svg-icons/faUserLarge";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { UserPage } from "../../../pages/UserProfilePage/UserProfilePage.interface";
 
 interface NavbarProps {
   isAuthenticated: boolean;
-  email: string;
-  onLogout: () => void;
+  logout: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({
-  isAuthenticated,
-  email,
-  onLogout,
-}) => {
-  const navigate = useNavigate();
+const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const navigate = useNavigate(); 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [userData, setUserData] = useState<UserPage>({
+    userName: "",
+    description: "",
+    profileImageUrl: "",
+    name: "",
+    email: "",
+    gender: "",
+    phoneNumber: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const fetchUserData = async () => {
+      try {
+        const id = localStorage.getItem("id");
+        const token = localStorage.getItem("token");
+        if (!id || !token) {
+          throw new Error("User ID or token not found");
+        }
+
+        // Fetch user data using stored userId
+        const response = await fetch(
+          `https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error("Fetch user data error:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [isAuthenticated]);
+
+  const handleDropdownToggle = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleClickOutside = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsDropdownVisible(false);
+    }
+  };
+
+  const handleLinkClick = () => {
+    setIsDropdownVisible(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsDropdownVisible(false);
+  }, [isAuthenticated]);
 
   const handleChange = () => {
     navigate("/login");
@@ -60,15 +130,89 @@ const Navbar: React.FC<NavbarProps> = ({
               </Link>
             </button>
             {isAuthenticated ? (
-              <div>
+              <div style={{ position: "relative" }} ref={dropdownRef}>
                 <Button
                   type="button"
                   size="small"
                   variant="secondary"
-                  onClick={onLogout}
+                  onClick={handleDropdownToggle}
                 >
-                  {email}
+                  {userData.userName}
                 </Button>
+                {isDropdownVisible && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      backgroundColor: "white",
+                      border: "1px solid #ccc",
+                      zIndex: 1000,
+                    }}
+                  >
+                    <Link
+                      to={"/"}
+                      onClick={logout}
+                      style={{
+                        display: "block",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                      }}
+                    >
+                      Logga ut
+                    </Link>
+                    <Link
+                      to={"/userProfile"}
+                      onClick={handleLinkClick}
+                      style={{
+                        display: "block",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                      }}
+                    >
+                      Profil
+                    </Link>
+                    <Link
+                      to={"/createEvent"}
+                      onClick={handleLinkClick}
+                      style={{
+                        display: "block",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                      }}
+                    >
+                      Skapa event
+                    </Link>
+                    <Link
+                      to={"/eventInfo"}
+                      onClick={handleLinkClick}
+                      style={{
+                        display: "block",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                      }}
+                    >
+                      Event Info
+                    </Link>
+                    <Link
+                      to={"/map"}
+                      onClick={handleLinkClick}
+                      style={{
+                        display: "block",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                      }}
+                    >
+                      Map
+                    </Link>
+                    
+                  </div>
+                )}
               </div>
             ) : (
               <Button
@@ -86,7 +230,7 @@ const Navbar: React.FC<NavbarProps> = ({
         <div className="py-6 sm:hidden fixed bottom-0 left-0 w-full bg-textColor z-10">
           <ul className="grid grid-cols-5">
             <li className="px-6">
-            <Link to="/">
+              <Link to="/">
                 <FontAwesomeIcon
                   icon={faHouseChimneyWindow}
                   style={{ color: "#1E0707" }}
@@ -94,7 +238,7 @@ const Navbar: React.FC<NavbarProps> = ({
               </Link>
             </li>
             <li className="px-6">
-            <Link to="/map">
+              <Link to="/map">
                 <FontAwesomeIcon icon={faMap} style={{ color: "#1e0707" }} />
               </Link>
             </li>

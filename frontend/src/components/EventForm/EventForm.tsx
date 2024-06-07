@@ -31,7 +31,8 @@ const EventForm = () => {
     experience: "",
     totalParticipant: 0,
     message: "",
-    start_time: Date(),
+    // start_time: Date(),
+    start_time: "",
 
     // end_time: new Date(),
   });
@@ -42,6 +43,7 @@ const EventForm = () => {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
+    // console.log("start_time");
     const { name, value } = e.target;
 
     if (value === "Ja") {
@@ -51,11 +53,19 @@ const EventForm = () => {
     }
     if (name === "start_time") {
       console.log(name, Math.floor(new Date(value).getTime() / 1000));
+      const unixTimestamp = Math.floor(new Date(value).getTime() / 1000);
+      // console.log("Detta är unix", unixTimestamp);
       console.log(
         "covertiing unix back to date ",
         new Date(Math.floor(new Date(value).getTime() / 1000) * 1000)
       );
       console.log(value);
+
+      // Uppdatera formData med Unix-tidstämpeln
+      setFormData({
+        ...formData,
+        [name]: unixTimestamp.toString(),
+      });
     } else {
       setFormData({
         ...formData,
@@ -122,7 +132,7 @@ const EventForm = () => {
           if (!response.ok) {
             throw new Error("Failed");
           }
-          navigate("/eventInfo");
+          navigate("/");
           // Om responsen är OK, fortsätt med lämplig hantering
         } catch (error) {
           console.error("Error sending data to backend: ", error);
@@ -182,6 +192,9 @@ const EventForm = () => {
               max="30"
               onChange={handleChange}
             />
+            <div>
+              <p className="flex flex-start pl-4">Har Utrustning?</p>
+            </div>
 
             <div className="flex flex-row overflow-hidden">
               <div className="place-self-start w-1/3">

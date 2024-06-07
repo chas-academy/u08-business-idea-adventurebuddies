@@ -10,6 +10,7 @@ import {
   getUserEvents,
   deleteOwnAccount,
   getFriends,
+  searchUsers,
 } from "../controllers/usercontroller";
 import { IUser } from "../interfaces/IUser";
 import { auth, admin, CustomRequest } from "../middleware/auth";
@@ -85,6 +86,10 @@ userRouter.post("/logoutall", auth, async (req: CustomRequest, res) => {
   });
 });
 
+userRouter.get("/search", auth, async (req, res) => {
+  await searchUsers(req, res);
+});
+
 userRouter.get("/:id/events", auth, getUserEvents);
 
 userRouter.get("/:id", auth, async (req, res) => {
@@ -93,30 +98,29 @@ userRouter.get("/:id", auth, async (req, res) => {
   res.status(200).json(user);
 });
 
-userRouter.get("/", auth, admin, async (req, res) => {
+userRouter.get("/", auth, async (req, res) => {
   const users = await getAllUsers();
   res.status(200).json(users);
 });
 
 userRouter.put("/:id", auth, async (req, res) => {
-    try {
-      const id = req.params.id;
-      let userData = req.body;
+  try {
+    const id = req.params.id;
+    let userData = req.body;
 
-      // Kollar om det finns en uppladad fil (vi använder multer för filuppladningar)
-      if (req.file) {
-        userData.profileImageUrl = req.file.filename; // Tilldela sökvägen till profileImageUrl
-      }
-
-      const updatedUser = await updateUser(id, userData);
-
-      res.status(200).json({ message: "Update succeeded", updatedUser });
-    } catch (error) {
-      console.error("Error updating user:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    // Kollar om det finns en uppladad fil (vi använder multer för filuppladningar)
+    if (req.file) {
+      userData.profileImageUrl = req.file.filename; // Tilldela sökvägen till profileImageUrl
     }
+
+    const updatedUser = await updateUser(id, userData);
+
+    res.status(200).json({ message: "Update succeeded", updatedUser });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-);
+});
 
 userRouter.delete("/me", auth, deleteOwnAccount);
 
