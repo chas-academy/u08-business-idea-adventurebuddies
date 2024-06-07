@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { IEvent } from "../../../../backend/src/interfaces/IEvent";
 import Button from "../../components/button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLocation } from "react-router-dom";
 
 import {
   faClock,
@@ -22,19 +23,22 @@ const EventInfoPage: React.FC = () => {
   const [error, setError] = useState<null | Error>(null);
   const userId = localStorage.getItem("id");
   const userToken = localStorage.getItem("token");
-  
-  const EVENT_ID = "6662e1313abf0dbbff7a022c";
 
+  // hämta eventId state och value från EventListItem. 
+  const location = useLocation();
+  let EVENT_ID = location.state.eventId;
   
   const API_URL = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${EVENT_ID}`;
 
   const API_URL_ATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/attend/${EVENT_ID}`;
+  const API_URL_UNATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/unattend/${EVENT_ID}`;
 
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const [isAttending, setIsAttending] = useState(false);
+
   let dateObject: Date;
   const [formattedDate, setFormattedDate] = useState('');
   const [formattedTime, setFormattedTime] = useState('');
-
   useEffect(() => {
     const getBackend = async () => {
       try {
@@ -78,10 +82,11 @@ const EventInfoPage: React.FC = () => {
     };
 
     getBackend();
-  }, [API_URL]);
+  }, [API_URL, isAttending]);
 
   const handleAttendEvent = async () => {
     if (!isAuthenticated) {
+      
       console.error("User is not authenticated");
 
       return;
@@ -102,6 +107,43 @@ const EventInfoPage: React.FC = () => {
 
       if (response.ok) {
         console.log("Attending event successful!");
+
+        setIsAttending(true)
+        
+      } else {
+        console.error("Failed to attend event:", response.statusText);
+       
+      }
+    } catch (error) {
+      console.error("An error occurred while attending event:", error);
+    }
+  };
+
+  const handleUnAttendEvent = async () => {
+    if (!isAuthenticated) {
+      
+      console.error("User is not authenticated");
+
+      return;
+    }
+
+    try {
+      const response = await fetch(API_URL_UNATTEND, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({
+          eventId: EVENT_ID,
+          userId: userId,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Attending event successful!");
+
+        setIsAttending(false)
         
       } else {
         console.error("Failed to attend event:", response.statusText);
@@ -120,17 +162,12 @@ const EventInfoPage: React.FC = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  
-
-
-  
-
 const handleSaveEvent= ( )=> {console.log("tjo")} 
 
   return (
     <div className="">
       <div className="font-bold text-5xl py-10 md:none">
-        {data?.activity} {data?.location}
+        {data?.activity} {data?.location && data.location.charAt(0).toUpperCase() + data.location.slice(1)}
       </div>
 
       <div className="lg:grid lg:grid-cols-2 ">
@@ -146,7 +183,7 @@ const handleSaveEvent= ( )=> {console.log("tjo")}
                 <div className="flex space-x-1 py-3">
                   <h2 className="font-bold">Plats:</h2>
                   <p>
-                    {data.location}, {data.venue}
+                    {data.location && data.location.charAt(0).toUpperCase() + data.location.slice(1)}, {data.venue}
                   </p>
                 </div>
 
@@ -177,6 +214,10 @@ const handleSaveEvent= ( )=> {console.log("tjo")}
                 <div className="flex space-x-1 py-3">
                   <h2 className="font-bold">Nivå:</h2>
                   <p>{data.experience}</p>
+                </div>
+                <div className="flex space-x-1 py-3">
+                  <h2 className="font-bold">Pris:</h2>
+                  <p>{data.price}</p>
                 </div>
                 <div className="flex space-x-1 py-3">
                   <h2 className="font-bold">Info:</h2>
@@ -211,7 +252,7 @@ const handleSaveEvent= ( )=> {console.log("tjo")}
                 <div className="flex justify-end space-x-1 py-3 ">
                   <FontAwesomeIcon size="xl" icon={faLocationArrow} />
                   <h2 className="font-bold ">Plats:</h2>
-                  <p>{data.location}</p>
+                  <p>{data.location.charAt(0).toUpperCase() + data.location.slice(1)}</p>
                 </div>
               </div>
 
@@ -229,7 +270,7 @@ const handleSaveEvent= ( )=> {console.log("tjo")}
             </div>
 
             <div className=" flex-wrap flex justify-center gap-2">
-              <Button
+              {/* <Button
                 type="button"
                 variant="secondary"
                 onClick={handleSaveEvent}
@@ -237,15 +278,17 @@ const handleSaveEvent= ( )=> {console.log("tjo")}
                 size="small"
               >
                 Spara Event
-              </Button>
+              </Button> */}
               <Button
                 type="button"
-                variant="primary"
-                onClick={handleAttendEvent}
-                icon="faCirclePlus"
-                size="small"
+                variant={`${isAttending ? 'danger' : 'primary'}`}
+                onClick={() => `${isAttending ? handleUnAttendEvent() : handleAttendEvent()}`}
+                icon={`${isAttending ? 'faCircleMinus' : 'faCirclePlus'}`}
+                
+
+             
               >
-                Kommer
+                {`${isAttending ? 'Delta inte' : 'Delta'}`}
               </Button>
             </div>
           </div>

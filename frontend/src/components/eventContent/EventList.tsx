@@ -4,7 +4,7 @@ import React from "react";
 
 interface EventListProps {
   events: IEvent[];
-  filteredEvents: IEvent[];
+  filteredEvents?: IEvent[];
   isAuthenticated: boolean;
 }
 
@@ -24,6 +24,7 @@ const EventList: React.FC<EventListProps> = ({
             <EventListItem
               key={index}
               event={event}
+              eventId={event._id}
               isAuthenticated={isAuthenticated}
             />
           ))
@@ -31,6 +32,7 @@ const EventList: React.FC<EventListProps> = ({
             <EventListItem
               key={index}
               event={event}
+              eventId={event._id}
               isAuthenticated={isAuthenticated}
             />
           ))}

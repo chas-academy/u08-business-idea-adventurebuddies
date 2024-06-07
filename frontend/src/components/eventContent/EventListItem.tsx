@@ -16,16 +16,21 @@ import {
   faGolfBallTee,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFutbol } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router-dom";
+
 
 interface EventListItemProps {
   event: IEvent;
+  eventId: Object;
   isAuthenticated: boolean;
 }
 
 const EventListItem: React.FC<EventListItemProps> = ({
   event,
+  eventId,
   isAuthenticated,
 }) => {
+  const navigate = useNavigate();
   const dateObject = new Date(Math.floor(new Date(event.start_time).getTime()) * 1000);
 
   const getActivityIcon = () => {
@@ -70,8 +75,17 @@ const EventListItem: React.FC<EventListItemProps> = ({
     minute: "numeric",
   });
 
+  const handleEventItemClick = (eventId: string) => {
+    console.log(eventId);
+    navigate("/eventInfo", { 
+      state: {
+        eventId: eventId,
+      }
+    });
+  }
+
   return (
-    <div className="flex flex-row justify-between px-5 h-20 min-w-72 max-w-80 m-1.5 border border-borderShade rounded-full shadow-custom">
+    <div id={eventId.toString()} onClick={() => handleEventItemClick(eventId.toString())} className="flex flex-row justify-between px-5 h-20 min-w-72 max-w-80 m-1.5 border border-borderShade rounded-full shadow-custom">
       <div className="flex flex-row items-center">
         {getActivityIcon()}
         <div className="text-start pl-3">
