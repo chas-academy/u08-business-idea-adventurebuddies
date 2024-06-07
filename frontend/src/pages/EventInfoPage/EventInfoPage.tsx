@@ -162,7 +162,7 @@ const EventInfoPage: React.FC = () => {
     return <div>Error: {error.message}</div>;
   }
 
-const handleSaveEvent= ( )=> {console.log("tjo")} 
+
 
   return (
     <div className="">
