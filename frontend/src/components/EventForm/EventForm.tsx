@@ -31,8 +31,8 @@ const EventForm = () => {
     experience: "",
     totalParticipant: 0,
     message: "",
-    start_time: Date(),
-    // start_time: "",
+    // start_time: Date(),
+    start_time: "",
 
     // end_time: new Date(),
   });
@@ -61,11 +61,11 @@ const EventForm = () => {
       );
       console.log(value);
 
-      // // Uppdatera formData med Unix-tidstämpeln
-      // setFormData({
-      //   ...formData,
-      //   [name]: unixTimestamp.toString(),
-      // });
+      // Uppdatera formData med Unix-tidstämpeln
+      setFormData({
+        ...formData,
+        [name]: unixTimestamp.toString(),
+      });
     } else {
       setFormData({
         ...formData,
