@@ -132,7 +132,7 @@ const EventForm = () => {
           if (!response.ok) {
             throw new Error("Failed");
           }
-          navigate("/eventInfo");
+          navigate("/");
           // Om responsen är OK, fortsätt med lämplig hantering
         } catch (error) {
           console.error("Error sending data to backend: ", error);
