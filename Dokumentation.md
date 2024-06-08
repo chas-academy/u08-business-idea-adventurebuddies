@@ -164,6 +164,263 @@ När detta är klart har vi en fullt registrerad användare i vår databas som �
 
 ---
 
+### userEvents
+
+This is a component that manages the display of events related to the user. It fetches the events from our server in the backend and display in two tabs, `Upcoming Events`and `Mina Events`.
+
+In this component we imported `React`, `useState`, and `useEffect` from the React library and we use it to build the user interface. Moreover, `Tab`, `Tabs` and `TabsProvider` are components imported from the tabs folder for handeling the tabbed interfaces.
+
+Our `Event` interface describes the shape of event object and looks as follows:
+
+![user event interface](./frontend/DokumentationBilder/UserEvents/UserEventInterface.png)
+
+Next is our `UserEvents` function where we declare several state variables. The variables ar as following:
+
+`
+const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [attendingEvents, setAttendingEvents] = useState<Event[]>([]);
+`
+The first variable handels the state of whichever tab is active. The following three handels the state of different types of events.
+
+Next we declare the `useEffect` hook and we use it to fetch events when the component is mounted or when the active tab changes. Inside the useEffect hook we have a `fetchEvents` function that is used to retrive the user's event from the server (our backend deployed in render).
+
+![hadel response](./frontend/DokumentationBilder/UserEvents/handelResUserEvent.png)
+
+It checks for token in local storage and get the user ID from it and it handels as the response we get from our server and filter the events which are either attending or created in the response into upcoming and created events.
+
+The `TabsProvider` component imported from tabs folder wraps the `Tabs` which contains the two `Tab` components we are using. We can add tabs as required.
+
+The component is then imported and rendered in the UserProfile Page.
+
+---
+
+### friendsList
+
+Here in this component we manage and display the list of friends a user has, incoming friend requests, search friends functionalty and send friendship request option. The fetch is made like the user events from the server side (our backend) and the tabs used for display are `Search Users`, `Friend Requests` and `Friends`.
+
+The imports are similar to the user event component. And our User interface that we declared here is describing the shape of user related data from our userinterface in our backend as well as friend interface.
+
+```
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  status: string;
+  requester: {
+    _id: string;
+    userName: string;
+  };
+  recipient: {
+    _id: string;
+    name: string;
+  };
+}
+```
+
+We declared next our FriendList function and it has several state variables. The variabels are as follows:
+
+```
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [friends, setFriends] = useState<User[]>([]);
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [incomingRequests, setIncomingRequests] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+```
+
+By now we know what the activeTabIndex states handels, But the other five variables handels different states and user related data. One of the functions we have declared under our `fetchFriends` function is `handleFriendRequest` function. This function is a very crucial one as it is responsible for handling several actions related to the friend requests. Different requests like sending, accepting, rejecting and removing friends.
+
+The function takes in two parameters, `friendId` and `action`. How the function works is that it checks if the token exist and then declares two variabels `url` and `method` which is used for fetch request. We have used a Switch statement to determine the appropraite url and method based on the action.
+
+If the `action` is "send", "accept" or "reject" the `method` used is "POST". And if the `action` is "remove" the `method` used is "Delete". After a sucessful fetch request the function updates the state and fetches the updates list. When `action` is "accept" or "reject", it fetches the incoming request. If it is "remove" it fetches into friends and if it was "send" it performs a search.
+
+Next the function sets a message to be displayed to the user based on the action. and the message is stored in the `modalMessage` state variable.
+
+```
+const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("id");
+  console.log(activeTabIndex); //låt stå annars ERROOOOORR
+  
+  const fetchFriends = async () => {
+    try {
+      if (!userId || !token) {
+        throw new Error("User ID or token not found in local storage");
+      }
+      const response = await fetch(
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/${userId}/friends`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setFriends(data.friends || []);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
+
+  const fetchIncomingRequests = async () => {
+    try {
+      if (!token) {
+        throw new Error("Token not found in local storage");
+      }
+
+      const incomingResponse = await fetch(
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/received`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!incomingResponse.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const incomingData = await incomingResponse.json();
+      setIncomingRequests(incomingData.requests || []);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      if (!token) {
+        throw new Error("Token not found in local storage");
+      }
+
+      const response = await fetch(
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/search?search=${searchQuery}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      const filteredResults = data.filter((user: User) => user._id !== userId);
+
+      setSearchResults(filteredResults);
+    } catch (error) {
+      if (error === "Friend request already sent") {
+        ("You have already sent a friend request to this user");
+      } else {
+        console.error("Error searching users:", error);
+      }
+    }
+  };
+
+  const handleFriendRequest = async (friendId: string, action: string) => {
+    try {
+      if (!token) {
+        throw new Error("Token not found in local storage");
+      }
+
+      let url = "";
+      let method = "POST";
+
+      switch (action) {
+        case "send":
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/request/${friendId}`;
+          break;
+        case "accept":
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/accept/${friendId}`;
+          break;
+        case "reject":
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/reject/${friendId}`;
+          break;
+        case "remove":
+          url = `https://u08-business-idea-adventurebuddies.onrender.com/api/friends/${friendId}`;
+          method = "DELETE";
+          break;
+        default:
+          throw new Error("Unknown action");
+      }
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Server response error:", errorData);
+        throw new Error("Network response was not ok");
+      }
+
+      if (action === "accept" || action === "reject") {
+        fetchIncomingRequests();
+      } else if (action === "remove") {
+        fetchFriends();
+      } else if (action === "send") {
+        handleSearch();
+      }
+
+      fetchFriends();
+      fetchIncomingRequests();
+      handleSearch();
+
+      let message = "";
+      switch (action) {
+        case "send":
+          message = "Friend request sent.";
+          break;
+        case "accept":
+          message = "Friend request accepted.";
+          break;
+        case "reject":
+          message = "Friend request rejected.";
+          break;
+        case "remove":
+          message = "Friend removed.";
+          break;
+        default:
+          break;
+      }
+      setModalMessage(message);
+    } catch (error) {
+      console.error(`Error handling friend request:`, error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFriends();
+    fetchIncomingRequests();
+  }, []);
+
+  const closeModal = () => {
+    setModalMessage(null);
+  };
+```
+
+Next step was declaring the `useEffect` hook. This hook is used to fetch the friends and incoming requests when the component is mounted. Inside the useEffect hook, we have `fetchFriends` and `fetchIncomingRequest` functions that are used to retrive friends and incoming requests from our backend. There are checks for token in our loaclStorage and we get the userId and info related to it.
+
+Similarly to the userEvents components the `TabsProvider` components wraps the `Tabs` and `Tab` and we import the `friendList` componenet in the userProfile page.
+
+---
+
 <u>AuthContext: </u>
 
 AuthContext är en React-kontext som hanterar autentiseringslogiken för en applikation. 
@@ -257,6 +514,4 @@ Vi använder oss av `userData` för att kunna visa och uppdatera användarens in
 I `returnen` hämtar vi även data från komponenterna **UserUpdate**, **UserEvents** och **FriendsList**.
 
 ---
-
-
 
