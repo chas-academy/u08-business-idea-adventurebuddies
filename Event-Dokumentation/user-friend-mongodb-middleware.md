@@ -180,40 +180,114 @@ Finally in our schema we have a static method findByCredentials to find a user b
 
 ![Find](./img/find.png)
 
-#### User Model
-
-The User Model is created by passing the User Schema to mongoose's model function. The model represents the users collection in the database and provides methods to query, update, delete, etc., documents in the collection.
+We also have a User Model that is passing the User Schema to mongoose's model function. Our model represents the users collection in the database and provides methods to query, update, delete among other things in documents in the collection.
 
 #### User Controller
 
-This TypeScript file usercontroller.ts is a part of a backend service, likely for a web application, and it defines various functions related to user management. These functions interact with a MongoDB database using Mongoose, and are designed to be used as middleware in Express.js routes. Here's a brief overview of each function:
+The functions on our user controller interacts with our MongoDB using Mongoose.
+Our functions are registerUser, loginUser, logoutUser, getAllUsers, getUser, searchUsers, updateUser, deleteOwnAccount, deleteUser, getUserEvents and getFriends.
 
-registerUser: This function is used to register a new user. It validates the input, checks if the user already exists, and if not, creates a new user in the database.
+We can look at the register function for an idea how it works:
 
-loginUser: This function is used to log in a user. It checks if the user exists and if the password is correct, then returns the user and a generated authentication token.
+```
+export const registerUser = async (user: Partial<IUser>) => {
+  try {
+    const {
+      name,
+      userName,
+      email,
+      password,
+      confirmPassword,
+      dateOfBirth,
+      gender,
+      description,
+      phoneNumber,
+      profileImageUrl,
+    } = user;
+    if (
+      !name ||
+      !userName ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !dateOfBirth ||
+      !gender ||
+      !phoneNumber
+      // !description
+    ) {
+      return {
+        error: "Please provide all the required fields",
+      };
+    }
+    if (password !== confirmPassword) {
+      return {
+        error: "Password and confirm password do not match",
+      };
+    }
+    if (password.length < 8 || password.length > 10) {
+      return {
+        error: "Password should be between 8 and 10 characters",
+      };
+    }
+    const age = new Date().getFullYear() - new Date(dateOfBirth).getFullYear();
+    if (age < 18) {
+      return {
+        error: "User must be at least 18 years old",
+      };
+    }
 
-logoutUser: This function is used to log out a user. It removes the token from the user's token list in the database.
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return {
+        error: "User with that email already exists.",
+      };
+    }
 
-getAllUsers: This function is used to get all users from the database.
+    const existingUserName = await User.findOne({
+      userName: userName.toLowerCase(),
+    });
+    if (existingUserName) {
+      return {
+        error: "User with that username already exists.",
+      };
+    }
 
-getUser: This function is used to get a specific user by their ID.
+    if (phoneNumber) {
+      const existingPhone = await User.findOne({ phoneNumber });
+      if (existingPhone) {
+        return {
+          error: "User with that phone number already exists.",
+        };
+      }
+    }
 
-searchUsers: This function is used to search for users by their username or email.
+    const newUser = new User({
+      name,
+      userName: userName.toLowerCase(),
+      email: email.toLowerCase(),
+      password,
+      dateOfBirth,
+      gender,
+      description,
+      phoneNumber,
+      profileImageUrl,
+      role: user.role,
+    });
+    await newUser.save();
+    const token = await newUser.generateAuthToken();
+    return {
+      user: newUser,
+      token,
+    };
+  } catch (error) {
+    return {error: error,};}};
+```
 
-updateUser: This function is used to update a user's information.
-
-deleteOwnAccount: This function is used to delete the currently authenticated user's account.
-
-deleteUser: This function is used to delete a user by their ID.
-
-getUserEvents: This function is used to get all events related to a specific user.
-
-getFriends: This function is used to get all friends of the currently authenticated user.
-Each function is designed to be used as a controller in an Express.js route, handling the request and response objects, interacting with the database, and sending the appropriate response.
+This is function requires different things to be fullfiled for it to be succussful. It is an asynchronous function and user object as an argument that has to match our interface. However because we use the Partial it doesn't need to match everthing just what we require and declare. if the feilds we declared are provided we can go on to the next step which is checking the pass and confrimpass feild are matching. Once checked we moveon to the length of the pass and the go on to checking the age provided and calculate from the currunt and if age is over 18 we go on to the next step. This would be checking if the username or email are unique or already used and same is donr to the phone number as well. Next the user is saved in our DB. And a tocken is generated for the user. If an error occurs during any of these process an error message is thrown.
 
 #### User Routes
 
-This TypeScript file users.ts is a part of an Express.js application and it defines various routes related to user management. These routes interact with the corresponding controllers imported from usercontroller.ts. Here's a brief overview of each route:
+Finally our routes interact with the controllers functions imported from usercontroller.ts. we have the following routes in our user.ts routes:
 
 POST /register: This route is used to register a new user. It takes user data from the request body and passes it to the registerUser controller.
 
@@ -240,3 +314,23 @@ DELETE /:id: This route is used to delete a user by their ID. It calls the delet
 GET /:id/friends: This route is used to get all friends of a specific user. It calls the getFriends controller.
 
 Each route is protected by middleware functions auth and admin (for some routes) which check if the request is authenticated and if the authenticated user has admin privileges, respectively.
+
+### Friend
+
+#### Friend Interface
+
+- Our friend interface extends the mongoose.Document and represnts a friend document in our DB. The requester holds the ID of the user who send the friend (user) request and the recipent hold the ID of the friend (user) that recives the request. Finally we have the status that holds the status of the request like 'pending', 'accepted' or so on.
+
+![friendsInterface](./img/friendInterface.png)
+
+#### Friend Model
+
+Our model mongoose anc schema from Mongoose and our IFriend interface. The we define a friendSchema as a new mongoose schema for our friend document in the DB. Here we have three feilds like the interface: requester, recipient and status. Our requester and recipient are ObjectIds refrencing the User model.
+
+Requester and recipient are ObjectIds that reference the User model. These fields are required. And our status is a string represting the status of our request. And it can only be one of the following values: "pending", "accepted", or "rejected". All the three feilds we have are required. A mongoose model is created then using the friendSchema and the interface. We can use this model furthur in our controller.
+
+![friend Model](./img/friendModel.png)
+
+#### Friend Controller
+
+#### Friend Routes
