@@ -161,3 +161,39 @@ Funktionen som hanterar formurlärets insändning av data är `handleSubmit` som
 I vår retur, som blir användarens UI, har vi ett formulär som tar in data som `namn`, `användarnamn`, `email`, `lösenord`, `födelsedatum`, `kön` och `telefonnummer`. Knappen till formuläret triggar igång funktionen `handleSubmit`.
 
 När detta är klart har vi en fullt registrerad användare i vår databas som är redo att logga in och skapa sina egna event samt få tillgång till sin profilsida.
+
+---
+
+### userEvents
+
+This is a component that manages the display of events related to the user. It fetches the events from our server in the backend and display in two tabs, `Upcoming Events`and `Mina Events`.
+
+In this component we imported `React`, `useState`, and `useEffect` from the React library and we use it to build the user interface. Moreover, `Tab`, `Tabs` and `TabsProvider` are components imported from the tabs folder for handeling the tabbed interfaces.
+
+Our `Event` interface describes the shape of event object and looks as follows:
+
+![user event interface](./frontend/DokumentationBilder/UserEvents/UserEventInterface.png)
+
+Next is our `UserEvents` function where we declare several state variables. The variables ar as following:
+
+`
+const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [attendingEvents, setAttendingEvents] = useState<Event[]>([]);
+`
+The first variable handels the state of whichever tab is active. The following three handels the state of different types of events.
+
+Next we declare the `useEffect` hook and we use it to fetch events when the component is mounted or when the active tab changes. Inside the useEffect hook we have a `fetchEvents` function that is used to retrive the user's event from the server (our backend deployed in render).
+
+![hadel response](./frontend/DokumentationBilder/UserEvents/handelResUserEvent.png)
+
+It checks for token in local storage and get the user ID from it and it handels as the response we get from our server and filter the events which are either attending or created in the response into upcoming and created events.
+
+The `TabsProvider` component imported from tabs folder wraps the `Tabs` which contains the two `Tab` components we are using. We can add tabs as required.
+
+The component is then imported and rendered in the UserProfile Page.
+
+---
+
+### friendsList
