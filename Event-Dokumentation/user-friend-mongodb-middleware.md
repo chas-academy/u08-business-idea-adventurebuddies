@@ -1,4 +1,6 @@
-### Table of Contents
+# Backend Documentation
+
+## Table of Contents
 
 1. [DB setup](#db-setup)
 2. [Middleware](#middleware)
