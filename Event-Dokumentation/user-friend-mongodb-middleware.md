@@ -9,14 +9,15 @@
 
 First we setup the MongoDB collection and connections. Then we moveon to VSC where we setup the .env setup the db.ts file.
 
-**Mongo db:**
+#### Mongo db
+
 First we went ahead to [MongoDB Atlas](https://account.mongodb.com/account/register?fromURI=https%3A%2F%2Fwww.mongodb.com%2Fdeveloper%2Fauth%2Fsignin%2F%3FfromPagePath%3D%2Fproducts%2Fatlas%2F) and created an accout. Filled in the required fields and got to the dashboard.
 
 Next we created a Cluster and gave it the name we whised to have **Sports**. Next we clicked on the connect button and choose **Compass** from the list. Installed Compass in our Device and copied the connection string.
 
 Went to MongoDB Compass and pasted the connection string along side our Cluster password that was provided while creating the cluster. As Our IP adress was whitlisted we were able to connect. We whitelisted the IP adresses we wanted to have connection to the DB manually later on.
 
-**.env and db**
+#### .env and db
 
 1. The .env contains sensetive informations such as the MongoDB connection strings and the JWT secret key that was generated.
 
@@ -333,4 +334,60 @@ Requester and recipient are ObjectIds that reference the User model. These field
 
 #### Friend Controller
 
+Similarly to our user controller our friend controller interacts with our DB using Mongoose. Functions we have declared here are sendRequest, acceptRecquest, rejectRequest and removeFriendship. We also have the exported functions that can be used in route handlers. The functions we export are sendFriendRequest, getSentRequests, getReceivedRequests, acceptFriendRequest, rejectFriendRequest, and removeFriend
+
+First let's take a look at our sendRequest function to see how it works:
+
+```
+const sendRequest = async (requesterId: string, recipientId: string) => {
+  const recipientUser = await User.findById(recipientId);
+  if (!recipientUser) {
+    throw new Error("Recipient user not found.");
+  }
+
+  const existingFriendRequest = await Friend.findOne({
+    requester: requesterId,
+    recipient: recipientId,
+  });
+
+  if (existingFriendRequest) {
+    throw new Error("Friend request already sent.");
+  }
+
+  const existingRemovedFriendship = await Friend.findOne({
+    $or: [
+      { requester: requesterId, recipient: recipientId },
+      { requester: recipientId, recipient: requesterId },
+    ],
+    status: "removed",
+  });
+
+  if (existingRemovedFriendship) {
+    throw new Error("Friendship removed. Cannot send request.");
+  }
+
+  const friendRequest = new Friend({
+    requester: requesterId,
+    recipient: recipientId,
+    status: "pending",
+  });
+
+  await friendRequest.save();
+};
+```
+
+Our sendRequest function is an asynchronous function that takes in requesterId and a recipientId as arguments. It checks it the Id are the same and if the are an error is returned. If the are no similar it checks if the recipient even exists in the DB and returns and error if it doesnt. Next it checks if a request has already been sent or if the friendship is already made and returns an error if that is the case. If all checks pass our function creates a new friend request and saves it in our DB.
+
+Now let's take a look at our exported sendFriendRequest function to see how it works:
+
+![sendFriendRequest](./img/sendFriendR.png)
+
+Our sendFriendRequest function is an asynchrouns function that takes request and response objects as arguments. It extracts the requesterId and recipiendId from the request body and calls the sendRequest function mentioned above. Then we get a success response of error response.
+
 #### Friend Routes
+
+Here we have set up our friend routes that interact with the controllers functions imported from friendcontroller.ts and authentication middelware imported from auth.ts. Here's how our routes look like:
+
+![friednRoutes](./img//friendRoutes.png)
+
+Each one of these routes is linked with a HTTP method such as (Get, Post and DELETE), a URL path and a middileware function to handle each request
