@@ -418,3 +418,100 @@ const token = localStorage.getItem("token");
 Next step was declaring the `useEffect` hook. This hook is used to fetch the friends and incoming requests when the component is mounted. Inside the useEffect hook, we have `fetchFriends` and `fetchIncomingRequest` functions that are used to retrive friends and incoming requests from our backend. There are checks for token in our loaclStorage and we get the userId and info related to it.
 
 Similarly to the userEvents components the `TabsProvider` components wraps the `Tabs` and `Tab` and we import the `friendList` componenet in the userProfile page.
+
+---
+
+<u>AuthContext: </u>
+
+AuthContext är en React-kontext som hanterar autentiseringslogiken för en applikation. 
+Här är en kort förklaring av vad den gör:
+
+1. Kontextdefinition: AuthContext skapas med createContext och används för att lagra autentiseringsstatus och relaterade data som e-post, användar-ID och token.
+
+2. `AuthProvider`: Detta är en komponent som förser sina underkomponenter med autentiseringsdata och funktioner för att logga in och logga ut.
+    * Statehantering: `useState` används för att hantera autentiseringstillstånd (isAuthenticated), e-post (email), användar-ID (userId) och token (token).
+    * Lokal lagring: Vid första renderingen hämtar `useEffect` eventuellt sparad autentiseringsdata från `localStorage` och uppdaterar state om användaren är inloggad.
+    * Login-funktion: Uppdaterar state och `localStorage` med användarens e-post, ID och token när användaren loggar in.
+    * Logout-funktion: Rensar state och `localStorage` när användaren loggar ut.
+3. `useAuth`: En anpassad `hook` som gör det enklare för komponenter att använda autentiseringskontexten. Den kastar ett fel om den används utanför `AuthProvider`.
+
+Sammanfattningsvis hanterar AuthContext autentiseringsstatus och användaruppgifter samt erbjuder inloggnings- och utloggningsfunktionalitet, vilket gör att resten av applikationen kan få tillgång till denna information på ett enkelt och konsekvent sätt.
+
+**Vart använder vi AuthContext då?**
+
+* Main.tsx:
+    * Med hjälp av AuthContext har vi omslutit vår RouterProvider med `AuthProvider` och lagt till ProtectedRouteProps för att säkerställa att användare måste vara inloggade för att kunna se alla sidor.
+
+![ProtectedRouteProps](/frontend/DokumentationBilder/AuthContext/protectedRoutesProps.png)
+
+![AuthProvider](/frontend/DokumentationBilder/AuthContext/authProvider.png)
+
+
+* App.tsx
+    * I App.tsx tar vi hand om login och logout och om användarens autentiserings status
+
+* LoginPage.tsx
+    * Här lägger vi till användarens email, id och token när vi loggar in, som sparas och delas till de sidor där man behöver vara inloggad (sköts i App.tsx som vidare är kopplat till AuthContext.tsx). 
+
+* Navbar.tsx
+    * Vi hämtar AuthContext här för att kolla om man är inloggade eller inte, är vi inloggade visas vårat namn istället för logga in samt att vi får en dropdown meny med olika länkar i. Vi hanterar även logga ut (logout) här.
+
+* EventListItem.tsx
+    * här använder vi oss av isAuthenticated för att kunna visa en del data för personer som inte är inloggade, och mer detaljer om du är inloggad
+
+---
+
+<u>Navbar</u>
+
+I navbaren har vi länkar (*Link*) till respective sida, stylingen ser olika ut beroende om du är på mobil eller desktop. Login knappen blir en dropdown när du väl loggat in, och den bytter då till ditt användarnamn (username). I dropdown menyn använder jag mig av *EventListener* för mustryck för att den ska stängas när du tryckt på en länk eller trycker utanför menyn. Har även en *useEffect* för att den ska stängas när du har loggat ut, så när du loggar in nästa gång så är den stängd.
+
+Mobil:
+
+![Mobil](/frontend/DokumentationBilder/Navbar/mobil.png)
+
+Desktop:
+
+![Desktop](/frontend/DokumentationBilder/Navbar/desktop.png)
+
+---
+
+<u>User Update (Komponent)</u>
+
+Vi använder oss av en *UserUpdateProps*, där vi använder oss utav `userData` som innehåller informationen vi vill uppdatera och `setUserData` funktion för att uppdatera datan i parent-komponenten (i detta fall UserProfilePage).
+
+`useEffect` och `useState` använder vi oss av för att hantera komponentens tillstånd och livscykel.
+
+Till exempel använder vi oss av `useEffect` för att uppdatera `formData` när `userData` ändras.
+
+`handleInputChange` uppdaterar `formData` baserat på var användaren matar in i input fälten, här inkluderar vi även filuppladning med hjälp av `multer` i våran backend. Så att filerna kan sparas i databasen (Mongodb).
+
+![Handle input change](/frontend/DokumentationBilder/UserProfile/handleInputChange.png)
+
+`handleUpdate` skickar en PUT-förfrågan till våran backend för att uppdatera användarens data.
+`handldeRemoveAccount` skickar en DELETE-förfrågan för att radera en användares konto. I `handldeRemoveAccount` använder vi oss av en `window.confirm` för att få upp en ruta för att dubbelkolla om användaren verkligen vill radera sitt konto. 
+
+Komponenterna `Button` och `Input` använder vi oss av för användargränssnittets knappar och inmatningsfält. Så att alla knappar och fält ser lika dana ut på alla sidor.
+
+`useNavigate` från `react-router-dom` använder vi oss av för att kunna navigeringa mellan olika sidor.
+
+---
+
+<u>UserProfilePage</u>
+
+På den här sidan hämtar och visar vi användarens profilinformation. 
+
+Vi använder oss av `userData` för att kunna visa och uppdatera användarens information.
+
+Även här använder vi oss av `useEffect` och `useState` för att hantera komponentens tillstånd och livscykel.
+
+`useEffect` körs när komponenten mountas (renderas för första gången). Den innehåller en asynkron funktion `fetchUserData` som gör följande:
+1. Hämtar användarens-ID och token från `localStorage`.
+2. Skickar en GET-förfrågan till API för att hämta användardata.
+3. Om förfrågan lyckas, uppdaterar `userData` med den hämtade datan.
+4. Om förfrågan misslyckas, loggar det ett felmeddelande.
+
+
+I `returnen` hämtar vi även data från komponenterna **UserUpdate**, **UserEvents** och **FriendsList**.
+
+---
+

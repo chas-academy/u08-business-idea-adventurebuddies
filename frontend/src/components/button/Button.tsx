@@ -1,16 +1,17 @@
 import { faBookmark } from "@fortawesome/free-regular-svg-icons";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faCircleMinus } from "@fortawesome/free-solid-svg-icons";
 import {
   faChevronDown,
   faChevronUp,
   faFilter,
+  
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 interface ButtonProps {
   children: React.ReactNode;
-  icon?: "faBookmark" | "faCirclePlus" | "faChevronDown" | "faChevronUp";
+  icon?: "faBookmark" | "faCirclePlus" | "faChevronDown" | "faChevronUp" | "faCircleMinus";
   type: "button" | "submit";
   variant?: "primary" | "secondary" | "danger";
   size?: "small";
@@ -44,6 +45,18 @@ const Button: React.FC<ButtonProps> = ({
         return (
           <div className="pl-3 ">
             <FontAwesomeIcon icon={faBookmark} />
+          </div>
+        );
+      case "faCirclePlus":
+        return (
+          <div className="pl-3 ">
+            <FontAwesomeIcon icon={faCirclePlus} />
+          </div>
+        );
+      case "faCircleMinus":
+        return (
+          <div className="pl-3 ">
+            <FontAwesomeIcon icon={faCircleMinus} />
           </div>
         );
       case "faCirclePlus":
