@@ -7,14 +7,14 @@ interface Event {
   _id: string;
   activity: string;
   location: string;
-  start_time: string;
-  // Will add more event details here later
+  start_time: number;
 }
 
 const UserEvents: React.FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [attendingEvents, setAttendingEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -42,14 +42,23 @@ const UserEvents: React.FC = () => {
         const data = await response.json();
         console.log("Data:", data);
 
-        if (data && data.createdEvents) {
-          const currentTime = new Date();
+        if (data && data.createdEvents && data.attendingEvents) {
+          const currentTime = Date.now();
+          console.log("Current Time:", currentTime);
           const upcomingCreatedEvents = data.createdEvents.filter(
-            (event: Event) => new Date(event.start_time) > currentTime
+            (event: Event) => event.start_time* 1000 > currentTime
+          );
+          const upcomingAttendingEvents = data.attendingEvents.filter( 
+            (event: Event) => event.start_time* 1000 > currentTime
           );
 
+          console.log("Upcoming Events:", upcomingCreatedEvents);
+          console.log("Upcoming Attending Events:", upcomingAttendingEvents);
           setUpcomingEvents(upcomingCreatedEvents);
           setCreatedEvents(data.createdEvents);
+          setAttendingEvents(upcomingAttendingEvents);
+
+
         } else {
           console.error("Events data not found in response:", data);
         }
@@ -70,8 +79,8 @@ const UserEvents: React.FC = () => {
           setActiveTabIndex={setActiveTabIndex}
         >
           <div>
-            {upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event) => (
+            {upcomingEvents.length + attendingEvents.length > 0 ? (
+              [...upcomingEvents, ...attendingEvents].map((event) => (
                 <div key={event._id}>
                   <h3>{event.activity}</h3>
                   <p>{event.location}</p>
