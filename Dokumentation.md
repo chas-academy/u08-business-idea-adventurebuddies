@@ -536,3 +536,97 @@ Vi använder oss av `userData` för att kunna visa och uppdatera användarens in
 I `returnen` hämtar vi även data från komponenterna **UserUpdate**, **UserEvents** och **FriendsList**.
 
 ---
+## EventInfoPage
+
+EventInfoPage.tsx representerar en sida i applikationen som visar detaljerad information om ett specifikt event. Denna sida hanterar interaktioner och visar informationen på ett strukturerat sätt.
+
+Komponenten använder React för att bygga sidan och hanterar state och livscykel med React Hooks såsom useEffect och useState. Den importerar också återanvändbara komponenter och verktyg för att förbättra användarupplevelsen.
+
+Sammanfattningsvis representerar EventInfoPage.tsx en sida i applikationen som fokuserar på att visa och hantera detaljer kring ett specifikt event. Den hanterar både datainhämtning och användarinteraktioner för att ge en fullständig och användbar upplevelse för användarna.
+
+<a name="API-URL"></a>
+
+### API-URL
+
+```typescript {
+// hämta eventId state och value från EventListItem.
+const location = useLocation();
+let EVENT_ID = location.state.eventId;
+```
+
+Denna del av koden använder useLocation()-hooken från React Router för att hämta platsens tillstånd. I detta fall använder den den del av tillståndet som skickades från EventListItem.tsx via navigeringen. EVENT_ID tilldelas värdet av eventId från platsens tillstånd.
+
+```typescript {
+const handleEventItemClick = (eventId: string) => {
+  console.log(eventId);
+  navigate("/eventInfo", {
+    state: {
+      eventId: eventId,
+    },
+  });
+};
+```
+
+Från EventListItem.tsx som skickar statet eventId
+
+```typescript {
+const API_URL = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${EVENT_ID}`;
+```
+
+Här skapas en URL för att hämta detaljer om ett specifikt event från en extern API. EVENT_ID används för att specificera vilket event som ska hämtas.
+
+```typescript {
+const API_URL_ATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/attend/${EVENT_ID}`;
+const API_URL_UNATTEND = `https://u08-business-idea-adventurebuddies.onrender.com/api/events/${userId}/unattend/${EVENT_ID}`;
+```
+
+Dessa variabler skapar URL
+för att registrera eller avregistrera användaren från det specifika eventet. userId används för att identifiera användaren, medan EVENT_ID specificerar vilket event som är aktuellt.
+
+<br>
+Så sammanfattningsvis, koden hämtar eventId från EventListItem.tsx, använder detta eventId för att skapa olika URL
+för att hämta eventinformation och hantera användarens deltagande i eventet.
+
+### Attend or not Attend
+
+Dessa två funktionerna fungerar väldigt likt varandra då båda använder sig av en POST-förfrågan, fast mot olika
+URL:Er [Läs URL STRUKTUR](#API-URL) och att en useState sätts till true eller false.
+
+```typescript {
+const [isAttending, setIsAttending] = useState(false);
+```
+
+```typescript {
+const handleAttendEvent = async () => {
+  // Hantera om användaren är autentiserad
+  // Skicka en POST-förfrågan för att registrera användaren till eventet
+  // Uppdaterar isAttending-tillståndsvariabeln till true om förfrågan lyckas.
+};
+
+const handleUnAttendEvent = async () => {
+  // Hantera om användaren är autentiserad
+  // Skicka en POST-förfrågan för att avregistrera användaren från eventet
+  //Uppdaterar isAttending-tillståndsvariabeln till false om förfrågan lyckas.
+};
+```
+
+
+## Tabs Komponent
+
+### Tabs.tsx
+
+`Tabs.tsx` är huvudkomponenten för flikfunktionaliteten. Den använder `useTabs`-hooken från `TabsContext.tsx` för att få tillgång till den aktiva fliken. Den renderar alla barnkomponenter och klonar varje barn med ett extra `index`-attribut. Den renderar också innehållet för den aktiva fliken.
+
+### TabsContext.tsx
+
+`TabsContext.tsx` definierar och exporterar `TabsContext`, `useTabs`-kroken och `TabsProvider`-komponenten. `TabsContext` är en React Context som håller den aktiva fliken och en funktion för att ändra den. `useTabs` är en krok som returnerar värdet av `TabsContext`. `TabsProvider` är en komponent som håller state för den aktiva fliken och tillhandahåller den till dess barn via `TabsContext`.
+
+### Tab.tsx
+
+`Tab.tsx` är en komponent som representerar en enskild flik. Den använder `useTabs`-hooken för att få tillgång till den aktiva fliken och funktionen för att ändra den. När en flik klickas på, sätts den som den aktiva fliken.
+
+### Tabs.css
+
+`Tabs.css` innehåller alla stilar som behövs för flikarna. Det definierar stilar för flikarna, den aktiva fliken och flikinnehållet.
+
+
