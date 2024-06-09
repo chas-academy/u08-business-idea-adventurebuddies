@@ -11,12 +11,12 @@ import { UserPage } from "../../../pages/UserProfilePage/UserProfilePage.interfa
 
 interface NavbarProps {
   isAuthenticated: boolean;
-  onLogout: () => void;
+  logout: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [userData, setUserData] = useState<UserPage>({
     userName: "",
@@ -66,26 +66,24 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
     fetchUserData();
   }, [isAuthenticated]);
 
-  const handleLogin = () => {
-    navigate("/login");
+  const handleDropdownToggle = () => {
+    setIsDropdownVisible(!isDropdownVisible);
   };
 
-  {
-    /* Dropdown */
-  }
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownVisible(false);
-      }
-    };
+  const handleClickOutside = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsDropdownVisible(false);
+    }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
+  const handleLinkClick = () => {
+    setIsDropdownVisible(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -93,9 +91,9 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
     setIsDropdownVisible(false);
   }, [isAuthenticated]);
 
-  const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
-  const closeDropdown = () => setIsDropdownVisible(false);
-
+  const handleChange = () => {
+    navigate("/login");
+  };
   return (
     <>
       <nav className="font-poppins m-10 xl:m-0 xl:my-10  h-[100px]">
@@ -137,7 +135,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                   type="button"
                   size="small"
                   variant="secondary"
-                  onClick={toggleDropdown}
+                  onClick={handleDropdownToggle}
                 >
                   {userData.userName}
                 </Button>
@@ -154,7 +152,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                   >
                     <Link
                       to={"/"}
-                      onClick={onLogout}
+                      onClick={logout}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -166,7 +164,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/userProfile"}
-                      onClick={closeDropdown}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -178,7 +176,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/createEvent"}
-                      onClick={closeDropdown}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -190,7 +188,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/eventInfo"}
-                      onClick={closeDropdown}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -202,7 +200,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     </Link>
                     <Link
                       to={"/map"}
-                      onClick={closeDropdown}
+                      onClick={handleLinkClick}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -212,6 +210,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                     >
                       Map
                     </Link>
+                    
                   </div>
                 )}
               </div>
@@ -220,7 +219,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
                 type="button"
                 size="small"
                 variant="secondary"
-                onClick={handleLogin}
+                onClick={handleChange}
               >
                 Login
               </Button>
@@ -228,7 +227,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
           </div>
         </div>
 
-        {/* Mobil Navbar, är längst ned på sidan och gömd på större skärmar. Utloggning för mobil vy sker i user update form */}
         <div className="py-6 sm:hidden fixed bottom-0 left-0 w-full bg-textColor z-10">
           <ul className="grid grid-cols-5">
             <li className="px-6">
@@ -258,21 +256,12 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
               </Link>
             </li>
             <li className="px-6">
-              {isAuthenticated ? (
-                <Link to="/userProfile">
-                  <FontAwesomeIcon
-                    icon={faUserLarge}
-                    style={{ color: "#1E0707" }}
-                  />
-                </Link>
-              ) : (
-                <Link to="/login">
-                  <FontAwesomeIcon
-                    icon={faUserLarge}
-                    style={{ color: "#1E0707" }}
-                  />
-                </Link>
-              )}
+              <Link to="/userProfile">
+                <FontAwesomeIcon
+                  icon={faUserLarge}
+                  style={{ color: "#1E0707" }}
+                />
+              </Link>
             </li>
           </ul>
         </div>
