@@ -70,7 +70,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 font-Poppins">
+    <div className="flex flex-col items-center justify-center bg-gray-100 mb-10">
       {/* removed shadow-md from the div below */}
       <div className="box-border md:box-content bg-gray-200 rounded-md p-8 glass-container">
         <h1 className="text-center-primaryColor mb-4 leading-12 font-bold">
