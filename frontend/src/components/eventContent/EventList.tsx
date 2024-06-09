@@ -1,5 +1,6 @@
+import { IEvent } from "../../utils/IEvents";
 import EventListItem from "./EventListItem";
-import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+
 import React from "react";
 
 interface EventListProps {
