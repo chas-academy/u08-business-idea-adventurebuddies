@@ -32,7 +32,7 @@ The foundation of this application is an eventplanner. Where you can create your
 
 ## Deployment
 
-- https://main--adventurebuddies.netlify.app/
+- https://adventurebuddies.netlify.app/
 
 ## The Work Team
 

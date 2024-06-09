@@ -10,10 +10,11 @@ import {
   EXPERIENCES,
   PRICES,
 } from "../../utils/enums";
-import { IEvent2 } from "../../pages/CreateEventPage/CreateEventPage.interface";
+import { IEvent } from "../../utils/IEvents";
+
 
 interface FilterDropdownProps {
-  events: IEvent2[];
+  events: IEvent[];
   onFilter: (queryParams: Record<string, string>) => void;
 }
 
