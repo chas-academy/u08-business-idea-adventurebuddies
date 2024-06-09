@@ -14,6 +14,8 @@
 10. [Navbar](#navbar)
 11. [User Update (Komponent)](#user-update-komponent)
 12. [UserProfilePage](#userprofilepage)
+13. [EventInfoPage](#eventinfopage)
+14. [Tabs Komponent](#tabs-komponent)
 
 ### SearchBar
 
@@ -536,7 +538,8 @@ Vi använder oss av `userData` för att kunna visa och uppdatera användarens in
 I `returnen` hämtar vi även data från komponenterna **UserUpdate**, **UserEvents** och **FriendsList**.
 
 ---
-## EventInfoPage
+
+### EventInfoPage
 
 EventInfoPage.tsx representerar en sida i applikationen som visar detaljerad information om ett specifikt event. Denna sida hanterar interaktioner och visar informationen på ett strukturerat sätt.
 
@@ -546,7 +549,7 @@ Sammanfattningsvis representerar EventInfoPage.tsx en sida i applikationen som f
 
 <a name="API-URL"></a>
 
-### API-URL
+#### API-URL
 
 ```typescript {
 // hämta eventId state och value från EventListItem.
@@ -587,7 +590,7 @@ för att registrera eller avregistrera användaren från det specifika eventet. 
 Så sammanfattningsvis, koden hämtar eventId från EventListItem.tsx, använder detta eventId för att skapa olika URL
 för att hämta eventinformation och hantera användarens deltagande i eventet.
 
-### Attend or not Attend
+#### Attend or not Attend
 
 Dessa två funktionerna fungerar väldigt likt varandra då båda använder sig av en POST-förfrågan, fast mot olika
 URL:Er [Läs URL STRUKTUR](#API-URL) och att en useState sätts till true eller false.
@@ -610,23 +613,20 @@ const handleUnAttendEvent = async () => {
 };
 ```
 
+### Tabs Komponent
 
-## Tabs Komponent
-
-### Tabs.tsx
+#### Tabs.tsx
 
 `Tabs.tsx` är huvudkomponenten för flikfunktionaliteten. Den använder `useTabs`-hooken från `TabsContext.tsx` för att få tillgång till den aktiva fliken. Den renderar alla barnkomponenter och klonar varje barn med ett extra `index`-attribut. Den renderar också innehållet för den aktiva fliken.
 
-### TabsContext.tsx
+#### TabsContext.tsx
 
 `TabsContext.tsx` definierar och exporterar `TabsContext`, `useTabs`-kroken och `TabsProvider`-komponenten. `TabsContext` är en React Context som håller den aktiva fliken och en funktion för att ändra den. `useTabs` är en krok som returnerar värdet av `TabsContext`. `TabsProvider` är en komponent som håller state för den aktiva fliken och tillhandahåller den till dess barn via `TabsContext`.
 
-### Tab.tsx
+#### Tab.tsx
 
 `Tab.tsx` är en komponent som representerar en enskild flik. Den använder `useTabs`-hooken för att få tillgång till den aktiva fliken och funktionen för att ändra den. När en flik klickas på, sätts den som den aktiva fliken.
 
-### Tabs.css
+#### Tabs.css
 
 `Tabs.css` innehåller alla stilar som behövs för flikarna. Det definierar stilar för flikarna, den aktiva fliken och flikinnehållet.
-
-
