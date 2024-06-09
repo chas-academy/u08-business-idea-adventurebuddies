@@ -3,15 +3,15 @@ import Navbar from "./navbar/Navbar";
 
 interface HeaderProps {
   isAuthenticated: boolean;
-  onLogout: () => void;
+  logout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ isAuthenticated, logout }) => {
   return (
     <>
     <Navbar
         isAuthenticated={isAuthenticated}
-        onLogout={onLogout}
+        logout={logout}
       />
     </>
   );

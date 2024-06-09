@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import UserUpdate from "../../components/UserUpdate/UserUpdate";
+import { useAuth } from "../../components/header/navbar/AuthContext";
 import { UserPage } from "./UserProfilePage.interface";
 import UserEvents from "../../components/userEvents/userEvents";
 import FriendsList from "../../components/FriendsList/FriendsList";
 
 const UserProfilePage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
   const [userData, setUserData] = useState<UserPage>({
     userName: "",
     description: "",
@@ -17,6 +20,7 @@ const UserProfilePage: React.FC = () => {
   });
 
   useEffect(() => {
+    if (!isAuthenticated) return;
 
     const fetchUserData = async () => {
       try {
@@ -50,7 +54,11 @@ const UserProfilePage: React.FC = () => {
     };
 
     fetchUserData();
-  }, []); // Fetch data when authentication state changes
+  }, [isAuthenticated]); // Fetch data when authentication state changes
+
+  if (!isAuthenticated) {
+    return <div>Vargod och logga in för att se din profil</div>;
+  }
 
   return (
     <>

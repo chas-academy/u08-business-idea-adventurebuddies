@@ -10,7 +10,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-      <footer className="relative flex flex-col mt-auto right-0 left-0 bottom-20 sm:bottom-0">
+    <>
+      <footer className="relative flex flex-col mt-auto right-0 left-0 bottom-20 sm:bottom-0 ">
         <div className="relative w-full h-auto">
           {/* Back SVG */}
           <div className="absolute inset-0 mt-4">
@@ -156,6 +157,7 @@ const Footer = () => {
           </div>
         </div>
       </footer>
+    </>
   );
 };
 
