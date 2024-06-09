@@ -421,7 +421,7 @@ Similarly to the userEvents components the `TabsProvider` components wraps the `
 
 ---
 
-<u>AuthContext: </u>
+### AuthContext:
 
 AuthContext är en React-kontext som hanterar autentiseringslogiken för en applikation. 
 Här är en kort förklaring av vad den gör:
@@ -461,9 +461,12 @@ Sammanfattningsvis hanterar AuthContext autentiseringsstatus och användaruppgif
 
 ---
 
-<u>Navbar</u>
+### Navbar
 
-I navbaren har vi länkar (*Link*) till respective sida, stylingen ser olika ut beroende om du är på mobil eller desktop. Login knappen blir en dropdown när du väl loggat in, och den bytter då till ditt användarnamn (username). I dropdown menyn använder jag mig av *EventListener* för mustryck för att den ska stängas när du tryckt på en länk eller trycker utanför menyn. Har även en *useEffect* för att den ska stängas när du har loggat ut, så när du loggar in nästa gång så är den stängd.
+I navbaren har vi länkar (*Link*) till respective sida, stylingen ser olika ut beroende om du är på mobil eller desktop. Login knappen blir en dropdown när du väl loggat in, och den bytter då till ditt användarnamn (username). I dropdown menyn använder jag mig av *EventListener* för mustryck för att den ska stängas när du tryckt på en länk eller trycker utanför menyn. Har även en *useEffect* för att den ska stängas när du har loggat ut, så när du loggar in nästa gång så är den stängd. 
+
+User iconen i mobil vyn tar dig antingen till login eller userProfile beroende på om du är inloggad eller inte. 
+Man loggar sedan ut via user update form.
 
 Mobil:
 
@@ -475,7 +478,7 @@ Desktop:
 
 ---
 
-<u>User Update (Komponent)</u>
+### User Update (Komponent)
 
 Vi använder oss av en *UserUpdateProps*, där vi använder oss utav `userData` som innehåller informationen vi vill uppdatera och `setUserData` funktion för att uppdatera datan i parent-komponenten (i detta fall UserProfilePage).
 
@@ -494,9 +497,11 @@ Komponenterna `Button` och `Input` använder vi oss av för användargränssnitt
 
 `useNavigate` från `react-router-dom` använder vi oss av för att kunna navigeringa mellan olika sidor.
 
+***När du är i mobil vyn så loggar du ut via user update formuläret*** 
+
 ---
 
-<u>UserProfilePage</u>
+### UserProfilePage
 
 På den här sidan hämtar och visar vi användarens profilinformation. 
 
