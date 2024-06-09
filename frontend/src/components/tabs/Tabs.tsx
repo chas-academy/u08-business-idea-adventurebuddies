@@ -21,7 +21,7 @@ const Tabs: React.FC<TabsProps> = ({ children }) => {
           return null;
         })}
       </div>
-      <div className=" h-10">
+      <div className="tabs-content-container max-h-[60vh] overflow-y-auto">
         {React.Children.map(children, (child, index) => {
           if (
             React.isValidElement<{

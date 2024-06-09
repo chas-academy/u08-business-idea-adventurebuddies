@@ -9,6 +9,7 @@ import Tabs from "../../components/tabs/Tabs";
 import Tab from "../../components/tabs/Tab";
 import { useAuth } from "../../components/header/navbar/AuthContext";
 
+
 const HomePage = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [query, setQuery] = useState<IEvent[]>([]);
@@ -118,11 +119,13 @@ console.log(query);
               index={1}
               setActiveTabIndex={setActiveTabIndex}
             >
+              <div className="min-h-[60vh] overflow-y-auto">
               <EventList
                 events={events}
                 filteredEvents={filteredEvents}
                 isAuthenticated={isAuthenticated}
               />
+              </div>
             </Tab>
           </Tabs>
         </TabsProvider>
