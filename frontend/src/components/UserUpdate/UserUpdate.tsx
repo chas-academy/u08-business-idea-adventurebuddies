@@ -4,16 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Input from "../input/Input";
 import { UserPage } from "../../pages/UserProfilePage/UserProfilePage.interface";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 interface UserUpdateProps {
   userData: UserPage;
   setUserData: React.Dispatch<React.SetStateAction<UserPage>>;
 }
 
+interface ContextType {
+  onLogout: () => void;
+}
+
 const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const navigate = useNavigate();
+  const { onLogout } = useOutletContext<ContextType>();
 
   const [formData, setFormData] = useState<UserPage>({
     userName: userData.userName,
@@ -65,14 +70,17 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update user data");
@@ -106,12 +114,15 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/me`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/me`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log(response.status);
 
@@ -230,22 +241,39 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 onChange={handleInputChange}
               />
             </div>
-            <Button
-              type="button"
-              size="small"
-              variant="secondary"
-              onClick={handleUpdate}
-            >
-              Uppdatera konto
-            </Button>
-            <Button
-              type="button"
-              size="small"
-              variant="danger"
-              onClick={handleRemoveAccount}
-            >
-              Radera konto
-            </Button>
+            <div className=" m-6">
+              <div className="pb-6">
+                <Button
+                  type="button"
+                  size="small"
+                  variant="primary"
+                  onClick={handleUpdate}
+                >
+                  Spara
+                </Button>
+              </div>
+              <div className="pb-6 md:hidden">
+                {/* Utloggnigs knapp i mobil vy */}
+                <Button
+                  type="button"
+                  size="small"
+                  variant="secondary"
+                  onClick={onLogout}
+                >
+                  Logga ut
+                </Button>
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  size="small"
+                  variant="danger"
+                  onClick={handleRemoveAccount}
+                >
+                  Radera konto
+                </Button>
+              </div>
+            </div>
           </form>
         )}
       </div>

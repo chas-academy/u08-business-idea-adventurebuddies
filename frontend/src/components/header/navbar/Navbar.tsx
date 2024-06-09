@@ -11,12 +11,12 @@ import { UserPage } from "../../../pages/UserProfilePage/UserProfilePage.interfa
 
 interface NavbarProps {
   isAuthenticated: boolean;
-  logout: () => void;
+  onLogout: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [userData, setUserData] = useState<UserPage>({
     userName: "",
@@ -71,7 +71,10 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
   };
 
   const handleClickOutside = (event: any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setIsDropdownVisible(false);
     }
   };
@@ -81,9 +84,9 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -152,7 +155,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                   >
                     <Link
                       to={"/"}
-                      onClick={logout}
+                      onClick={onLogout}
                       style={{
                         display: "block",
                         padding: "10px",
@@ -210,7 +213,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
                     >
                       Map
                     </Link>
-                    
                   </div>
                 )}
               </div>
@@ -256,12 +258,21 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, logout }) => {
               </Link>
             </li>
             <li className="px-6">
-              <Link to="/userProfile">
-                <FontAwesomeIcon
-                  icon={faUserLarge}
-                  style={{ color: "#1E0707" }}
-                />
-              </Link>
+              {isAuthenticated ? (
+                <Link to="/userProfile">
+                  <FontAwesomeIcon
+                    icon={faUserLarge}
+                    style={{ color: "#1E0707" }}
+                  />
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <FontAwesomeIcon
+                    icon={faUserLarge}
+                    style={{ color: "#1E0707" }}
+                  />
+                </Link>
+              )}
             </li>
           </ul>
         </div>
