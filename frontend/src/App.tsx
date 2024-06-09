@@ -30,6 +30,7 @@ function App() {
         <Outlet
           context={{
             onLogin: handleLogin,
+            onLogout: handleLogout,
           }}
         />
       </main>
