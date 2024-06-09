@@ -4,21 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Input from "../input/Input";
 import { UserPage } from "../../pages/UserProfilePage/UserProfilePage.interface";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface UserUpdateProps {
   userData: UserPage;
   setUserData: React.Dispatch<React.SetStateAction<UserPage>>;
 }
 
-interface ContextType {
-  onLogout: () => void;
-}
-
 const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const navigate = useNavigate();
-  const { onLogout } = useOutletContext<ContextType>();
 
   const [formData, setFormData] = useState<UserPage>({
     userName: userData.userName,
@@ -70,17 +65,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(
-        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update user data");
@@ -92,6 +84,10 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
     } catch (error) {
       console.error("Update user data error:", error);
     }
+  };
+
+  const handleDropdownToggle = () => {
+    setIsDropdownVisible(!isDropdownVisible);
   };
 
   const handleRemoveAccount = async () => {
@@ -110,15 +106,12 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
         throw new Error("User ID or token not found in local storage");
       }
 
-      const response = await fetch(
-        `https://u08-business-idea-adventurebuddies.onrender.com/api/users/me`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`https://u08-business-idea-adventurebuddies.onrender.com/api/users/me`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       console.log(response.status);
 
@@ -139,21 +132,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
     }
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-  };
-
   return (
     <>
       <div className="col-start-1 col-end-3">
-        <div
-          id="updateDropdown"
-          className="flex justify-end mr-2 mt-2 xl:mr-4"
-        >
+        <div id="updateDropdown" className="flex justify-end mr-2 mt-2 xl:mr-4">
           <FontAwesomeIcon
             icon={faGear}
             style={{ color: "#000000" }}
-            onClick={toggleDropdown}
+            onClick={handleDropdownToggle}
           />
         </div>
 
@@ -161,14 +147,14 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
           <form
             action="submit"
             method="post"
-            className="absolute left-auto right-auto top-[370px] bg-textColor glass-container z-20 my-8"
+            className="absolute left-auto right-auto top-60 bg-textColor glass-container z-20 my-8"
           >
             <div className="mt-4">
               <FontAwesomeIcon
                 icon={faXmark}
                 size="xl"
                 style={{ color: "#000000" }}
-                onClick={toggleDropdown}
+                onClick={handleDropdownToggle}
               />
             </div>
             <div className="my-4">
@@ -244,39 +230,22 @@ const UserUpdate: React.FC<UserUpdateProps> = ({ userData, setUserData }) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className=" m-6">
-              <div className="pb-6">
-                <Button
-                  type="button"
-                  size="small"
-                  variant="primary"
-                  onClick={handleUpdate}
-                >
-                  Spara
-                </Button>
-              </div>
-              <div className="pb-6 md:hidden">
-                {/* Utloggnigs knapp i mobil vy */}
-                <Button
-                  type="button"
-                  size="small"
-                  variant="secondary"
-                  onClick={onLogout}
-                >
-                  Logga ut
-                </Button>
-              </div>
-              <div>
-                <Button
-                  type="button"
-                  size="small"
-                  variant="danger"
-                  onClick={handleRemoveAccount}
-                >
-                  Radera konto
-                </Button>
-              </div>
-            </div>
+            <Button
+              type="button"
+              size="small"
+              variant="secondary"
+              onClick={handleUpdate}
+            >
+              Uppdatera konto
+            </Button>
+            <Button
+              type="button"
+              size="small"
+              variant="danger"
+              onClick={handleRemoveAccount}
+            >
+              Radera konto
+            </Button>
           </form>
         )}
       </div>

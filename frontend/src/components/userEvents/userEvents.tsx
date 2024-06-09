@@ -7,14 +7,14 @@ interface Event {
   _id: string;
   activity: string;
   location: string;
-  start_time: number;
+  start_time: string;
+  // Will add more event details here later
 }
 
 const UserEvents: React.FC = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
-  const [attendingEvents, setAttendingEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -40,27 +40,16 @@ const UserEvents: React.FC = () => {
         }
 
         const data = await response.json();
-        // console.log("Data:", data);
+        console.log("Data:", data);
 
-        if (data && data.createdEvents && data.attendingEvents) {
-          const currentTime = Date.now();
-          // console.log("Current Time:", currentTime);
-          
+        if (data && data.createdEvents) {
+          const currentTime = new Date();
           const upcomingCreatedEvents = data.createdEvents.filter(
-            (event: Event) => event.start_time* 1000 > currentTime
-          );
-          const upcomingAttendingEvents = data.attendingEvents.filter( 
-            (event: Event) => event.start_time* 1000 > currentTime
+            (event: Event) => new Date(event.start_time) > currentTime
           );
 
-          // console.log("Upcoming Events:", upcomingCreatedEvents);
-          // console.log("Upcoming Attending Events:", upcomingAttendingEvents);
-          
           setUpcomingEvents(upcomingCreatedEvents);
           setCreatedEvents(data.createdEvents);
-          setAttendingEvents(upcomingAttendingEvents);
-
-
         } else {
           console.error("Events data not found in response:", data);
         }
@@ -72,27 +61,6 @@ const UserEvents: React.FC = () => {
     fetchEvents();
   }, [activeTabIndex]);
 
-  const formatEventDate = (unixTimestamp: number) => {
-    const date = new Date(unixTimestamp * 1000);
-
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    };
-
-    const timeOptions: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    };
- 
-    const formattedDate = date.toLocaleDateString('sv-SE', dateOptions);
-    const formattedTime = date.toLocaleTimeString('sv-SE', timeOptions);
-
-    return `${formattedDate} ${formattedTime}`;
-  };
-
   return (
     <TabsProvider>
       <Tabs>
@@ -102,12 +70,12 @@ const UserEvents: React.FC = () => {
           setActiveTabIndex={setActiveTabIndex}
         >
           <div>
-            {upcomingEvents.length + attendingEvents.length > 0 ? (
-              [...upcomingEvents, ...attendingEvents].map((event) => (
+            {upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event) => (
                 <div key={event._id}>
                   <h3>{event.activity}</h3>
                   <p>{event.location}</p>
-                  <p>{formatEventDate(event.start_time)}</p>
+                  <p>{new Date(event.start_time).toLocaleString()}</p>
                 </div>
               ))
             ) : (
@@ -126,7 +94,7 @@ const UserEvents: React.FC = () => {
                 <div key={event._id}>
                   <h3>{event.activity}</h3>
                   <p>{event.location}</p>
-                  <p>{formatEventDate(event.start_time)}</p>
+                  <p>{new Date(event.start_time).toLocaleString()}</p>
                 </div>
               ))
             ) : (

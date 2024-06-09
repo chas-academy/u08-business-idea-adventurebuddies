@@ -5,26 +5,26 @@ Vi änvänder oss av CRUD där vi kan skapa, läsa, uppdatera och radera ett eve
 
 Skapa:
 
-![Create Event](./img/create.png)
+![Create Event](/Event-Dokumentation/img/create.png)
 
 Se alla event:
 
-![Se alla event](./img/allEvents.png)
+![Se alla event](/Event-Dokumentation/img/allEvents.png)
 
 Se ett event:
 
-![Se ett event](./img/eventById.png)
+![Se ett event](/Event-Dokumentation/img/eventById.png)
 
 Uppdatera:
 
-![Uppdatera ett event](./img/update.png)
+![Uppdatera ett event](/Event-Dokumentation/img/update.png)
 
 Radera: 
 
-![Radera ett event](./img/delete.png)
+![Radera ett event](/Event-Dokumentation/img/delete.png)
 
 
-Vi har använt oss av *Mongoose populate* för att automatiskt fylla i referenser mellan olika dokument inom MongoDB.
+Vi har använt oss av *Mongoose populate* för att automatiskt fylla i referenser mellan olika dokument inom MongoDB. 
 
 *Populate* djälper dig att utföra en slags "join" operation, som är vanligt i relationsdatabaser, men på ett sätt som passar MongoDB dokumenterade natur.
 

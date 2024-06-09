@@ -21,21 +21,20 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col">
+    <>
       <Header
         isAuthenticated={isAuthenticated}
-        onLogout={handleLogout}
+        logout={handleLogout}
       />
-      <main className="flex-grow flex flex-col justify-center items-center mb-20 md:mb-0">
+      <main className="flex flex-col justify-center items-center z-10 mt-10">
         <Outlet
           context={{
             onLogin: handleLogin,
-            onLogout: handleLogout,
           }}
         />
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
 
