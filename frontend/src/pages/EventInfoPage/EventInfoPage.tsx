@@ -2,7 +2,7 @@
 // import Tabs from "../../components/tabs/Tabs";
 // import { TabsProvider } from "../../components/tabs/TabsContext";
 import React, { useEffect, useState } from "react";
-import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+
 import Button from "../../components/button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
@@ -13,6 +13,7 @@ import {
   faPeopleRobbery,
 } from "@fortawesome/free-solid-svg-icons";
 import Maps2 from "../map/Maps2";
+import { IEvent } from "../../utils/IEvents";
 
 
 
@@ -161,6 +162,8 @@ const EventInfoPage: React.FC = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+
 
   return (
     <div className="">

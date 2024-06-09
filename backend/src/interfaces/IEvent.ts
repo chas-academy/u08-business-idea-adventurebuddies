@@ -1,4 +1,4 @@
-import { Date } from "mongoose";
+
 import { ObjectId } from "mongodb";
 
 // interface Location {
@@ -23,7 +23,7 @@ export interface IEvent {
 
   start_time: number;
   // start_time: Date;
-  // end_time: Date;
+  //end_time: Date;
 
   userName?: string;
   userEmail?: string;

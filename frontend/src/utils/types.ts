@@ -13,7 +13,7 @@ export interface IEvent {
   _id: string;
   activity: string;
   user_id: string;
-  start_time: Date;
+  start_time: number;
   location: string;
   equipment: string;
   age?: string;

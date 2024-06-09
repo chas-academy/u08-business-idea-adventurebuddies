@@ -1,5 +1,5 @@
 import React from "react";
-import { IEvent } from "../../../../backend/src/interfaces/IEvent";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
@@ -17,6 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faFutbol } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { IEvent } from "../../utils/IEvents";
 
 
 interface EventListItemProps {

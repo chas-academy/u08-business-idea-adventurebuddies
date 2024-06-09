@@ -40,11 +40,12 @@ const UserEvents: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log("Data:", data);
+        // console.log("Data:", data);
 
         if (data && data.createdEvents && data.attendingEvents) {
           const currentTime = Date.now();
-          console.log("Current Time:", currentTime);
+          // console.log("Current Time:", currentTime);
+          
           const upcomingCreatedEvents = data.createdEvents.filter(
             (event: Event) => event.start_time* 1000 > currentTime
           );
@@ -52,8 +53,9 @@ const UserEvents: React.FC = () => {
             (event: Event) => event.start_time* 1000 > currentTime
           );
 
-          console.log("Upcoming Events:", upcomingCreatedEvents);
-          console.log("Upcoming Attending Events:", upcomingAttendingEvents);
+          // console.log("Upcoming Events:", upcomingCreatedEvents);
+          // console.log("Upcoming Attending Events:", upcomingAttendingEvents);
+          
           setUpcomingEvents(upcomingCreatedEvents);
           setCreatedEvents(data.createdEvents);
           setAttendingEvents(upcomingAttendingEvents);
@@ -70,6 +72,27 @@ const UserEvents: React.FC = () => {
     fetchEvents();
   }, [activeTabIndex]);
 
+  const formatEventDate = (unixTimestamp: number) => {
+    const date = new Date(unixTimestamp * 1000);
+
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    };
+
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    };
+ 
+    const formattedDate = date.toLocaleDateString('sv-SE', dateOptions);
+    const formattedTime = date.toLocaleTimeString('sv-SE', timeOptions);
+
+    return `${formattedDate} ${formattedTime}`;
+  };
+
   return (
     <TabsProvider>
       <Tabs>
@@ -84,7 +107,7 @@ const UserEvents: React.FC = () => {
                 <div key={event._id}>
                   <h3>{event.activity}</h3>
                   <p>{event.location}</p>
-                  <p>{new Date(event.start_time).toLocaleString()}</p>
+                  <p>{formatEventDate(event.start_time)}</p>
                 </div>
               ))
             ) : (
@@ -103,7 +126,7 @@ const UserEvents: React.FC = () => {
                 <div key={event._id}>
                   <h3>{event.activity}</h3>
                   <p>{event.location}</p>
-                  <p>{new Date(event.start_time).toLocaleString()}</p>
+                  <p>{formatEventDate(event.start_time)}</p>
                 </div>
               ))
             ) : (
