@@ -1,4 +1,21 @@
-SearchBar
+# Frontend Documentation
+
+## Table of Contents
+
+1. [SearchBar](#searchbar)
+2. [useMapsFormData](#usemapsformdata)
+3. [Maps2](#maps2)
+4. [EventForm](#eventform)
+5. [LoginPage](#loginpage)
+6. [RegisterForm](#registerform)
+7. [userEvents](#userevents)
+8. [friendsList](#friendslist)
+9. [AuthContext](#authcontext)
+10. [Navbar](#navbar)
+11. [User Update (Komponent)](#user-update-komponent)
+12. [UserProfilePage](#userprofilepage)
+
+### SearchBar
 
 I denna fil finns ett form som har en text input för att kunna söka på platser och två inputs för att kunna välja två olika stilar på kartan.
 
@@ -43,7 +60,7 @@ Variabeln updateOption är sedan kopplad till useMapsFormData funktionen som i s
 
 ![alt text](frontend/DokumentationBilder/SearchBar/image-10.png)
 
-useMapsFormData
+### useMapsFormData
 
 Detta är en store som satts upp för att kunna skicka variabler mellan olika komponenter. userLocation och option är vaiablerna som kommer bli uppdaterade med värden i storen. updateUserLocation är funktionen i storen som används för att uppdatera variablerna med de nya värdenna för lat och lon. updateOpten är funktionen i storen som används för att uppdatera variabeln option med nya värden. Denna stor behöv som nämt för att kunna dela lon och lat mellan searchbaren och map2 för att kunna söka på ett område och att kartan ska kunna visa det området.
 
@@ -53,7 +70,7 @@ Interfacen som används i storen är till för att deffinera typerna av värden 
 
 ![alt text](frontend/DokumentationBilder/SearchBar/image-12.png)
 
-Maps2
+### Maps2
 
 När denna component skapas så körs denna useEffekt som triggar funktionen getUserLocation och sätter användarens värden i useState Latitude och Longitude användaren kommer också kunna se event som är skapade och markers på kartan. Detta för att denna komponent gör en fetch till databasen när den skapas och då går en loop igenom alla event som finns och lägger ut dom på kartan.
 
@@ -85,7 +102,7 @@ Föratt dölja API KEY i frontend så skapade jag en .env fil där jag satte in 
 
 ![alt text](frontend/DokumentationBilder/Maps2/image-3.png)
 
-EventForm:
+### EventForm
 
 Detta form tar in data om event och skall skicka över lon, lat till maps för att kunna trigga en funktion som lägger till en marker på användarens event destination.
 
@@ -119,7 +136,7 @@ efter detta så kommer sendDataBackend att köras på grund av att formData.lat 
 
 ---
 
-<u>LoginPage:</u>
+### LoginPage
 
 Denna komponent hanterar inloggningen genom att samla användarens inmatning --> skicka den till en server --> och om inloggningen är lyckad, navigeras användaren till sin profil.
 
@@ -148,7 +165,7 @@ I returen framgår komponentens UI, det vill säga User Interface, vilket är sj
 
 ---
 
-<u>RegisterForm: </u>
+### RegisterForm
 
 Som föregående formulär tar även denna in olika data från användaren för registrering.
 
@@ -421,7 +438,7 @@ Similarly to the userEvents components the `TabsProvider` components wraps the `
 
 ---
 
-### AuthContext:
+### AuthContext
 
 AuthContext är en React-kontext som hanterar autentiseringslogiken för en applikation. 
 Här är en kort förklaring av vad den gör:
@@ -519,4 +536,3 @@ Vi använder oss av `userData` för att kunna visa och uppdatera användarens in
 I `returnen` hämtar vi även data från komponenterna **UserUpdate**, **UserEvents** och **FriendsList**.
 
 ---
-
