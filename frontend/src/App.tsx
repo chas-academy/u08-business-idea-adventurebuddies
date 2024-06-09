@@ -24,12 +24,13 @@ function App() {
     <>
       <Header
         isAuthenticated={isAuthenticated}
-        logout={handleLogout}
+        onLogout={handleLogout}
       />
       <main className="flex flex-col justify-center items-center z-10 mt-10">
         <Outlet
           context={{
             onLogin: handleLogin,
+            onLogout: handleLogout,
           }}
         />
       </main>
